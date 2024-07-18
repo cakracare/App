@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448143761674",
+    "project_id": "cakra-care",
+    "storage_bucket": "cakra-care.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448143761674:android:992b6565f4841472ed5af3",
+        "android_client_info": {
+          "package_name": "com.cakracare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsBzHaI-4yKO2Mzm3JfflTpoDtF-Xger0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
