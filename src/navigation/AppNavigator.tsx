@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import AuthNavigator from './AuthNavigator';
-import { checkIfUserIsLoggedIn } from '../helpers/checkIfUserIsLoggedIn'; // Assuming you have the function implemented
+import { checkIfUserIsLoggedIn } from '../helpers/checkIfUserIsLoggedIn'; 
+import { createStackNavigator } from '@react-navigation/stack';
 import { View,ActivityIndicator } from 'react-native';
-
+const Stack = createStackNavigator();
 const AppNavigator: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 

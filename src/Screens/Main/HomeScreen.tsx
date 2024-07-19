@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Layout, Text, List, ListItem } from '@ui-kitten/components';
 import { Logout, SignInWithEmailAndPassword, SignUpWithEmailAndPassword } from '../../service/auth';
-import { NavigationProp, useNavigation, CommonActions } from '@react-navigation/native';
+import { NavigationProp, useNavigation,CommonActions } from '@react-navigation/native';
 
 
 
@@ -21,12 +21,9 @@ const HomeScreen: React.FC = () => {
         console.log(a.message)
         if (a.success) {
             // Redirect to the Login screen
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' }], // Pastikan 'Login' sesuai dengan nama rute di AuthNavigator
-            });
+            navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
-
+        
 
     }
 
@@ -43,7 +40,6 @@ const HomeScreen: React.FC = () => {
     return (
         <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text category='h1'>Home</Text>
-            <Button onPress={handleLogin}>Login</Button>
             <Button onPress={handleRegister}>Register</Button>
             <Button onPress={handleLogout}>Logout</Button>
         </Layout>
