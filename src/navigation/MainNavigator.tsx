@@ -39,7 +39,7 @@ const MainNavigator: React.FC = () => {
                 break;
             }
             return renderIcon(iconName)({ color, size });
-          },
+          }, headerShown: false
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
