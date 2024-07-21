@@ -7,8 +7,9 @@ import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn";
 export async function SignInWithEmailAndPassword(email: string, password: string) {
     try {
         const isLogin = await checkIfUserIsLoggedIn()
-        if (isLogin.loggedIn)  return { success: false, data: isLogin.user, message: 'user sudah login'}
+        if (isLogin.loggedIn) return { success: false, data: isLogin.user, message: 'user sudah login' }
 
+        if ((email == '') || (password == '')) return { success: false, data: isLogin.user, message: 'Username or password kosogn' }
         const user = await auth().signInWithEmailAndPassword(email, password);
         return {
             success: true,

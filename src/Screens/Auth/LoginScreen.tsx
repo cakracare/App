@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { NavigationProp, useNavigation,CommonActions } from '@react-navigation/native';
+import { NavigationProp, useNavigation} from '@react-navigation/native';
 import { SignInWithEmailAndPassword } from '../../service/auth';
+
 
 
 const LoginScreen: React.FC = () => {
@@ -14,14 +15,11 @@ const LoginScreen: React.FC = () => {
         const result = await SignInWithEmailAndPassword(email, pass);
 
         if (result.success) {
-            // Navigate to Home screen on successful login
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'MainNavigator', state: { routes: [{ name: 'Home' }] } }],
-            });
+            navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
+            Alert.alert(result.message)
         } else {
-            // Handle login failure (e.g., show an error message)
             console.log(result.message);
+            Alert.alert(result.message)
         }
     };
 
@@ -46,14 +44,5 @@ const LoginScreen: React.FC = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-    },
-    input: {
-        flex: 1,
-        margin: 2,
-    },
-});
 
 export default LoginScreen;

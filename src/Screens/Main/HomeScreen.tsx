@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Layout, Text, List, ListItem } from '@ui-kitten/components';
-import { Logout, SignInWithEmailAndPassword, SignUpWithEmailAndPassword } from '../../service/auth';
+import { Button, Layout, Text } from '@ui-kitten/components';
+import { Logout, SignUpWithEmailAndPassword } from '../../service/auth';
 import { NavigationProp, useNavigation,CommonActions } from '@react-navigation/native';
 
 
@@ -10,17 +10,10 @@ import { NavigationProp, useNavigation,CommonActions } from '@react-navigation/n
 const HomeScreen: React.FC = () => {
     const navigation = useNavigation<NavigationProp<any>>();
 
-    const handleLogin = async () => {
-        const a = await SignInWithEmailAndPassword('gggggxffgdfgdfgdfgfdgdxfgdbxcbcxaufal1234565@gmail.com', '12345678')
-        console.log(a)
-
-    }
-
     const handleLogout = async () => {
         const a = await Logout()
         console.log(a.message)
         if (a.success) {
-            // Redirect to the Login screen
             navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
         
@@ -33,7 +26,7 @@ const HomeScreen: React.FC = () => {
             nama: "aufadfgdfgfdgfdgl",
             kelas: "Ttt"
         }
-        const data = await SignUpWithEmailAndPassword('gggggxffgdfgdfgdfgfdgdxfgdbxcbcxaufal1234565@gmail.com', '12345678', '12345678', dat)
+        const data = await SignUpWithEmailAndPassword('aufal1234565@gmail.com', '12345678', '12345678', dat)
         console.log(data)
     }
 
