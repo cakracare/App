@@ -23,6 +23,10 @@ const LoginScreen: React.FC = () => {
         }
     };
 
+    const handleRegister= ()=>{
+        navigation.navigate('Register')
+    }
+
     return (
         <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} level='2'>
             <Text style={{ marginBottom: 20 }} category='h1'>Login</Text>
@@ -39,7 +43,8 @@ const LoginScreen: React.FC = () => {
                 style={{ width: 300 , marginBottom: 10}}
                 secureTextEntry
             />
-            <Button onPress={handleLogin}>Login</Button>
+            <Button onPress={handleLogin} style={{ width: 300 , marginBottom: 10}} >Login</Button>
+            <Button onPress={handleRegister}style={{ width: 300 , marginBottom: 10}} >Register</Button>
         </Layout>
     );
 };

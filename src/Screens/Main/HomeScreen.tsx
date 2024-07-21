@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button, Layout, Text } from '@ui-kitten/components';
 import { Logout, SignUpWithEmailAndPassword } from '../../service/auth';
-import { NavigationProp, useNavigation,CommonActions } from '@react-navigation/native';
-
-
-
+import { NavigationProp, useNavigation} from '@react-navigation/native';
 
 
 const HomeScreen: React.FC = () => {
@@ -19,7 +16,6 @@ const HomeScreen: React.FC = () => {
         
 
     }
-
 
     const handleRegister = async () => {
         const dat = {

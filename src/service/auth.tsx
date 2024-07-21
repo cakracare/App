@@ -59,7 +59,7 @@ export async function SignUpWithEmailAndPassword(email: string, password: string
 
             // Menyimpan data tambahan lainnya di Firestore
             await firestore().collection('users').doc(userCredential.user.uid).set(additionalData);
-
+            await auth().signOut();
             return {
                 success: true,
                 data: userCredential.user,
