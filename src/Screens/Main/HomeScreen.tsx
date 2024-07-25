@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import styles from '../../style/HomeStyle.tsx';
 
 const handleLogin = () => {
   console.log('kepencet');
@@ -31,41 +32,14 @@ const data = [
   },
 ];
 const renderItem = ({item, index}: {item: any; index: number}) => (
-  <Card
-    style={{
-      width: 'auto',
-      height: 'auto',
-    }}>
-    <View style={{flexDirection: 'row'}}>
-      <Image source={{uri: item.image}} style={{width: 100, height: 100}} />
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          marginStart: 10,
-        }}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 20,
-          }}>
-          {item.title}
-        </Text>
-        <Text
-          numberOfLines={2}
-          style={{
-            color: 'black',
-            fontSize: 15,
-            marginEnd: 50,
-          }}>
+  <Card style={styles.Card}>
+    <View style={styles.container}>
+      <Image source={{uri: item.image}} style={styles.Image} />
+      <View style={styles.container1}>
+        <Text style={styles.Text}>{item.title}</Text>
+        <Text numberOfLines={2} style={styles.Text1}>
           {item.description}
         </Text>
-        <Image
-          source={{
-            uri: 'https://emojiguide.com/wp-content/uploads/platform/google/44140.png',
-          }}
-          style={{width: 30, height: 30}}
-        />
       </View>
     </View>
   </Card>
@@ -108,55 +82,12 @@ const data2 = [
   },
 ];
 const renderItem2 = ({item, index}: {item: any; index: number}) => (
-  <View
-    style={{
-      width: 'auto',
-      height: 'auto',
-      borderRadius: 5,
-      backgroundColor: 'white',
-      margin: 10,
-      borderColor: 'grey',
-      borderWidth: 1,
-    }}>
+  <View style={styles.container2}>
     <View>
-      <Image
-        source={{uri: item.image}}
-        style={{
-          width: 200,
-          height: 150,
-          borderTopLeftRadius: 5,
-          borderTopRightRadius: 5,
-        }}
-      />
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          margin: 10,
-        }}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 15,
-          }}>
-          {item.title}
-        </Text>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 20,
-            marginEnd: 50,
-          }}>
-          {item.duration}
-        </Text>
-        <Icon
-          name="exclamationcircle"
-          size={30}
-          color="black"
-          style={{
-            marginTop: 10,
-          }}
-        />
+      <Image source={{uri: item.image}} style={styles.Image1} />
+      <View style={styles.container3}>
+        <Text style={styles.Text2}>{item.title}</Text>
+        <Text style={styles.Text3}>{item.duration}</Text>
       </View>
     </View>
   </View>
@@ -165,19 +96,8 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
 const HomeScreen: React.FC = () => {
   return (
     <Layout style={{flex: 1, padding: 2}}>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginStart: 10,
-        }}>
-        Selamat Datang di Aplikasi Kami !
-      </Text>
-      <Text
-        style={{
-          fontSize: 15,
-          marginStart: 10,
-        }}>
+      <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
+      <Text style={styles.Text5}>
         Memberdayakan dan Mendidik Pelawan Penindasan
       </Text>
       <FlatList
@@ -185,25 +105,13 @@ const HomeScreen: React.FC = () => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginStart: 10,
-          marginTop: 20,
-        }}>
-        Recomended Videos
-      </Text>
+      <Text style={styles.Text6}>Recomended Videos</Text>
       <FlatList
         data={data2}
         renderItem={renderItem2}
         keyExtractor={(item, index) => index.toString()}
         horizontal={true}
-        style={{
-          marginTop: 10,
-          flexDirection: 'row',
-          height: 310,
-        }}
+        style={styles.Flatlist}
       />
     </Layout>
   );
