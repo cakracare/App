@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon, IconElement} from '@ui-kitten/components';
 import HomeScreen from '../Screens/Main/HomeScreen';
@@ -8,7 +9,6 @@ import AccountScreen from '../Screens/Main/AccountScreen';
 import ReportDetail from '../Screens/Main/ReportDetail';
 import {ParamListBase, ScreenProps} from '../Types';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 const Tab = createBottomTabNavigator<ParamListBase>();
 const Stack = createNativeStackNavigator();
 function MainNavigator() {
@@ -23,6 +23,7 @@ function MainNavigator() {
     </Stack.Navigator>
   );
 }
+  
 function SecondNavigator() {
   const renderIcon =
     (name: string) =>
