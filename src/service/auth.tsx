@@ -93,7 +93,6 @@ export const signInWithGoogle = async () => {
                 uid: user.uid,
                 displayName: user.displayName,
                 email: user.email,
-                // Tambahkan field lain yang diperlukan
             });
         }
 
