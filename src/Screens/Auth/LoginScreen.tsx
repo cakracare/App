@@ -1,8 +1,10 @@
-import React from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import React,{useState} from 'react';
+import { Alert } from 'react-native';
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { NavigationProp, useNavigation} from '@react-navigation/native';
-import {onGoogleButtonPress, SignInWithEmailAndPassword} from '../../service/auth';
+import {signInWithEmailAndPass, signInWithGoogle,} from '../../service/auth';
+import {User} from '../../Types'
+import {useId} from "../../helpers/IdContext.tsx";
 
 
 
@@ -10,13 +12,20 @@ const LoginScreen: React.FC = () => {
     const [email, setEmail] = React.useState('');
     const [pass, setPass] = React.useState('');
     const navigation = useNavigation<NavigationProp<any>>();
+    // @ts-ignore
+    const {id, setId}=useId()
+    const [user, setUser] = useState<User>({email:'',password: '',
+        displayName: '',  asalSekolah: '',role: '',photoURL:'',kelas: ''});
 
 
     const handleLogin = async () => {
-        const result = await SignInWithEmailAndPassword(email, pass);
-
+        const result = await signInWithEmailAndPass(email, pass);
         if (result.success) {
-            navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
+            // @ts-ignore
+            setId(result.userid)
+            navigation.navigate('MainNavigator', {
+                screen: 'HomeScreen',
+            })
             Alert.alert(result.message)
         } else {
             console.log(result.message);
@@ -29,8 +38,16 @@ const LoginScreen: React.FC = () => {
     }
 
     const handleLoginWithGoogle= async ()=>{
-        const a = await onGoogleButtonPress()
-        console.log('login with google nih boss',a.user.displayName)
+        const result = await signInWithGoogle()
+        if (result.success) {
+            // @ts-ignore
+            setId(result.userid)
+            navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
+            Alert.alert(result.message)
+        } else {
+            console.log(result.message);
+            Alert.alert(result.message)
+        }
     }
 
     return (

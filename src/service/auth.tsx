@@ -1,89 +1,61 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn";
+import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn.ts";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
-
-
+import {User}from'../Types'
+import {createUser} from "./user.ts";
 
 // Configuration : google
 GoogleSignin.configure({
     webClientId: '448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com',
 })
 
-// ====================================================================================================================
-// Fungsi untuk Sign In dengan Email dan Password
-export async function SignInWithEmailAndPassword(email: string, password: string) {
+export const signInWithEmailAndPass = async (email: string, password: string) => {
     try {
-        const isLogin = await checkIfUserIsLoggedIn()
-        if (isLogin.loggedIn) return { success: false, data: isLogin.user, message: 'user sudah login' }
-
-        if ((email == '') || (password == '')) return { success: false, data: isLogin.user, message: 'Username or password kosogn' }
-        const user = await auth().signInWithEmailAndPassword(email, password);
+        const userCredential = await auth().signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
         return {
             success: true,
-            data: user,
-            message: 'SUKSES'
+            userid: user.uid || null,
+            message: 'Login successful'
         };
     } catch (error: any) {
-        console.log(error)
-        let message = 'FAILED';
-        switch (error.code) {
-            case 'auth/invalid-email':
-                message = 'Email tidak valid.';
-                break;
-            case 'auth/user-disabled':
-                message = 'Pengguna telah dinonaktifkan.';
-                break;
-            case 'auth/user-not-found':
-                message = 'Pengguna tidak ditemukan.';
-                break;
-            case 'auth/too-many-requests':
-                message = 'Terlalu banyak permintaan. Silakan coba lagi nanti.';
-                break;
-            default:
-                message = 'Terjadi kesalahan. Silakan coba lagi.';
-                break;
-        }
-
         return {
             success: false,
-            data: null,
-            message
+            message: error.message
         };
     }
-}
+};
 
-// Fungsi untuk Sign Up dengan Email, Password, dan data tambahan
-export async function SignUpWithEmailAndPassword(email: string, password: string, confirm_password: string, additionalData: { [key: string]: any }) {
+
+
+export async function SignUpWithEmailAndPassword(user:User, confirm_password:string) {
     try {
-        if (password !== confirm_password) return { success: false, data: null, message: 'Password tidak sama' };
-        const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+        // Validasi password
+        if (user.password !== confirm_password) {
+            return { success: false, data: null, message: 'Password tidak sama' };
+        }
+        // Pendaftaran pengguna
+        const userCredential = await auth().createUserWithEmailAndPassword(user.email, user.password);
 
         if (userCredential.user) {
             await userCredential.user.updateProfile({
-                displayName: additionalData.displayName || "",
-                photoURL: additionalData.photoURL || ""
+                displayName: user.displayName || "",
+                photoURL: user.photoURL || ""
             });
 
-            // Menyimpan data tambahan lainnya di Firestore
-            await firestore().collection('users').doc(userCredential.user.uid).set(additionalData);
-            await auth().signOut();
-            return {
-                success: true,
-                data: userCredential.user,
-                message: 'SUKSES'
-            };
+           return await  createUser(user,userCredential.user.uid)
         } else {
             return {
                 success: false,
-                data: null,
-                message: 'User tidak ditemukan setelah pendaftaran.'
+                message: 'Pengguna tidak ditemukan setelah pendaftaran.'
             };
         }
     } catch (error: any) {
         console.log('error', error.code);
 
-        let message = 'FAILED';
+        // Penanganan kesalahan
+        let message = 'Terjadi kesalahan. Silakan coba lagi.';
         switch (error.code) {
             case 'auth/email-already-in-use':
                 message = 'Email sudah digunakan.';
@@ -97,9 +69,6 @@ export async function SignUpWithEmailAndPassword(email: string, password: string
             case 'auth/weak-password':
                 message = 'Password terlalu lemah.';
                 break;
-            default:
-                message = 'Terjadi kesalahan. Silakan coba lagi.';
-                break;
         }
 
         return {
@@ -110,18 +79,37 @@ export async function SignUpWithEmailAndPassword(email: string, password: string
     }
 }
 
-export async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
+export const signInWithGoogle = async () => {
+    try {
+        // Google Sign-In
+        const { idToken } = await GoogleSignin.signIn();
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        const userCredential = await auth().signInWithCredential(googleCredential);
+        const user = userCredential.user;
+        const userDoc = await firestore().collection('users').doc(user.uid).get();
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        if (!userDoc.exists) {
+            await firestore().collection('users').doc(user.uid).set({
+                uid: user.uid,
+                displayName: user.displayName,
+                email: user.email,
+                // Tambahkan field lain yang diperlukan
+            });
+        }
 
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-}
+        return {
+            success: true,
+            userid: user.uid || null,
+            message: 'Login successful with Google!'
+        };
+    } catch (error: any) {
+        console.log(error)
+        return {
+            success: false,
+            message: error.message
+        };
+    }
+};
 
 // Fungsi untuk Logout
 export async function Logout() {
