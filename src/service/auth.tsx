@@ -1,8 +1,16 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn";
+import {GoogleSignin} from "@react-native-google-signin/google-signin";
 
 
+
+// Configuration : google
+GoogleSignin.configure({
+    webClientId: '448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com',
+})
+
+// ====================================================================================================================
 // Fungsi untuk Sign In dengan Email dan Password
 export async function SignInWithEmailAndPassword(email: string, password: string) {
     try {
@@ -100,6 +108,19 @@ export async function SignUpWithEmailAndPassword(email: string, password: string
             message
         };
     }
+}
+
+export async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
 }
 
 // Fungsi untuk Logout

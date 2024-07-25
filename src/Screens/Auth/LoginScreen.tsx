@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { NavigationProp, useNavigation} from '@react-navigation/native';
-import { SignInWithEmailAndPassword } from '../../service/auth';
+import {onGoogleButtonPress, SignInWithEmailAndPassword} from '../../service/auth';
 
 
 
@@ -10,6 +10,7 @@ const LoginScreen: React.FC = () => {
     const [email, setEmail] = React.useState('');
     const [pass, setPass] = React.useState('');
     const navigation = useNavigation<NavigationProp<any>>();
+
 
     const handleLogin = async () => {
         const result = await SignInWithEmailAndPassword(email, pass);
@@ -25,6 +26,11 @@ const LoginScreen: React.FC = () => {
 
     const handleRegister= ()=>{
         navigation.navigate('Register')
+    }
+
+    const handleLoginWithGoogle= async ()=>{
+        const a = await onGoogleButtonPress()
+        console.log('login with google nih boss',a.user.displayName)
     }
 
     return (
@@ -44,7 +50,8 @@ const LoginScreen: React.FC = () => {
                 secureTextEntry
             />
             <Button onPress={handleLogin} style={{ width: 300 , marginBottom: 10}} >Login</Button>
-            <Button onPress={handleRegister}style={{ width: 300 , marginBottom: 10}} >Register</Button>
+            <Button onPress={handleRegister} style={{ width: 300 , marginBottom: 10}} >Register</Button>
+            <Button onPress={handleLoginWithGoogle} style={{ width: 300 , marginBottom: 10}} >Google</Button>
         </Layout>
     );
 };
