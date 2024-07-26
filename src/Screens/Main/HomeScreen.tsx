@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Layout,
@@ -12,7 +11,6 @@ import {FlatList, Image, ScrollView, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import styles from '../../style/HomeStyle.tsx';
 import React, {useEffect} from 'react';
-import { Button, Layout, Text } from '@ui-kitten/components';
 import { Logout} from '../../service/auth';
 import { NavigationProp, useNavigation} from '@react-navigation/native';
 import {useId} from "../../helpers/IdContext.tsx";
@@ -105,7 +103,7 @@ const HomeScreen: React.FC = () => {
 
     const [user, setUser] = React.useState<User | null>(null);
     const {id} = useId()
-    console.log(id)
+
 
 
     const navigation = useNavigation<NavigationProp<any>>();
@@ -128,11 +126,11 @@ const HomeScreen: React.FC = () => {
     // @ts-ignore
 
     const name = user?.displayName || ''
-    console.log(name, 'sfdsdf')
+
 
   return (
     <Layout style={{flex: 1, padding: 2}}>
-      <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
+      <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami {name} !</Text>
       <Text style={styles.Text5}>
         Memberdayakan dan Mendidik Pelawan Penindasan
       </Text>

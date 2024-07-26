@@ -1,25 +1,38 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-const data = [
-  {
-    id: 1,
-    name: 'Aziz',
-    image: 'https://via.placeholder.com/150',
-    email: 'hahahah@gmail.com',
-  },
-];
-const renderItem = ({item, index}: {item: any; index: number}) => (
-  <View style={styles.container1}>
-    <Image source={{uri: item.image}} style={styles.Image} />
-    <View style={styles.container2}>
-      <Text style={styles.Text}>{item.name}</Text>
-      <Text>{item.email}</Text>
-    </View>
-  </View>
-);
+import {useId} from "../../helpers/IdContext.tsx";
+import {getUser} from "../../service/user.ts";
+import {User} from "../../Types";
+import {HeaderAccount} from "../../components/HeaderAccount.tsx";
+// const data = [
+//   {
+//     id: 1,
+//     name: 'Aziz',
+//     image: 'https://via.placeholder.com/150',
+//     email: 'hahahah@gmail.com',
+//   },
+// ];
+
+// type renderItem1Props = {
+//     image: string,
+//     name: string,
+//     email: string
+// }
+//
+// const RenderItem = (props:renderItem1Props) => {
+//     return (
+//         <View style={styles.container1}>
+//             <Image source={{uri: props.image}} style={styles.Image} />
+//             <View style={styles.container2}>
+//                 <Text style={styles.Text}>{props.name}</Text>
+//                 <Text>{props.email}</Text>
+//             </View>
+//         </View>
+//     );
+// }
 
 const data2 = [
   {
@@ -58,9 +71,20 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
   </View>
 );
 const AccountScreen: React.FC = () => {
+    const [user, setUser] = React.useState<User | null>(null);
+    const {id} = useId()
+
+    useEffect(()=>{
+        if (id != null) {
+            getUser(id).then((user)=>{
+                // @ts-ignore
+                setUser(user.data)
+            })
+        }
+    },[id])
   return (
     <Layout style={styles.container}>
-      <View>{renderItem({item: data[0], index: 0})}</View>
+        <HeaderAccount image={'sdfsdf'} name={'sdfsd'} email={'sdfsdfds'}/>
       <View>
         <View style={styles.container4}>
           <Text style={styles.Text4}>Account Details</Text>

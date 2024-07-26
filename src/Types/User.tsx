@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 // Definisikan skema User
@@ -14,3 +13,5 @@ export const UserSchema = z.object({
 
 // Tipe TypeScript dari skema
 export type User = z.infer<typeof UserSchema>;
+
+

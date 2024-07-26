@@ -11,7 +11,9 @@ export default function App() {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <AppNavigator />
+       <IdProvider>
+           <AppNavigator />
+       </IdProvider>
       </ApplicationProvider>
     </>
   );
