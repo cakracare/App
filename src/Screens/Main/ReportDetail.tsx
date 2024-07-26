@@ -1,81 +1,34 @@
 import {Button, Card, Layout} from '@ui-kitten/components';
-import {Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 
 export default function ReportDetail() {
   return (
-    <Layout style={{flex: 1, padding: 20}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginTop: 20,
-        }}>
-        <View
+    <Layout
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
           style={{
+            width: 300,
+            height: 100,
+            backgroundColor: 'cyan',
+            justifyContent: 'center',
             alignItems: 'center',
-            borderColor: 'grey',
-            borderWidth: 1,
-            width: 150,
-            height: 'auto',
-            marginEnd: 10,
-            borderRadius: 10,
-            padding: 10,
-          }}>
-          <Icon
-            name="add-circle-outline"
-            size={50}
-            color={'#373A40'}
-            style={{
-              backgroundColor: '#EEEDEB',
-              borderRadius: 50,
-            }}
-          />
-          <Text
-            style={{
-              color: 'black',
-            }}>
-            Laporkan Bullying
-          </Text>
-        </View>
-        <View
-          style={{
-            alignItems: 'center',
-            borderColor: 'grey',
-            borderWidth: 1,
-            width: 150,
-            height: 'auto',
-            marginStart: 10,
-            padding: 10,
             borderRadius: 10,
           }}>
-          <Icon
-            name="my-library-books"
-            size={50}
-            color={'#373A40'}
+          <Image
+            source={require('../../Image/speaking.png')}
             style={{
-              backgroundColor: '#EEEDEB',
-              borderRadius: 50,
+              width: 50,
+              height: 50,
             }}
           />
-          <Text
-            style={{
-              color: 'black',
-            }}>
-            Lihat Laporan
-          </Text>
-        </View>
+          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
+        </TouchableOpacity>
       </View>
-      <Text
-        style={{
-          color: 'black',
-          fontFamily: 'Poppins-Bold',
-          fontSize: 20,
-          marginTop: 20,
-          fontWeight: 'bold',
-        }}>
-        Recent Report
-      </Text>
     </Layout>
   );
 }

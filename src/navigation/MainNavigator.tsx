@@ -8,29 +8,19 @@ import AccountScreen from '../Screens/Main/AccountScreen';
 import ReportDetail from '../Screens/Main/ReportDetail';
 import {ParamListBase, ScreenProps} from '../Types';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../Screens/Auth/LoginScreen';
-import RegisterScreen from '../Screens/Auth/RegisterScreen';
+import AuthNavigator from './AuthNavigator';
 
 const Tab = createBottomTabNavigator<ParamListBase>();
 const Stack = createNativeStackNavigator();
 function MainNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator>
       <Stack.Screen
         name="Main"
         component={SecondNavigator}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
-        options={{headerShown: false}}
-      />
+      <Stack.Screen name="Auth" component={AuthNavigator} />
       <Stack.Screen name="Bullying Reporting Menu" component={ReportDetail} />
     </Stack.Navigator>
   );

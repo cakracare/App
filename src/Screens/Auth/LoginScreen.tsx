@@ -52,7 +52,7 @@ export default function LoginScreen() {
             alignItems: 'center',
           }}
           onPress={() => {
-            navigation.navigate('Main' as never);
+            navigation.navigate('MainNavigator' as never);
           }}>
           Log In
         </Button>

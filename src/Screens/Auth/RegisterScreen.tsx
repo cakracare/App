@@ -1,6 +1,6 @@
-import {Button, CheckBox, Input, Layout} from '@ui-kitten/components';
+import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
 import {useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet} from 'react-native';
 
 export default function RegisterScreen() {
   const [password, setPassword] = useState('');
@@ -26,7 +26,7 @@ export default function RegisterScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={require('../../Image/logo.png')} />
-      <View style={styles.form}>
+      <Layout style={styles.form}>
         <Text style={styles.label}>Nama Lengkap</Text>
         <Input style={styles.input} />
         <Text style={styles.label}>Email</Text>
@@ -73,7 +73,7 @@ export default function RegisterScreen() {
           disabled={!isChecked}>
           <Text style={styles.buttonText}>Daftar</Text>
         </Button>
-      </View>
+      </Layout>
     </ScrollView>
   );
 }

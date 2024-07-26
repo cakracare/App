@@ -38,14 +38,17 @@ const HomeScreen: React.FC = () => {
         </View>
       </Card>
       <Text style={styles.Text6}>Recomended Videos</Text>
-      <Card>
+      <Card style={styles.Card}>
         <YoutubePlayer height={200} play={false} videoId={'r8tCRia5-pc'} />
         <View style={styles.container2}>
           <Text style={styles.Text2}>
             Menjadi Pelaku Perundungan (Bullying) yang Tidak Disadari! Kenali
             Ciri-cirinya.
           </Text>
-          <Text>
+          <Text
+            style={{
+              textAlign: 'justify',
+            }}>
             Coba kamu ingat, pernahkah kamu merasa senang saat mengejek orang
             lain? Tonton video ini untuk mengetahui apakah kamu adalah pelaku
             perundungan atau bukan.
