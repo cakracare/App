@@ -2,7 +2,7 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn.ts";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
-import {User}from'../Types'
+import {User, UserSchema} from '../Types'
 import {createUser} from "./user.ts";
 
 // Configuration : google
@@ -29,19 +29,19 @@ export const signInWithEmailAndPass = async (email: string, password: string) =>
 
 
 
-export async function SignUpWithEmailAndPassword(user:User, confirm_password:string) {
+export async function SignUpWithEmailAndPassword(user:User, password:string,confirm_password:string) {
     try {
         // Validasi password
-        if (user.password !== confirm_password) {
+        if (password !== confirm_password) {
             return { success: false, data: null, message: 'Password tidak sama' };
         }
-        // Pendaftaran pengguna
-        const userCredential = await auth().createUserWithEmailAndPassword(user.email, user.password);
+
+        const userCredential = await auth().createUserWithEmailAndPassword(user.email,password);
 
         if (userCredential.user) {
             await userCredential.user.updateProfile({
-                displayName: user.displayName || "",
-                photoURL: user.photoURL || ""
+                displayName: user.nama_lengkap,
+                photoURL: user.photoURL
             });
 
            return await  createUser(user,userCredential.user.uid)
@@ -86,14 +86,14 @@ export const signInWithGoogle = async () => {
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         const userCredential = await auth().signInWithCredential(googleCredential);
         const user = userCredential.user;
+        console.log(user)
         const userDoc = await firestore().collection('users').doc(user.uid).get();
 
         if (!userDoc.exists) {
-            await firestore().collection('users').doc(user.uid).set({
-                uid: user.uid,
-                displayName: user.displayName,
-                email: user.email,
-            });
+                const datauser: User = UserSchema.parse({nama_lengkap : user.displayName,
+                    email : user.email,
+                    photoURL : user.photoURL})
+                await createUser(datauser,user.uid)
         }
 
         return {

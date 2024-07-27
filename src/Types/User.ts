@@ -2,12 +2,14 @@ import { z } from 'zod';
 
 // Definisikan skema User
 export const UserSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
-    displayName: z.string(),
+    nama_lengkap: z.string(),
     photoURL: z.string().optional(),
-    asalSekolah: z.string(),
-    kelas: z.string().min(1).optional(),
+    email: z.string().email(),
+    usia: z.number().optional(),
+    kelas: z.string().max(10).optional(),
+    asalSekolah: z.string().optional(),
+    gender: z.enum(['male', 'female']).optional(),
+    nama_orangtua: z.string().max(20).optional(),
     role: z.string().default('siswa'),
 });
 
