@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Layout,
@@ -19,7 +18,6 @@ const HomeScreen: React.FC = () => {
     const handleLogout= async ()=>{
         const a = await Logout()
         console.log(a.message)
-
         if (a.success) {
             navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
@@ -70,4 +68,4 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-export default HomeScreen;
+export default HomeScreen

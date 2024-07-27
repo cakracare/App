@@ -1,10 +1,18 @@
+
+import React,{useState} from 'react';
+import { Alert } from 'react-native';
+import { Layout, Text, Input, Button } from '@ui-kitten/components';
+
 import React from 'react'
 import {Button, IconProps, Input, Layout, Text} from '@ui-kitten/components';
 import {useState} from 'react';
 import {Alert, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import { NavigationProp, useNavigation} from '@react-navigation/native';
-import {onGoogleButtonPress, SignInWithEmailAndPassword} from '../../service/auth';
+import {signInWithEmailAndPass, signInWithGoogle,} from '../../service/auth';
+import {User} from '../../Types'
+import {useId} from "../../helpers/IdContext.tsx";
 
 export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -18,7 +26,6 @@ export default function LoginScreen() {
       onPress={() => setPasswordVisible(!passwordVisible)}
     />
   );
-
   const navigation = useNavigation<NavigationProp<any>>();
   const handleLogin = async () => {
         const result = await SignInWithEmailAndPassword(email, pass);
@@ -36,6 +43,7 @@ export default function LoginScreen() {
    const handleRegister= ()=>{
         navigation.navigate('Register')
     }
+
 
    const handleLoginWithGoogle= async ()=>{
         const a = await onGoogleButtonPress()
