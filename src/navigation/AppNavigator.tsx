@@ -74,7 +74,7 @@ const AppNavigator: React.FC = () => {
     );
   }
   const iniRout = isLoggedIn ? 'MainNavigator' : 'AuthNavigator';
-
+  console.log(iniRout)
   return (
     <NavigationContainer>
       <Stack.Navigator

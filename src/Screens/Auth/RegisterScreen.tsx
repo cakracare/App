@@ -26,7 +26,7 @@ export default function RegisterScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../../Image/logo.png')} />
+      <Image source={require('../../assets/img/logo.png')} />
       <Layout style={styles.form}>
         <Text style={styles.label}>Nama Lengkap</Text>
         <Input style={styles.input} />

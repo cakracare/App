@@ -12,8 +12,18 @@ import {FlatList, Image, ScrollView, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
-
+import {Logout} from "../../service/auth.tsx";
+import { NavigationProp, useNavigation} from '@react-navigation/native';
 const HomeScreen: React.FC = () => {
+    const navigation = useNavigation<NavigationProp<any>>();
+    const handleLogout= async ()=>{
+        const a = await Logout()
+        console.log(a.message)
+
+        if (a.success) {
+            navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
+        }
+    }
   return (
     <Layout style={{flex: 1, padding: 5}}>
       <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
@@ -55,6 +65,7 @@ const HomeScreen: React.FC = () => {
           </Text>
         </View>
       </Card>
+      <Button onPress={handleLogout}>logut</Button>
     </Layout>
   );
 };
