@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
-export async function checkIfUserIsLoggedIn(): Promise<{ loggedIn: boolean; user: FirebaseAuthTypes.User | null }> {
+export async function checkIfUserIsLoggedIn(): Promise<{ loggedIn: boolean | null; user: FirebaseAuthTypes.User | null }> {
     const user = auth().currentUser;
     if (user) {
         return {

@@ -3,14 +3,14 @@ import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import AuthNavigator from './AuthNavigator';
-import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.tsx';
+import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.ts';
 
 import {View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const AppNavigator: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [user, setUser] = useState<Object | null>(null);
   // const {id,setId}=useId()
 
@@ -24,7 +24,7 @@ const AppNavigator: React.FC = () => {
     checkAuthStatus();
     // const uid = user?.uid || ''
     // setId(uid.toString())
-  }, []);
+  }, [user]);
 
   if (isLoggedIn === null) {
     return (
@@ -40,8 +40,8 @@ const AppNavigator: React.FC = () => {
       <Stack.Navigator
         initialRouteName={iniRout}
         screenOptions={{headerShown: false}}>
-        <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
         <Stack.Screen name="MainNavigator" component={MainNavigator} />
+        <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
