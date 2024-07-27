@@ -13,7 +13,7 @@ const ReportScreen: React.FC = () => {
       }}>
       <Button
         style={{marginBottom: 10, borderRadius: 10, backgroundColor: '#00B2FF'}}
-        onPress={() => navigation.navigate('Add Report')}>
+        onPress={() => navigation.navigate('Bullying Reporting Menu' as never)}>
         Add Report
       </Button>
     </Layout>
