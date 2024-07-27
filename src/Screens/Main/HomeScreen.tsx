@@ -7,14 +7,12 @@ import {
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import {Logout} from "../../service/auth.tsx";
-import { NavigationProp, useNavigation} from '@react-navigation/native';
-
 
 
 
 
 const HomeScreen: React.FC = () => {
+
 
   return (
     <Layout style={{flex: 1, padding: 5}}>

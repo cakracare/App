@@ -4,15 +4,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import AuthNavigator from './AuthNavigator';
 import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.ts';
-
 import {View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useId} from "../helpers/IdContext.tsx";
+import {getUserId} from "../service/user.ts";
+
+
+
+
 const Stack = createNativeStackNavigator();
 const AppNavigator: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [user, setUser] = useState<Object | null>(null);
-  // const {id,setId}=useId()
+  const { id, setId } = useId();
+
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -20,6 +26,12 @@ const AppNavigator: React.FC = () => {
       setIsLoggedIn(authStatus.loggedIn);
       setUser(authStatus.user);
     };
+
+    const userid = async ()=>{
+      const userId = getUserId() || '';
+      setId(userId)
+    }
+    userid()
 
     checkAuthStatus();
     // const uid = user?.uid || ''

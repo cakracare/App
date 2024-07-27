@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
 import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
 import {useId} from "../../helpers/IdContext.tsx";
-import {getUser} from "../../service/user.ts";
+import {getUser, getUserId} from "../../service/user.ts";
 import {User} from "../../Types";
 import {HeaderAccount} from "../../components/HeaderAccount.tsx";
 import {Logout} from "../../service/auth.tsx";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
+
 
 
 const data2 = [
@@ -37,7 +38,7 @@ const InfoItem = ({
     <Text style={styles.Text3}>{value}</Text>
   </View>
 );
-const renderItem2 = ({item, index}: {item: any; index: number}) => (
+const renderItem2 = ({item, index}: {item: any; index: number})  => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item.nama} />
     <InfoItem iconName="envelope" label="Email" value={item.email} />
@@ -49,29 +50,36 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
 );
 const AccountScreen: React.FC = () => {
     const [user, setUser] = React.useState<User | null>(null);
-    const {id} = useId()
+    const {id,setId} = useId()
     const navigation = useNavigation<NavigationProp<any>>();
     const handleLogout= async ()=>{
-        const a = await Logout()
-        console.log(a.message)
-        if (a.success) {
+        const result = await Logout()
+        if (result.success) {
+            setId('')
             navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
     }
 
     useEffect(()=>{
-        if (id != null) {
-            getUser(id).then((user)=>{
-                // @ts-ignore
-                setUser(user.data)
-            })
+        const get = async ()=>{
+            if (id != null) {
+                getUser(id).then((user)=>{
+                    // @ts-ignore
+                    setUser(user.data)
+                })
+            }
         }
+
+        get()
+
     },[id])
+    console.log(id)
   return (
     <Layout style={styles.container}>
-        <HeaderAccount image={'https://miro.medium.com/v2/resize:fit:3398/format:webp/1*eTt34ujlYnjfM21cB0-ZaQ.png'}
-                       name={'aufal'}
-                       email={'aufalgantengbanget@gmail.com'}/>
+        <HeaderAccount image={user?.photoURL}
+                       name={user?.nama_lengkap}
+                       email={user?.email}/>
+
       <View>
         <View style={styles.container4}>
           <Text style={styles.Text4}>Account Details</Text>
