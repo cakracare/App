@@ -1,5 +1,3 @@
-
-import {useNavigation} from '@react-navigation/native';
 import {Button, IconProps, Input, Layout, Text} from '@ui-kitten/components';
 import {useState} from 'react';
 import {
@@ -10,8 +8,11 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { NavigationProp, useNavigation} from '@react-navigation/native';
-import {onGoogleButtonPress, SignInWithEmailAndPassword} from '../../service/auth';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  onGoogleButtonPress,
+  SignInWithEmailAndPassword,
+} from '../../service/auth';
 
 export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -23,30 +24,29 @@ export default function LoginScreen() {
       onPress={() => setPasswordVisible(!passwordVisible)}
     />
   );
-  const navigation = useNavigation();
+
   const navigation = useNavigation<NavigationProp<any>>();
 
-
   const handleLogin = async () => {
-        const result = await SignInWithEmailAndPassword(email, pass);
+    const result = await SignInWithEmailAndPassword(email, pass);
 
-        if (result.success) {
-            navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
-            Alert.alert(result.message)
-        } else {
-            console.log(result.message);
-            Alert.alert(result.message)
-        }
-    };
-
-   const handleRegister= ()=>{
-        navigation.navigate('Register')
+    if (result.success) {
+      navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
+      Alert.alert(result.message);
+    } else {
+      console.log(result.message);
+      Alert.alert(result.message);
     }
+  };
 
-   const handleLoginWithGoogle= async ()=>{
-        const a = await onGoogleButtonPress()
-        console.log('login with google nih boss',a.user.displayName)
-    }
+  const handleRegister = () => {
+    navigation.navigate('Register');
+  };
+
+  const handleLoginWithGoogle = async () => {
+    const a = await onGoogleButtonPress();
+    console.log('login with google nih boss', a.user.displayName);
+  };
 
   return (
     <Layout
@@ -80,8 +80,7 @@ export default function LoginScreen() {
           }}
           onPress={() => {
             navigation.navigate('MainNavigator' as never);
-          }}
-          >
+          }}>
           Log In
         </Button>
         <View
