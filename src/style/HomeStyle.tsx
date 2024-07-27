@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {Text} from 'react-native-svg';
 
 export default StyleSheet.create({
   Card: {
@@ -7,6 +8,7 @@ export default StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
+    padding: 10,
   },
   container1: {
     flexDirection: 'column',
@@ -14,28 +16,11 @@ export default StyleSheet.create({
     marginStart: 10,
   },
   container2: {
-    width: 'auto',
-    height: 'auto',
-    borderRadius: 5,
-    backgroundColor: 'white',
-    margin: 10,
-    borderColor: 'grey',
-    borderWidth: 1,
-  },
-  container3: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    margin: 10,
+    padding: 10,
   },
   Image: {
     width: 100,
     height: 100,
-  },
-  Image1: {
-    width: 200,
-    height: 150,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
   },
   Text: {
     color: 'black',
@@ -47,14 +32,9 @@ export default StyleSheet.create({
     marginEnd: 50,
   },
   Text2: {
-    color: 'black',
-    fontSize: 15,
-  },
-  Text3: {
-    color: 'black',
     fontSize: 20,
-    marginEnd: 50,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   Text4: {
     fontSize: 20,
