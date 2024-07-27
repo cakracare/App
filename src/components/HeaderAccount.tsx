@@ -5,18 +5,18 @@ import React from "react";
 import {initialImage} from "../helpers/initialImage.ts";
 
 type headerAccountProps = {
-    image: string,
-    name: string,
-    email: string
+    image: string | undefined,
+    name: string | undefined,
+    email: string | undefined,
 }
 
 export const HeaderAccount = (props:headerAccountProps): React.ReactElement => {
     return (
         <View style={styles.container1}>
-            <Image source={{uri: props.image || initialImage()}} style={styles.Image} />
+            <Image source={{uri: props.image || initialImage }} style={styles.Image} />
             <View style={styles.container2}>
-                <Text style={styles.Text}>{props.name}</Text>
-                <Text>{props.email}</Text>
+                <Text style={styles.Text}>{props.name || 'loading bang'}</Text>
+                <Text>{props.email || 'loading bang'}</Text>
             </View>
         </View>
     );

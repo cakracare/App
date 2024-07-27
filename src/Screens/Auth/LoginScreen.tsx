@@ -1,23 +1,34 @@
 import React, {useState} from 'react';
-import {Button, IconProps, Input, Layout, Text} from '@ui-kitten/components';
-import {Alert, Image, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {
-  Logout,
-  signInWithEmailAndPass,
-  signInWithGoogle,
-} from '../../service/auth';
+  Button,
+  IconProps,
+  Input,
+  Layout,
+  Text,
+  Icon,
+} from '@ui-kitten/components';
+import {Alert, Image, TouchableOpacity} from 'react-native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {signInWithEmailAndPass, signInWithGoogle} from '../../service/auth';
+import {getUser, getUserId} from '../../service/user.ts';
+import {useId} from '../../helpers/IdContext.tsx';
 
 export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = React.useState('');
   const [pass, setPass] = React.useState('');
+  const {id, setId} = useId();
+
+  const userid = async () => {
+    const userId = getUserId() || '';
+    setId(userId);
+  };
+
   const renderPasswordIcon = (props: IconProps) => (
     <Icon
       {...props}
-      name={passwordVisible ? 'eye-off' : 'eye'}
-      fill="black"
+      name={passwordVisible ? 'eye' : 'eye-off'}
+      // fill="black"
       onPress={() => setPasswordVisible(!passwordVisible)}
     />
   );
@@ -26,6 +37,7 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     const result = await signInWithEmailAndPass(email, pass);
     if (result.success) {
+      await userid();
       navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
       Alert.alert(result.message);
     } else {
@@ -39,13 +51,17 @@ export default function LoginScreen() {
   };
 
   const handleLoginWithGoogle = async () => {
-    const a = await signInWithGoogle();
-    navigation.navigate('MainNavigator', {Screen: 'Home'});
-  };
-
-  const handleLogout = async () => {
-    await Logout();
-    console.log('sdfdsf');
+    const result = await signInWithGoogle();
+    if (result.success) {
+      await userid();
+      const user = await getUser(result.userid || '');
+      console.log(user.data);
+      navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
+      Alert.alert(result.message);
+    } else {
+      console.log(result.message);
+      Alert.alert(result.message);
+    }
   };
 
   return (
@@ -119,7 +135,6 @@ export default function LoginScreen() {
           <Text>Sign In with Google</Text>
         </TouchableOpacity>
       </Layout>
-      <Button onPress={handleLogout}>test</Button>
     </Layout>
   );
 }

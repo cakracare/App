@@ -1,7 +1,8 @@
-import {Button, Card, Layout} from '@ui-kitten/components';
-import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
+import {Layout} from '@ui-kitten/components';
+import React from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 
-export default function ReportDetail() {
+export function ReportDetail() {
   return (
     <Layout
       style={{

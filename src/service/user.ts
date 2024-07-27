@@ -1,6 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 import {User} from "../Types";
 import {validateUser} from "../helpers/validateUser.ts";
+import auth from "@react-native-firebase/auth";
+
+export const getUserId = ()=>{
+    const user = auth().currentUser;
+    return user?.uid
+}
+
+
 
 // Create a new user
 export const createUser = async (user: User, id: string) => {
@@ -17,12 +25,13 @@ export const createUser = async (user: User, id: string) => {
     }
 };
 
+
 // Get a user by UID
 export const getUser = async (uid: string) => {
     try {
         const userDocument = await firestore().collection('users').doc(uid).get();
         if (userDocument.exists) {
-            console.log('User data:', userDocument.data());
+            // console.log('User data:', userDocument.data());
             return { success: true, data: userDocument.data() };
         } else {
             return { success: false, message: 'User not found' };
