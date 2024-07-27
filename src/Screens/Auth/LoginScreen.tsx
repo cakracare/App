@@ -1,18 +1,9 @@
-
 import React,{useState} from 'react';
-import { Alert } from 'react-native';
-import { Layout, Text, Input, Button } from '@ui-kitten/components';
-
-import React from 'react'
 import {Button, IconProps, Input, Layout, Text} from '@ui-kitten/components';
-import {useState} from 'react';
 import {Alert, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import { NavigationProp, useNavigation} from '@react-navigation/native';
-import {signInWithEmailAndPass, signInWithGoogle,} from '../../service/auth';
-import {User} from '../../Types'
-import {useId} from "../../helpers/IdContext.tsx";
+import {Logout, signInWithEmailAndPass, signInWithGoogle,} from '../../service/auth';
 
 export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -28,10 +19,9 @@ export default function LoginScreen() {
   );
   const navigation = useNavigation<NavigationProp<any>>();
   const handleLogin = async () => {
-        const result = await SignInWithEmailAndPassword(email, pass);
-
+        const result = await  signInWithEmailAndPass(email, pass);
         if (result.success) {
-            navigation.navigate('MainNavigator', {Screen: 'Home'})
+            navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
             Alert.alert(result.message)
 
         } else {
@@ -44,10 +34,14 @@ export default function LoginScreen() {
         navigation.navigate('Register')
     }
 
-
    const handleLoginWithGoogle= async ()=>{
-        const a = await onGoogleButtonPress()
-        console.log('login with google nih boss',a.user.displayName)
+        const a = await signInWithGoogle()
+        navigation.navigate('MainNavigator', {Screen: 'Home'})
+    }
+
+    const handleLogout = async ()=>{
+       await Logout()
+        console.log('sdfdsf')
     }
 
 
@@ -122,6 +116,7 @@ export default function LoginScreen() {
           <Text>Sign In with Google</Text>
         </TouchableOpacity>
       </Layout>
+        <Button onPress={handleLogout} >test</Button>
     </Layout>
   );
 }
