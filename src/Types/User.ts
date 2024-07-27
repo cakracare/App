@@ -11,6 +11,11 @@ export const UserSchema = z.object({
     role: z.string().default('siswa'),
 });
 
+export enum UserRole {
+    STUDENT = 'student',
+    TEACHER = 'teacher',
+}
+
 // Tipe TypeScript dari skema
 export type User = z.infer<typeof UserSchema>;
 
