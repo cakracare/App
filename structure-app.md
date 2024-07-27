@@ -1,0 +1,51 @@
+- Cakra Care App
+    - Auth Navigator
+      - Login Screen
+      - Register Screen
+    - Main Navigator (Tab Navigator)
+      - Home Tab (HomeStack)
+        - Home Screen
+          - tapilan awal
+          - artikel
+          - vidio
+          - dashboard hasil laporan (tampilan guru)
+        - AddQuestion Screen (tampilan guru)
+      - Report Tab (ReportStack)
+        - Report Screen
+          - hanya menampilkan list laporan yang sudah dibuat
+          - menapilkan semua laporan yang dibuat(tmapilan guru)
+        - Report detail
+          - menampolkan form unutk mengisi detail laporan yang terjadi
+          - summary atau rangkuman dari laporan yang sudah dibuat siswa  & memberikna feedback (tampilan guru)
+      - Account Tab (AccountStack)
+        - Account Screen
+        - Edit account screen
+
+    - Database Structure (Firestore)
+      - users
+          - uid
+          - name
+          - email
+          - asal sekolah
+          - kelas (optional)
+          - role
+      - reports
+          - reportId
+          - userId
+          - description
+          - url-gambar
+          - type
+          - status
+          - timestamp
+      - feedback
+          - feedbackId
+          - reportId
+          - teacherId
+          - message
+          - timestamp
+      - questions
+          - questionId
+          - userId
+          - question
+          - answer
+          - timestamp

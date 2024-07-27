@@ -92,7 +92,7 @@ export default function ReportDetail() {
             borderRadius: 10,
           }}>
           <Image
-            source={require('../../Image/speaking.png')}
+            source={require('../../assets/img/speaking.png')}
             style={{
               width: 50,
               height: 50,

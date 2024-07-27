@@ -1,19 +1,21 @@
-import React from 'react';
 import {
   Button,
   Layout,
   Text,
-  List,
-  ListItem,
   Card,
 } from '@ui-kitten/components';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {FlatList, Image, ScrollView, View} from 'react-native';
-import auth from '@react-native-firebase/auth';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import {Logout} from "../../service/auth.tsx";
+import { NavigationProp, useNavigation} from '@react-navigation/native';
+
+
+
+
 
 const HomeScreen: React.FC = () => {
+
   return (
     <Layout style={{flex: 1, padding: 5}}>
       <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
@@ -59,4 +61,4 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-export default HomeScreen;
+export default HomeScreen
