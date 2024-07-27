@@ -34,14 +34,15 @@ export default function LoginScreen():React.ReactElement {
             }
         };
 
-       const handleRegister= ()=>{
-            navigation.navigate('Register')
-        }
+   const handleRegister= ()=>{
+        navigation.navigate('Register')
+    }
 
        const handleLoginWithGoogle= async ()=>{
            const result = await signInWithGoogle()
            if (result.success) {
                console.info(result.user)
+               // @ts-ignore
                setUser(result?.user)
                navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                Alert.alert(result.message)
