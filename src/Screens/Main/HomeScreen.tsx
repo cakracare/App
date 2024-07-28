@@ -13,8 +13,6 @@ import {useUser} from "../../helpers/userContext.tsx";
 
 
 const HomeScreen: React.FC = () => {
-    // const {user, setUser} = useUser()
-    // console.info(user, 'home screens')
 
   return (
     <Layout style={{flex: 1, padding: 5}}>
