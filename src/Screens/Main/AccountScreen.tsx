@@ -3,9 +3,6 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-// import {useId} from "../../helpers/IdContext.tsx";
-import {getUser, getUserId} from "../../service/user.ts";
-import {User} from "../../Types";
 import {HeaderAccount} from "../../components/HeaderAccount.tsx";
 import {Logout} from "../../service/auth.tsx";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
@@ -52,22 +49,18 @@ const renderItem2 = ({item, index}: {item: any; index: number})  => (
 );
 const AccountScreen: React.FC = () => {
     const {user, setUser} = useUser()
-    // const [user, setUser] = React.useState<User | null>(null);
-    // const {id,setId} = useId()
 
     const navigation = useNavigation<NavigationProp<any>>();
     const handleLogout= async ()=>{
         const result = await Logout()
         if (result.success) {
-            console.log('dfgfdg')
             navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
     }
 
     useEffect(()=>{
-        // console.info(user, 'test')
+        console.info(user, 'account screen')
     },[user])
-    // console.log(id)
   return (
     <Layout style={styles.container}>
         <HeaderAccount image={user?.photoURL} name={user?.nama_lengkap} email={user?.email}/>
