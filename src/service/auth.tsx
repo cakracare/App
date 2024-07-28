@@ -1,9 +1,11 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-import { checkIfUserIsLoggedIn } from "../helpers/checkIfUserIsLoggedIn.ts";
-import {GoogleSignin} from "@react-native-google-signin/google-signin";
+import {GoogleSignin, isErrorWithCode} from "@react-native-google-signin/google-signin";
 import {User, UserSchema} from '../Types'
-import {createUser} from "./user.ts";
+import {createUser, getUser} from "./user.ts";
+import {handleFirebaseError} from "../helpers/handlingErrorFirebase.ts";
+
+
 
 // Configuration : google
 GoogleSignin.configure({
@@ -13,16 +15,18 @@ GoogleSignin.configure({
 export const signInWithEmailAndPass = async (email: string, password: string) => {
     try {
         const userCredential = await auth().signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+        const user = await getUser(userCredential.user.uid);
+
         return {
             success: true,
-            userid: user.uid || null,
+            user: user.data,
             message: 'Login successful'
         };
     } catch (error: any) {
+        const message = handleFirebaseError(error)
         return {
             success: false,
-            message: error.message
+            message: message
         };
     }
 };
@@ -81,12 +85,10 @@ export async function SignUpWithEmailAndPassword(user:User, password:string,conf
 
 export const signInWithGoogle = async () => {
     try {
-        // Google Sign-In
         const { idToken } = await GoogleSignin.signIn();
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         const userCredential = await auth().signInWithCredential(googleCredential);
         const user = userCredential.user;
-        console.log(user)
         const userDoc = await firestore().collection('users').doc(user.uid).get();
 
         if (!userDoc.exists) {
@@ -94,15 +96,22 @@ export const signInWithGoogle = async () => {
                     email : user.email,
                     photoURL : user.photoURL})
                 await createUser(datauser,user.uid)
+                return {
+                    success: true,
+                    user: datauser,
+                    message: 'Login successful with Google!'
+                };
         }
 
         return {
             success: true,
-            userid: user.uid || null,
+            user: userDoc.data(),
             message: 'Login successful with Google!'
         };
     } catch (error: any) {
-        console.log(error)
+        if (isErrorWithCode(error)) {
+            console.log(error.code)
+        }
         return {
             success: false,
             message: error.message
@@ -119,10 +128,10 @@ export async function Logout() {
             message: 'Logout berhasil.'
         };
     } catch (error: any) {
-        console.log(error);
+        console.error(error)
         return {
             success: false,
-            message: 'Logout gagal. Silakan coba lagi.'
+            message: error.message
         };
     }
 }

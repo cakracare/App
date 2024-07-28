@@ -7,12 +7,14 @@ import {
 import {FlatList, Image, ScrollView, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import {useUser} from "../../helpers/userContext.tsx";
 
 
 
 
 const HomeScreen: React.FC = () => {
-
+    // const {user, setUser} = useUser()
+    // console.info(user, 'home screens')
 
   return (
     <Layout style={{flex: 1, padding: 5}}>

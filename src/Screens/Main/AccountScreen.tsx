@@ -3,12 +3,14 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-import {useId} from "../../helpers/IdContext.tsx";
+// import {useId} from "../../helpers/IdContext.tsx";
 import {getUser, getUserId} from "../../service/user.ts";
 import {User} from "../../Types";
 import {HeaderAccount} from "../../components/HeaderAccount.tsx";
 import {Logout} from "../../service/auth.tsx";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {useUser} from "../../helpers/userContext.tsx";
+
 
 
 
@@ -40,46 +42,35 @@ const InfoItem = ({
 );
 const renderItem2 = ({item, index}: {item: any; index: number})  => (
   <View>
-    <InfoItem iconName="user" label="Nama" value={item.nama} />
+    <InfoItem iconName="user" label="Nama" value={item.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item.email} />
     <InfoItem iconName="key" label="Password" value={item.password} />
     <InfoItem iconName="transgender-alt" label="Gender" value={item.gender} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item.kelas} />
-    <InfoItem iconName="school" label="School" value={item.sekolah} />
+    <InfoItem iconName="school" label="School" value={item.asalSekolah} />
   </View>
 );
 const AccountScreen: React.FC = () => {
-    const [user, setUser] = React.useState<User | null>(null);
-    const {id,setId} = useId()
+    const {user, setUser} = useUser()
+    // const [user, setUser] = React.useState<User | null>(null);
+    // const {id,setId} = useId()
+
     const navigation = useNavigation<NavigationProp<any>>();
     const handleLogout= async ()=>{
         const result = await Logout()
         if (result.success) {
-            setId('')
+            console.log('dfgfdg')
             navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
         }
     }
 
     useEffect(()=>{
-        const get = async ()=>{
-            if (id != null) {
-                getUser(id).then((user)=>{
-                    // @ts-ignore
-                    setUser(user.data)
-                })
-            }
-        }
-
-        get()
-
-    },[id])
-    console.log(id)
+        // console.info(user, 'test')
+    },[user])
+    // console.log(id)
   return (
     <Layout style={styles.container}>
-        <HeaderAccount image={user?.photoURL}
-                       name={user?.nama_lengkap}
-                       email={user?.email}/>
-
+        <HeaderAccount image={user?.photoURL} name={user?.nama_lengkap} email={user?.email}/>
       <View>
         <View style={styles.container4}>
           <Text style={styles.Text4}>Account Details</Text>
@@ -88,7 +79,7 @@ const AccountScreen: React.FC = () => {
             <Icon2 name="angle-right" size={20} color={'black'} />
           </View>
         </View>
-        {renderItem2({item: data2[0], index: 0})}
+        {renderItem2({item: user, index: 0})}
         <Button onPress={handleLogout}>logut</Button>
       </View>
 
