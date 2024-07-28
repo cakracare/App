@@ -2,6 +2,7 @@
 import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
 import {useState} from 'react';
 import {Image, ScrollView, StyleSheet} from 'react-native';
+import FormInput from '../../components/FormInput';
 
 export default function RegisterScreen() {
   const [password, setPassword] = useState('');
@@ -28,22 +29,13 @@ export default function RegisterScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={require('../../assets/img/logo.png')} />
       <Layout style={styles.form}>
-        <Text style={styles.label}>Nama Lengkap</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Email</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Usia</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Kelas</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Asal Sekolah</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Jenis Kelamin</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>No. Orang Tua/Wali</Text>
-        <Input style={styles.input} />
-        <Text style={styles.label}>Alamat Lengkap</Text>
-        <Input style={styles.input} />
+        <FormInput label="Nama Lengkap" placeholder="" />
+        <FormInput label="Email" placeholder="" />
+        <FormInput label="Usia" placeholder="" />
+        <FormInput label="Kelas" placeholder="" />
+        <FormInput label="Asal Sekolah" placeholder="" />
+        <FormInput label="No. Orang Tua" placeholder="" />
+        <FormInput label="Alamat Lenkap" placeholder="" />
         <Text style={styles.label}>Password</Text>
         <Input
           style={styles.input}
