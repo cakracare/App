@@ -27,6 +27,8 @@ export default function LoginScreen():React.ReactElement {
                 setUser(result?.user)
                 navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                 Alert.alert(result.message)
+                setPass('')
+                setEmail('')
             } else {
                 Alert.alert(result.message)
                 setPass('')

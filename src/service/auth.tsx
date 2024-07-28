@@ -3,7 +3,7 @@ import firestore from "@react-native-firebase/firestore";
 import {GoogleSignin, isErrorWithCode} from "@react-native-google-signin/google-signin";
 import {User, UserSchema} from '../Types'
 import {createUser, getUser} from "./user.ts";
-import {handleFirebaseError} from "../helpers/handlingErrorFirebase.ts";
+import {handleFirebaseError} from "../helpers/handlingErrorFirebaseAuth.ts";
 
 
 
@@ -56,29 +56,10 @@ export async function SignUpWithEmailAndPassword(user:User, password:string,conf
             };
         }
     } catch (error: any) {
-        console.log('error', error.code);
-
-        // Penanganan kesalahan
-        let message = 'Terjadi kesalahan. Silakan coba lagi.';
-        switch (error.code) {
-            case 'auth/email-already-in-use':
-                message = 'Email sudah digunakan.';
-                break;
-            case 'auth/invalid-email':
-                message = 'Email tidak valid.';
-                break;
-            case 'auth/operation-not-allowed':
-                message = 'Operasi tidak diizinkan.';
-                break;
-            case 'auth/weak-password':
-                message = 'Password terlalu lemah.';
-                break;
-        }
-
+        const message = handleFirebaseError(error)
         return {
             success: false,
-            data: null,
-            message
+            message: message
         };
     }
 }
@@ -122,7 +103,11 @@ export const signInWithGoogle = async () => {
 // Fungsi untuk Logout
 export async function Logout() {
     try {
+
+        // await GoogleSignin.revokeAccess();
+        // await auth().revokeToken()
         await auth().signOut();
+        // await GoogleSignin.signOut();
         return {
             success: true,
             message: 'Logout berhasil.'
