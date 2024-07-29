@@ -1,4 +1,5 @@
 import {Layout} from '@ui-kitten/components';
+import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 
 export function ReportDetail() {
@@ -9,7 +10,80 @@ export function ReportDetail() {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'column'}}>
+        <TouchableOpacity
+          style={{
+            width: 300,
+            height: 100,
+            backgroundColor: 'cyan',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            source={require('../../assets/img/speaking.png')}
+            style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            width: 300,
+            height: 100,
+            backgroundColor: 'cyan',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            source={require('../../assets/img/speaking.png')}
+            style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            width: 300,
+            height: 100,
+            backgroundColor: 'cyan',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            // source={require('../../assets/img/speaking.png')}
+            source={require('../../assets/img/speaking.png')}
+            style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            width: 300,
+            height: 100,
+            backgroundColor: 'cyan',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+          }}>
+          <Image
+            source={require('../../assets/img/speaking.png')}
+            style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={{
             width: 300,

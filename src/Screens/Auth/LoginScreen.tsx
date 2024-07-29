@@ -24,6 +24,7 @@ export default function LoginScreen():React.ReactElement {
       const handleLogin = async () => {
             const result = await  signInWithEmailAndPass(email, pass);
             if (result.success) {
+                // @ts-ignore
                 setUser(result?.user)
                 navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                 Alert.alert(result.message)
