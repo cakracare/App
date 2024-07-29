@@ -1,23 +1,27 @@
-import {StyleSheet} from 'react-native';
-import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
-import {forminput} from '../Types/FormInputprops';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Text, Input, Layout } from '@ui-kitten/components';
+import { forminput } from '../Types/FormInputprops';
 
 export default function FormInput(props: forminput) {
+  const isPasswordField = props.label.toLowerCase().includes('password' || 'confirm password');
   return (
-    <Layout style={styles.form}>
-      <Text style={styles.label}>{props.label}</Text>
-      <Input style={styles.input} placeholder={props.placeholder} />
-    </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.label}>{props.label}</Text>
+        <Input
+            style={styles.input}
+            placeholder={props.placeholder}
+            value={props.value}
+            onChangeText={props.onChangeText}
+            status={props.status} // Apply status prop
+            secureTextEntry={isPasswordField}
+        />
+        {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+      </Layout>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-  },
   form: {
     width: 300,
   },
@@ -28,33 +32,13 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 15,
   },
-  label1: {
-    marginTop: 10,
-    borderRadius: 10,
-    fontSize: 13,
-    color: 'grey',
-  },
   input: {
-    marginTop: 20,
+    marginTop: 5,
     borderRadius: 10,
     backgroundColor: '#EEEDEB',
-  },
-  button: {
-    marginTop: 20,
-    borderRadius: 10,
-    backgroundColor: '#3B6EA8',
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
   },
   errorText: {
     color: 'red',
     marginTop: 10,
-  },
-  checkbox: {
-    marginTop: 20,
   },
 });
