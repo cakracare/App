@@ -4,7 +4,7 @@ import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
 import {HeaderAccount} from "../../components/HeaderAccount.tsx";
-import {Logout} from "../../service/auth.tsx";
+import {Logout} from "../../service";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {useUser} from "../../helpers/userContext.tsx";
 
