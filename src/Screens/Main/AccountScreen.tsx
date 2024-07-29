@@ -3,12 +3,14 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-import {HeaderAccount} from "../../components/HeaderAccount.tsx";
-import {Logout} from "../../service/auth.tsx";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {useId} from '../../helpers/IdContext.tsx';
+import {getUser, getUserId} from '../../service/user.ts';
+import {User} from '../../Types';
+import {HeaderAccount} from '../../components/HeaderAccount.tsx';
+import {Logout} from '../../service/auth.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from "../../helpers/userContext.tsx";
-
-
 
 
 const data2 = [

@@ -2,22 +2,6 @@ import React, { useState } from 'react';
 import { Button, Text, CheckBox, Input, Layout } from '@ui-kitten/components';
 import {Alert, Image, ScrollView, StyleSheet} from 'react-native';
 import FormInput from '../../components/FormInput';
-import useForm from '../../helpers/useFormHooks';
-import {handleZodError, validateUser} from "../../helpers/validateUser.ts";
-import {Logout, SignUpWithEmailAndPassword} from "../../service";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
-
-const initialState = {
-  nama_lengkap: '',
-  email: '',
-  usia: '',
-  kelas: '',
-  asal_sekolah: '',
-  no_ortu: '',
-  alamat_lengkap: '',
-  password: '',
-  confirm_password: '',
-};
 
 export default function RegisterScreen() {
   const {
@@ -60,8 +44,6 @@ export default function RegisterScreen() {
         Alert.alert('register suskes')
       }
     }
-
-
   };
 
   return (
