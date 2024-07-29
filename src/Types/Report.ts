@@ -57,6 +57,12 @@ const ReportSchema = z.object({
     sexualBullyingResponseId: z.string(),
 });
 
+export type BullyingResponse = z.infer<typeof BullyingResponseSchema>;
+export type PhysicalBullyingResponse = z.infer<typeof PhysicalBullyingResponseSchema>;
+export type VerbalBullyingResponse = z.infer<typeof VerbalBullyingResponseSchema>;
+export type SexualBullyingResponse = z.infer<typeof BullyingResponseSchema>;
+export type Report = z.infer<typeof ReportSchema>;
+
 export {
     PhysicalBullyingResponseSchema,
     VerbalBullyingResponseSchema,
