@@ -1,23 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
-import {forminput} from '../Types/FormInputprops';
-import React from 'react';
 
-export default function FormInput(props: forminput) {
-  return (
-    <Layout style={styles.form}>
-      <Text style={styles.label}>{props.label}</Text>
-      <Input style={styles.input} placeholder={props.placeholder} />
-    </Layout>
-  );
-}
-const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
-    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   form: {
     width: 300,
@@ -28,12 +16,14 @@ const styles = StyleSheet.create({
     marginStart: 10,
     color: 'grey',
     fontSize: 15,
+    paddingVertical: 5,
   },
   label1: {
     marginTop: 10,
     borderRadius: 10,
     fontSize: 13,
     color: 'grey',
+    paddingVertical: 5,
   },
   input: {
     marginTop: 20,
@@ -57,5 +47,6 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     marginTop: 20,
+    paddingVertical: 5,
   },
 });

@@ -6,17 +6,23 @@ import {
   Layout,
   Text,
   Icon,
+  Spinner,
+  Modal,
 } from '@ui-kitten/components';
-import {Alert, Image, TouchableOpacity} from 'react-native';
+import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle} from '../../service/auth';
 import {getUser, getUserId} from '../../service/user.ts';
 import {useId} from '../../helpers/IdContext.tsx';
+import ButtonCompo from '../../components/ButtonCompo.tsx';
+import styles from '../../style/LoginStyle.tsx';
+import {set} from 'zod';
 
 export default function LoginScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = React.useState('');
   const [pass, setPass] = React.useState('');
+  const [loading, setLoading] = useState(false);
   const {id, setId} = useId();
 
   const userid = async () => {
@@ -51,32 +57,38 @@ export default function LoginScreen() {
   };
 
   const handleLoginWithGoogle = async () => {
+    setLoading(true);
     const result = await signInWithGoogle();
+    setLoading(false);
     if (result.success) {
       await userid();
       const user = await getUser(result.userid || '');
       console.log(user.data);
       navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-      Alert.alert(result.message);
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
     } else {
       console.log(result.message);
-      Alert.alert(result.message);
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
     }
   };
 
   return (
-    <Layout
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        padding: 50,
-        backgroundColor: '#FFFFFF',
-      }}>
+    <Layout style={styles.container}>
+      <Modal
+        visible={loading}
+        animationType="fade"
+        backdropStyle={styles.backdrop}>
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <Spinner size="large" status="primary" />
+          </View>
+        </View>
+      </Modal>
       <Image source={require('../../assets/img/logo.png')} />
       <Layout>
         <Input
           placeholder="Enter your email"
-          style={{marginTop: 20, borderRadius: 10, backgroundColor: '#EEEDEB'}}
+          style={styles.input}
           value={email}
           onChangeText={nextValue => setEmail(nextValue)}
         />
@@ -84,56 +96,55 @@ export default function LoginScreen() {
           placeholder="Enter your password"
           accessoryRight={renderPasswordIcon}
           secureTextEntry={!passwordVisible}
-          style={{marginTop: 20, borderRadius: 10, backgroundColor: '#EEEDEB'}}
+          style={styles.input}
           value={pass}
           onChangeText={nextValue => setPass(nextValue)}
         />
-        <Text>Minimum 8 charakter</Text>
-        <Button
+        <Text
           style={{
-            marginTop: 10,
-            borderRadius: 10,
-            backgroundColor: '#3B6EA8',
-            width: 300,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={handleLogin}>
-          Log In
-        </Button>
-        <Layout
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 30,
-            marginTop: 10,
+            paddingVertical: 10,
           }}>
+          Minimum 8 charakter
+        </Text>
+        <ButtonCompo status="primary" text="Login" onPress={handleLogin} />
+        <Layout style={styles.container1}>
           <TouchableOpacity onPress={handleRegister}>
-            <Text>Create Account</Text>
+            <Text
+              style={{
+                paddingVertical: 10,
+              }}>
+              Create Account
+            </Text>
           </TouchableOpacity>
-          <Text>or</Text>
-          <Text>Reset Password</Text>
-        </Layout>
-        <TouchableOpacity
-          onPress={handleLoginWithGoogle}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 10,
-            borderRadius: 10,
-            backgroundColor: '#EEEDEB',
-          }}>
-          <Image
-            source={require('../../assets/img/google.png')}
+          <Text
             style={{
-              width: 20,
-              height: 20,
-              marginRight: 10,
-            }}
-          />
+              paddingVertical: 10,
+            }}>
+            or
+          </Text>
+          <Text
+            style={{
+              paddingVertical: 10,
+            }}>
+            Reset Password
+          </Text>
+        </Layout>
+        <Button
+          onPress={handleLoginWithGoogle}
+          style={styles.touch}
+          status="basic"
+          accessoryLeft={
+            <Image
+              source={require('../../assets/img/google.png')}
+              style={{
+                width: 20,
+                height: 20,
+                marginRight: 10,
+              }}
+            />
+          }>
           <Text>Sign In with Google</Text>
-        </TouchableOpacity>
+        </Button>
       </Layout>
     </Layout>
   );

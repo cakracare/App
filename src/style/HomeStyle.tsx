@@ -23,33 +23,37 @@ export default StyleSheet.create({
     height: 100,
   },
   Text: {
-    color: 'black',
     fontSize: 20,
+    paddingBottom: 5,
   },
   Text1: {
-    color: 'black',
     fontSize: 15,
     marginEnd: 50,
+    paddingBottom: 5,
   },
   Text2: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    paddingBottom: 5,
   },
   Text4: {
     fontSize: 20,
     fontWeight: 'bold',
     marginStart: 10,
+    paddingBottom: 5,
   },
   Text5: {
     fontSize: 15,
     marginStart: 10,
+    paddingBottom: 5,
   },
   Text6: {
     fontSize: 20,
     fontWeight: 'bold',
     marginStart: 10,
     marginTop: 20,
+    paddingBottom: 5,
   },
   Flatlist: {
     marginTop: 10,

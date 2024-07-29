@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
@@ -7,18 +6,14 @@ import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.ts';
 import {View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useId} from "../helpers/IdContext.tsx";
-import {getUserId} from "../service/user.ts";
-
-
-
+import {useId} from '../helpers/IdContext.tsx';
+import {getUserId} from '../service/user.ts';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [user, setUser] = useState<Object | null>(null);
-  const { id, setId } = useId();
-
+  const {id, setId} = useId();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -27,11 +22,11 @@ const AppNavigator: React.FC = () => {
       setUser(authStatus.user);
     };
 
-    const userid = async ()=>{
+    const userid = async () => {
       const userId = getUserId() || '';
-      setId(userId)
-    }
-    userid()
+      setId(userId);
+    };
+    userid();
 
     checkAuthStatus();
     // const uid = user?.uid || ''
@@ -46,7 +41,7 @@ const AppNavigator: React.FC = () => {
     );
   }
   const iniRout = isLoggedIn ? 'MainNavigator' : 'AuthNavigator';
-  console.log(iniRout)
+  console.log(iniRout);
   return (
     <NavigationContainer>
       <Stack.Navigator

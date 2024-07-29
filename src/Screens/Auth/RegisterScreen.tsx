@@ -1,8 +1,19 @@
-
-import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
+import {
+  Button,
+  Text,
+  CheckBox,
+  Input,
+  Layout,
+  Select,
+  IndexPath,
+  SelectItem,
+} from '@ui-kitten/components';
 import {useState} from 'react';
 import {Image, ScrollView, StyleSheet} from 'react-native';
 import FormInput from '../../components/FormInput';
+import React from 'react';
+import ButtonCompo from '../../components/ButtonCompo';
+import styles from '../../style/RegisterStyle';
 
 export default function RegisterScreen() {
   const [password, setPassword] = useState('');
@@ -26,95 +37,49 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../../assets/img/logo.png')} />
-      <Layout style={styles.form}>
-        <FormInput label="Nama Lengkap" placeholder="" />
-        <FormInput label="Email" placeholder="" />
-        <FormInput label="Usia" placeholder="" />
-        <FormInput label="Kelas" placeholder="" />
-        <FormInput label="Asal Sekolah" placeholder="" />
-        <FormInput label="No. Orang Tua" placeholder="" />
-        <FormInput label="Alamat Lenkap" placeholder="" />
-        <Text style={styles.label}>Password</Text>
-        <Input
-          style={styles.input}
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
-        <Text style={styles.label1}>Minimum 8 characters</Text>
-        <Text style={styles.label}>Confirm Password</Text>
-        <Input
-          style={styles.input}
-          secureTextEntry={true}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
-        {error1 ? <Text style={styles.errorText}>{error1}</Text> : null}
-        <Text style={styles.label1}>Minimum 8 characters</Text>
-        <CheckBox
-          style={styles.checkbox}
-          checked={isChecked}
-          onChange={setIsChecked}>
-          Saya Setuju dengan ketentuan diatas
-        </CheckBox>
-        <Button
-          style={styles.button}
-          onPress={handleRegister}
-          disabled={!isChecked}>
-          <Text style={styles.buttonText}>Daftar</Text>
-        </Button>
-      </Layout>
-    </ScrollView>
+    <Layout>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require('../../assets/img/logo.png')} />
+        <Layout style={styles.form}>
+          <FormInput label="Nama Lengkap" placeholder="" />
+          <FormInput label="Email" placeholder="" />
+          <FormInput label="Usia" placeholder="" />
+          <FormInput label="Kelas" placeholder="" />
+          <FormInput label="Asal Sekolah" placeholder="" />
+          <FormInput label="No. Orang Tua" placeholder="" />
+          <FormInput label="Alamat Lenkap" placeholder="" />
+          <Text style={styles.label}>Password</Text>
+          <Input
+            style={styles.input}
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          <Text style={styles.label1}>Minimum 8 characters</Text>
+          <Text style={styles.label}>Confirm Password</Text>
+          <Input
+            style={styles.input}
+            secureTextEntry={true}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          {error1 ? <Text style={styles.errorText}>{error1}</Text> : null}
+          <Text style={styles.label1}>Minimum 8 characters</Text>
+          <CheckBox
+            style={styles.checkbox}
+            checked={isChecked}
+            onChange={setIsChecked}>
+            Saya Setuju dengan ketentuan diatas
+          </CheckBox>
+          <ButtonCompo
+            text="Daftar"
+            status="primary"
+            onPress={handleRegister}
+            disabled={!isChecked}
+          />
+        </Layout>
+      </ScrollView>
+    </Layout>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-  },
-  form: {
-    width: 300,
-  },
-  label: {
-    marginTop: 20,
-    borderRadius: 10,
-    marginStart: 10,
-    color: 'grey',
-    fontSize: 15,
-  },
-  label1: {
-    marginTop: 10,
-    borderRadius: 10,
-    fontSize: 13,
-    color: 'grey',
-  },
-  input: {
-    marginTop: 20,
-    borderRadius: 10,
-    backgroundColor: '#EEEDEB',
-  },
-  button: {
-    marginTop: 20,
-    borderRadius: 10,
-    backgroundColor: '#3B6EA8',
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 10,
-  },
-  checkbox: {
-    marginTop: 20,
-  },
-});

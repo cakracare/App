@@ -3,14 +3,13 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-import {useId} from "../../helpers/IdContext.tsx";
-import {getUser, getUserId} from "../../service/user.ts";
-import {User} from "../../Types";
-import {HeaderAccount} from "../../components/HeaderAccount.tsx";
-import {Logout} from "../../service/auth.tsx";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
-
-
+import {useId} from '../../helpers/IdContext.tsx';
+import {getUser, getUserId} from '../../service/user.ts';
+import {User} from '../../Types';
+import {HeaderAccount} from '../../components/HeaderAccount.tsx';
+import {Logout} from '../../service/auth.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import ButtonCompo from '../../components/ButtonCompo.tsx';
 
 const data2 = [
   {
@@ -38,7 +37,7 @@ const InfoItem = ({
     <Text style={styles.Text3}>{value}</Text>
   </View>
 );
-const renderItem2 = ({item, index}: {item: any; index: number})  => (
+const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item.nama} />
     <InfoItem iconName="envelope" label="Email" value={item.email} />
@@ -49,36 +48,37 @@ const renderItem2 = ({item, index}: {item: any; index: number})  => (
   </View>
 );
 const AccountScreen: React.FC = () => {
-    const [user, setUser] = React.useState<User | null>(null);
-    const {id,setId} = useId()
-    const navigation = useNavigation<NavigationProp<any>>();
-    const handleLogout= async ()=>{
-        const result = await Logout()
-        if (result.success) {
-            setId('')
-            navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
-        }
+  const [user, setUser] = React.useState<User | null>(null);
+  const {id, setId} = useId();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const handleLogout = async () => {
+    const result = await Logout();
+    if (result.success) {
+      setId('');
+      navigation.navigate('AuthNavigator', {Screen: 'LoginScreen'});
     }
+  };
 
-    useEffect(()=>{
-        const get = async ()=>{
-            if (id != null) {
-                getUser(id).then((user)=>{
-                    // @ts-ignore
-                    setUser(user.data)
-                })
-            }
-        }
+  useEffect(() => {
+    const get = async () => {
+      if (id != null) {
+        getUser(id).then(user => {
+          // @ts-ignore
+          setUser(user.data);
+        });
+      }
+    };
 
-        get()
-
-    },[id])
-    console.log(id)
+    get();
+  }, [id]);
+  console.log(id);
   return (
     <Layout style={styles.container}>
-        <HeaderAccount image={user?.photoURL}
-                       name={user?.nama_lengkap}
-                       email={user?.email}/>
+      <HeaderAccount
+        image={user?.photoURL}
+        name={user?.nama_lengkap}
+        email={user?.email}
+      />
 
       <View>
         <View style={styles.container4}>
@@ -89,9 +89,15 @@ const AccountScreen: React.FC = () => {
           </View>
         </View>
         {renderItem2({item: data2[0], index: 0})}
-        <Button onPress={handleLogout}>logut</Button>
+        <Layout
+          style={{
+            alignContent: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ButtonCompo status="danger" text="Logout" onPress={handleLogout} />
+        </Layout>
       </View>
-
     </Layout>
   );
 };

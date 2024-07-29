@@ -1,8 +1,12 @@
-import {Layout} from '@ui-kitten/components';
+import {Button, Layout, Text} from '@ui-kitten/components';
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import ReportComp from '../../components/ReportComp';
+import ButtonCompo from '../../components/ButtonCompo';
+import {useNavigation} from '@react-navigation/native';
+import {TouchableOpacity} from 'react-native';
 
 export function ReportDetail() {
+  const navigation = useNavigation();
   return (
     <Layout
       style={{
@@ -10,98 +14,45 @@ export function ReportDetail() {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <View style={{flexDirection: 'column'}}>
-        <TouchableOpacity
-          style={{
-            width: 300,
-            height: 100,
-            backgroundColor: 'cyan',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={require('../../Image/speaking.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 300,
-            height: 100,
-            backgroundColor: 'cyan',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={require('../../Image/speaking.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 300,
-            height: 100,
-            backgroundColor: 'cyan',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={require('../../Image/speaking.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 300,
-            height: 100,
-            backgroundColor: 'cyan',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={require('../../Image/speaking.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 300,
-            height: 100,
-            backgroundColor: 'cyan',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-          }}>
-          <Image
-            source={require('../../assets/img/speaking.png')}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-          <Text style={{color: '#000000', fontSize: 20}}>Report</Text>
-        </TouchableOpacity>
-      </View>
+      <ReportComp
+        onPress={() => {
+          navigation.navigate('Soal' as never);
+        }}
+        text="Verbal"
+        status="success"
+        icon={require('../../assets/img/speaking.png')}
+      />
+      <ReportComp
+        onPress={() => {
+          navigation.navigate('Soal' as never);
+        }}
+        text="Physical"
+        status=""
+        icon={require('../../assets/img/physical.png')}
+      />
+      <ReportComp
+        onPress={() => {
+          navigation.navigate('Soal' as never);
+        }}
+        text="Sexual"
+        status=""
+        icon={require('../../assets/img/seksual.png')}
+      />
+      <ReportComp
+        onPress={() => {
+          navigation.navigate('Soal' as never);
+        }}
+        text="Cyber"
+        status=""
+        icon={require('../../assets/img/cyber.png')}
+      />
+      <ButtonCompo
+        text="Submit"
+        status="primary"
+        onPress={() => {
+          navigation.navigate('ReportScreen' as never);
+        }}
+      />
     </Layout>
   );
 }
