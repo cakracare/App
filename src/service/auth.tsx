@@ -76,12 +76,15 @@ export const signInWithGoogle = async () => {
                 const datauser: User = UserSchema.parse({nama_lengkap : user.displayName,
                     email : user.email,
                     photoURL : user.photoURL})
-                await createUser(datauser,user.uid)
+            try {
+                await createUser(datauser, user.uid);
+            } catch (createUserError: any) {
+                await auth().signOut();
                 return {
-                    success: true,
-                    user: datauser,
-                    message: 'Login successful with Google!'
+                    success: false,
+                    message: `Failed to create user: ${createUserError.message}`
                 };
+            }
         }
 
         return {

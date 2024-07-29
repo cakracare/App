@@ -1,16 +1,17 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { User, UserSchema } from "../Types";
 
+// @ts-ignore
 const initialUser: User = {
     nama_lengkap: '',
     email: '',
-    role: '',
+    role: 'siswa',
     photoURL: '',
-    usia: undefined,
+    usia: '',
     kelas: '',
-    asalSekolah: '',
-    gender: undefined,
-    nama_orangtua: '',
+    asal_sekolah: '',
+    gender: 'male',
+    no_ortu: '',
 };
 
 interface UserContextProps {

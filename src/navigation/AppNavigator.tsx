@@ -19,7 +19,9 @@ const AppNavigator: React.FC = () => {
     const checkAuthStatus = async () => {
       const authStatus = await checkIfUserIsLoggedIn();
       setIsLoggedIn(authStatus.loggedIn);
+      // @ts-ignore
       const {data} = await getUser(authStatus?.user?.uid)
+      // @ts-ignore
       setUser(data);
     };
 
