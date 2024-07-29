@@ -6,23 +6,21 @@ import ButtonCompo from '../../components/ButtonCompo';
 import {useNavigation} from '@react-navigation/native';
 
 export default function Soal() {
-  const [checked, setChecked] = React.useState<boolean>(false);
+  const [checkedItems, setCheckedItems] = React.useState<{
+    [key: string]: boolean;
+  }>({});
   const [selectedOption, setSelectedOption] = React.useState('');
   const navigation = useNavigation();
   const data = [
     {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
     {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
   ];
+  const handleCheckedChange = (key: string, value: boolean) => {
+    setCheckedItems(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
   return (
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <List
@@ -30,11 +28,12 @@ export default function Soal() {
         data={data}
         renderItem={({item}) => (
           <SoalCompo
-            keye={item.key} // Compare keye with item.key
-            key={'dfsdf'}
+            key={item.key}
             text={item.soal}
-            checked={checked} // Convert checked to string and compare with item.key.toString()
-            setChecked={setChecked} // Compare setChecked with true
+            checked={!!checkedItems[item.key]}
+            setChecked={(value: boolean) =>
+              handleCheckedChange(item.key, value)
+            }
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />

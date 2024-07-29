@@ -4,5 +4,4 @@ export type SoalProps = {
   setChecked: (value: boolean) => void;
   selectedOption: string;
   setSelectedOption: (value: string) => void;
-  keye: string;
 };

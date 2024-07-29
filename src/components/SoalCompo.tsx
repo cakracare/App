@@ -9,11 +9,10 @@ const SoalCompo: React.FC<SoalProps> = ({
   setChecked,
   selectedOption,
   setSelectedOption,
-  keye,
 }) => {
-  console.log('checked', checked, keye);
+  console.log('checked', checked);
   return (
-    <View key={keye}>
+    <View>
       <Text>{text}</Text>
       <Radio checked={checked === false} onChange={() => setChecked(false)}>
         Tidak
