@@ -1,8 +1,7 @@
 export type SoalProps = {
-  text: string;
-  checked: boolean;
+  text: string | null;
+  checked: boolean | undefined;
   setChecked: (value: boolean) => void;
-  selectedOption: string;
-  setSelectedOption: (value: string) => void;
-  keye: string;
+  selectedOption: number | undefined;
+  setSelectedOption: (value: number) => void;
 };

@@ -57,20 +57,7 @@ export default function LoginScreen():React.ReactElement {
            }
         }
 
-  const handleLoginWithGoogle = async () => {
-    setLoading(true);
-    const result = await signInWithGoogle();
-    setLoading(false);
-    if (result.success) {
-      // const user = await getUser(result.userid || '');
-      console.log(user?.data);
-      navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-      ToastAndroid.show(result.message, ToastAndroid.SHORT);
-    } else {
-      console.log(result.message);
-      ToastAndroid.show(result.message, ToastAndroid.SHORT);
-    }
-  };
+
 
   return (
     <Layout style={styles.container}>
@@ -107,7 +94,7 @@ export default function LoginScreen():React.ReactElement {
           Minimum 8 charakter
         </Text>
         <ButtonCompo
-            o status="primary" text="Login" onPress={handleLogin} />
+            status="primary" text="Login" onPress={handleLogin} />
         <Layout style={styles.container1}>
           <TouchableOpacity onPress={handleRegister}>
             <Text

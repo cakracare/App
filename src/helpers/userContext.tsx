@@ -2,26 +2,28 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { User, UserSchema } from "../Types";
 
 const initialUser: User = {
+    alamat_lengkap: "",
+    password: "",
     nama_lengkap: '',
     email: '',
-    role: '',
+    role: 'siswa',
     photoURL: '',
-    usia: undefined,
+    usia: '',
     kelas: '',
-    asalSekolah: '',
-    gender: undefined,
-    nama_orangtua: '',
+    asal_sekolah: '',
+    gender: 'male',
+    no_ortu: ''
 };
 
 interface UserContextProps {
-    user: User;
-    setUser: React.Dispatch<React.SetStateAction<User>>;
+    user: User | undefined;
+    setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User>(initialUser);
+    const [user, setUser] = useState<User | undefined>(initialUser);
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

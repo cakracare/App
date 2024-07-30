@@ -1,52 +1,80 @@
-import React from 'react';
-import {View} from 'react-native';
-import {Layout, List, Radio, Text} from '@ui-kitten/components';
+import React, {useCallback} from 'react';
+import { View } from 'react-native';
+import { Layout, List, Radio, Text } from '@ui-kitten/components';
 import SoalCompo from '../../components/SoalCompo';
 import ButtonCompo from '../../components/ButtonCompo';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {getQuestionsByType} from "../../service/questions.ts";
+import {Questions} from "../../Types/Questions.ts";
+
 
 export default function Soal() {
-  const [checked, setChecked] = React.useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = React.useState('');
-  const navigation = useNavigation();
-  const data = [
-    {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-    // {key: '1', soal: 'Apakah anda pernah mengalami kekerasan?'},
-    // {key: '2', soal: 'Apakah anda pernah mengalami kekerasan?aaaaaaaaa'},
-    // {key: '3', soal: 'Apakah anda pernah mengalami kekerasan?aaaa'},
-  ];
-  return (
-    <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <List
-        style={{flex: 1, padding: 10}}
-        data={data}
-        renderItem={({item}) => (
-          <SoalCompo
-            keye={item.key} // Compare keye with item.key
-            key={'dfsdf'}
-            text={item.soal}
-            checked={checked} // Convert checked to string and compare with item.key.toString()
-            setChecked={setChecked} // Compare setChecked with true
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-        )}
-      />
-      <ButtonCompo
-        text="Submit"
-        status="primary"
-        onPress={() => {
-          navigation.navigate('ReportDetails' as never);
-        }}
-      />
-    </Layout>
-  );
+    const route = useRoute();
+    // const [data, setData] = React.useState<any[]>([]);
+    const questins = route.params?.questions || [];
+
+    // console.log(questins)
+
+    const [answers, setAnswers] = React.useState<Questions[]>(questins);
+
+
+
+    const navigation = useNavigation();
+
+    const handleCheckedChange = (key: string | null, value: boolean) => {
+        setAnswers(prevAnswers =>
+            prevAnswers.map(answer =>
+                answer.id === key
+                    ? { ...answer, isChecked: value || false, selectedOption: value ? answer.selectedOption : 0 }
+                    : answer
+            )
+        );
+    };
+
+    const handleOptionChange = (key: string | null, option: number) => {
+        setAnswers(prevAnswers =>
+            prevAnswers.map(answer =>
+                answer.id === key ? { ...answer, selectedOption: option } : answer
+            )
+        );
+    };
+
+    // console.info(answers);
+    /*
+    { type: 'type_of_bully', quest: 'Apakah anda pernah mengalami kekerasan?', incedent: false, point: 0 },
+     */
+
+    return (
+        <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <List
+                style={{ flex: 1, padding: 10 }}
+                data={answers}
+                renderItem={({ item }) => (
+                    <SoalCompo
+                        key={item.id}
+                        text={item.question}
+                        checked={item.isChecked}
+                        setChecked={(value: boolean) => handleCheckedChange(item.id, value)}
+                        selectedOption={item.selectedOption}
+                        setSelectedOption={(option: number) => handleOptionChange(item.id, option)}
+                    />
+                )}
+            />
+            <ButtonCompo
+                text="Submit"
+                status="primary"
+                onPress={() => {
+                    const result = answers.map((item: Questions) =>{
+                        console.log(item.question, (item.selectedOption?item.selectedOption:0));
+                        return {
+                            question: item.question,
+                            answersValue: item.selectedOption?item.selectedOption:0,
+                        }
+                    })
+
+                    console.log(result)
+                }}
+            />
+        </Layout>
+    );
 }

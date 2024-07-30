@@ -1,12 +1,12 @@
 import React from 'react';
-import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
-import {useNavigation} from '@react-navigation/native';
+import {Layout, Text} from '@ui-kitten/components';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
-import {Touchable, TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import CardComp from '../../components/CardComp';
 
 const ReportScreen: React.FC = () => {
-  const navigation = useNavigation();
+   const navigation = useNavigation<NavigationProp<any>>();
 
   return (
     <Layout
@@ -24,14 +24,14 @@ const ReportScreen: React.FC = () => {
           text="Report"
           status="primary"
           onPress={() => {
-            navigation.navigate('ReportDetails' as never);
+            navigation.navigate('ReportNavigator', {screen: "ReportDetail"});
           }}
         />
       </View>
       <Text>Result Report</Text>
       <CardComp
         onPress={() => {
-          navigation.navigate('ReportDetails' as never);
+          navigation.navigate('ReportDetail');
         }}
         time="12:00"
         status="success"
@@ -39,7 +39,7 @@ const ReportScreen: React.FC = () => {
       />
       <CardComp
         onPress={() => {
-          navigation.navigate('ReportDetails' as never);
+          navigation.navigate('ReportDetail');
         }}
         time="12:00"
         status="success"

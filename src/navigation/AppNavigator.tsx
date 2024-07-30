@@ -20,6 +20,7 @@ const AppNavigator: React.FC = () => {
       const authStatus = await checkIfUserIsLoggedIn();
       setIsLoggedIn(authStatus.loggedIn);
       const {data} = await getUser(authStatus?.user?.uid)
+      console.info(data)
       setUser(data);
     };
 

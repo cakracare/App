@@ -1,6 +1,13 @@
 export type ParamListBase = {
   Home: undefined;
-  Report: undefined;
+  ReportNavigator: undefined;
   Feedback: undefined;
   Account: undefined;
 };
+
+
+export type ParamListReport = {
+  Report: undefined;
+  ReportDetail: undefined;
+  Soal: { questions: any[] };
+}
