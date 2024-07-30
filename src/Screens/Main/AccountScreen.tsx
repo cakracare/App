@@ -3,12 +3,14 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-import {HeaderAccount} from "../../components/HeaderAccount.tsx";
-import {Logout} from "../../service";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {useId} from '../../helpers/IdContext.tsx';
+import {getUser, getUserId} from '../../service/user.ts';
+import {User} from '../../Types';
+import {HeaderAccount} from '../../components/HeaderAccount.tsx';
+import {Logout} from '../../service/auth.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from "../../helpers/userContext.tsx";
-
-
 
 
 const data2 = [
@@ -39,12 +41,12 @@ const InfoItem = ({
 );
 const renderItem2 = ({item, index}: {item: any; index: number})  => (
   <View>
-    <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap || ''} />
-    <InfoItem iconName="envelope" label="Email" value={item?.email || ''} />
-    <InfoItem iconName="key" label="Password" value={item?.password || ''} />
-    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender || ''} />
-    <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas || ''} />
-    <InfoItem iconName="school" label="School" value={item?.asal_sekolah || ''} />
+    <InfoItem iconName="user" label="Nama" value={item.nama_lengkap} />
+    <InfoItem iconName="envelope" label="Email" value={item.email} />
+    <InfoItem iconName="key" label="Password" value={item.password} />
+    <InfoItem iconName="transgender-alt" label="Gender" value={item.gender} />
+    <InfoItem iconName="user-graduate" label="Kelas" value={item.kelas} />
+    <InfoItem iconName="school" label="School" value={item.asal_sekolah} />
   </View>
 );
 const AccountScreen: React.FC = () => {

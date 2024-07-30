@@ -1,7 +1,6 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, Input, Layout } from '@ui-kitten/components';
-import { forminput } from '../Types/FormInputprops';
+import {StyleSheet} from 'react-native';
+import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
+import {forminput} from '../Types/FormInputprops';
 
 export default function FormInput(props: forminput) {
   const isPasswordField = props.label.toLowerCase().includes('password' || 'confirm password');
@@ -20,7 +19,6 @@ export default function FormInput(props: forminput) {
       </Layout>
   );
 }
-
 const styles = StyleSheet.create({
   form: {
     width: 300,

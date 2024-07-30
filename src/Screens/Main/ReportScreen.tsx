@@ -1,9 +1,12 @@
 import React from 'react';
-import {Button, Layout, Text} from '@ui-kitten/components';
-import {useNavigation} from '@react-navigation/native';
+import {Layout, Text} from '@ui-kitten/components';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import ButtonCompo from '../../components/ButtonCompo';
+import {View} from 'react-native';
+import CardComp from '../../components/CardComp';
 
 const ReportScreen: React.FC = () => {
-  const navigation = useNavigation();
+   const navigation = useNavigation<NavigationProp<any>>();
 
   return (
     <Layout
@@ -11,11 +14,37 @@ const ReportScreen: React.FC = () => {
         flex: 1,
         padding: 10,
       }}>
-      <Button
-        style={{marginBottom: 10, borderRadius: 10, backgroundColor: '#00B2FF'}}
-        onPress={() => navigation.navigate('ReportDetails' as never)}>
-        Add Report
-      </Button>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 10,
+        }}>
+        <ButtonCompo
+          text="Report"
+          status="primary"
+          onPress={() => {
+            navigation.navigate('ReportNavigator', {screen: "ReportDetail"});
+          }}
+        />
+      </View>
+      <Text>Result Report</Text>
+      <CardComp
+        onPress={() => {
+          navigation.navigate('ReportDetail');
+        }}
+        time="12:00"
+        status="success"
+        title="Report 1"
+      />
+      <CardComp
+        onPress={() => {
+          navigation.navigate('ReportDetail');
+        }}
+        time="12:00"
+        status="success"
+        title="Report 1"
+      />
     </Layout>
   );
 };

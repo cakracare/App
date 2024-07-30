@@ -27,7 +27,7 @@ export const createUser = async (user: User, id: string) => {
 
 
 // Get a user by UID
-export const getUser = async (uid: string) => {
+export const getUser = async (uid: string | undefined) => {
     try {
         const userDocument = await firestore().collection('users').doc(uid).get();
         if (userDocument.exists) {
