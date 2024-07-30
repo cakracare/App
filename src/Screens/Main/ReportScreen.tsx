@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, List, Text} from '@ui-kitten/components';
 import {useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
 import {Touchable, TouchableOpacity, View} from 'react-native';
@@ -29,21 +29,18 @@ const ReportScreen: React.FC = () => {
         />
       </View>
       <Text>Result Report</Text>
-      <CardComp
-        onPress={() => {
-          navigation.navigate('ReportDetails' as never);
-        }}
-        time="12:00"
-        status="success"
-        title="Report 1"
-      />
-      <CardComp
-        onPress={() => {
-          navigation.navigate('ReportDetails' as never);
-        }}
-        time="12:00"
-        status="success"
-        title="Report 1"
+      <List
+        data={['Report 1', 'Report 2', 'Report 3']}
+        renderItem={({item}) => (
+          <CardComp
+            onPress={() => {
+              navigation.navigate('HasilReport' as never);
+            }}
+            time="12:00"
+            status="success"
+            title={item}
+          />
+        )}
       />
     </Layout>
   );

@@ -8,6 +8,7 @@ import {ParamListBase, ScreenProps} from '../Types';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ReportDetail} from '../Screens/Main/ReportDetail.tsx';
 import Soal from '../Screens/Main/Soal.tsx';
+import HasilReport from '../Screens/Main/HasilReport.tsx';
 const Tab = createBottomTabNavigator<ParamListBase>();
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,7 @@ function MainNavigator() {
         component={SecondNavigator}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="HasilReport" component={HasilReport} />
       <Stack.Screen name="ReportDetails" component={ReportDetail} />
       <Stack.Screen name="Soal" component={Soal} />
     </Stack.Navigator>
