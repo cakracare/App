@@ -9,6 +9,7 @@ import {Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useUser} from "../helpers/userContext.tsx";
 import {getUser} from "../service/user.ts";
+import auth from "@react-native-firebase/auth";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator: React.FC = () => {
@@ -16,15 +17,12 @@ const AppNavigator: React.FC = () => {
   const {user, setUser} = useUser()
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      const authStatus = await checkIfUserIsLoggedIn();
-      setIsLoggedIn(authStatus.loggedIn);
-      const {data} = await getUser(authStatus?.user?.uid)
-      console.info(data)
-      setUser(data);
-    };
-
-    checkAuthStatus();
+     checkIfUserIsLoggedIn().then((status)=>{
+          setIsLoggedIn(status.loggedIn)
+          getUser(status.user?.uid).then((result)=>{
+            setUser(result?.data)
+          })
+      })
   }, []);
 
   if (isLoggedIn === null) {
@@ -36,7 +34,7 @@ const AppNavigator: React.FC = () => {
   }
 
   const iniRout = isLoggedIn ? 'MainNavigator' : 'AuthNavigator';
-  console.info(isLoggedIn)
+  console.info(isLoggedIn,'<< App navigator')
   return (
       <NavigationContainer>
         <Stack.Navigator

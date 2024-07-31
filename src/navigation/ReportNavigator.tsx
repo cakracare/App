@@ -7,9 +7,6 @@ import {ParamListReport} from "../Types";
 
 
 const ReportStack = createNativeStackNavigator<ParamListReport>();
-
-
-
 function ReportNavigator () {
     return (
         <ReportStack.Navigator>

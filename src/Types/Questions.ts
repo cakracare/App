@@ -1,5 +1,5 @@
 export interface Questions {
-    id: string | null;
+    id: string | undefined;
     type: "physical" | "verbal" | "seksual" | "cyber" ;
     question: string | null;
     isChecked: boolean | undefined;

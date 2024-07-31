@@ -2,11 +2,26 @@ import {BullyingResponse, Report, UserRole,} from "../Types";
 import firestore from "@react-native-firebase/firestore";
 
 
-async function createLaporanBullying(respon: BullyingResponse) {
+/*
+Update untuk type Report = {
+    userId,
+    title,
+    desc?,
+    physicalBullyingResponse: [];
+    verbalBullyingResponse: [];
+    sexualBullyingResponse: [];
+    cyberBullyingResponse: [];
+}
+*/
+
+// TAMBAHKAN PENGECEKAN DAN RETURN UNUTK SETIAP FUNCTION
+
+export async function createLaporanBullying(respon: BullyingResponse) {
     try {
         const timestamp = firestore.Timestamp.now(); // Mendapatkan timestamp saat ini
         const date: Date = timestamp.toDate();
-        // Menambahkan jawaban terkait bullying fisik
+
+        // uplod sua rsponse yang didapat ke firestore
         const physicalResponseRef = await firestore()
             .collection("physical_bullying_responses")
             .add(respon.physicalBullyingResponse);
@@ -16,24 +31,43 @@ async function createLaporanBullying(respon: BullyingResponse) {
         const sexualResponseRef = await firestore()
             .collection("sexual_bullying_responses")
             .add(respon.sexualBullyingResponse);
+        const cyberResponseRef = await firestore()
+            .collection("cyber_bullying_responses")
+            .add(respon.cyberBullyingResponse);
 
         // Menambahkan laporan dengan referensi ke jawaban terkait bullying fisik, verbal, dan seksual
+
+        /*
+        Update untuk type Report = {
+            userId,
+            title,
+            desc?,
+            timestamp
+            physicalBullyingResponseId,
+            verbalBullyingResponseId,
+            sexualBullyingResponseId,
+            cyberBullyingResponseId
+        }
+         */
         const report: Report = {
             userId: respon.userId,
             timestamp: date,
             physicalBullyingResponseId: physicalResponseRef.id,
             verbalBullyingResponseId: verbalResponseRef.id,
-            sexualBullyingResponseId: sexualResponseRef.id
+            sexualBullyingResponseId: sexualResponseRef.id,
+            cyberBullyingResponseId: cyberResponseRef.id
         };
 
+        // berikan return agar memudah kan logging
         await firestore().collection("reports").add(report);
-        console.log("Laporan berhasil ditambahkan!");
+        console.info("Laporan berhasil ditambahkan!");
     } catch (error) {
-        console.error("Error menambahkan laporan: ", error);
+        console.error(error, '<< membuat laporan');
     }
 }
 
 
+// Tambahkan untuk cyber bully
 async function getLaporanBullying(reportId: string) {
     try {
         const reportDoc = await firestore().collection("reports").doc(reportId).get();
@@ -70,7 +104,7 @@ async function getLaporanBullying(reportId: string) {
     }
 }
 
-async function getReportsByUser(userId: string, role: UserRole): Promise<Report[]> {
+export async function getReportsByUser(userId: string, role: UserRole): Promise<Report[]> {
     try {
         let query;
 
@@ -88,20 +122,28 @@ async function getReportsByUser(userId: string, role: UserRole): Promise<Report[
         }
 
         const snapshot = await query.get();
+
+
         const reports: Report[] = [];
+        let id: string
 
         snapshot.forEach(doc => {
             const data = doc.data();
+            id = doc.id || ''
             reports.push({
                 userId: data.userId,
                 timestamp: data.timestamp?.toDate(),
                 physicalBullyingResponseId: data.physicalBullyingResponseId,
                 verbalBullyingResponseId: data.verbalBullyingResponseId,
                 sexualBullyingResponseId: data.sexualBullyingResponseId,
+                cyberBullyingResponseId: data.sexualBullyingResponseId
             });
         });
 
-        return reports;
+        return {
+            id,
+            reports
+        };
     } catch (error) {
         console.error('Error getting reports:', error);
         throw new Error('Gagal mendapatkan laporan');

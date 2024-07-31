@@ -3,27 +3,11 @@ import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
-import {useId} from '../../helpers/IdContext.tsx';
-import {getUser, getUserId} from '../../service/user.ts';
-import {User} from '../../Types';
 import {HeaderAccount} from '../../components/HeaderAccount.tsx';
-import {Logout} from '../../service/auth.tsx';
+import {Logout} from '../../service';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from "../../helpers/userContext.tsx";
 
-
-const data2 = [
-  {
-    id: 1,
-    nama: 'Aziz',
-    email: 'hahahahh@gmail.com',
-    password: '123 456 789',
-    gender: 'male',
-    kelas: 'XII RPL 1',
-    sekolah: 'SMK Negeri 1 Surabaya',
-  },
-];
 const InfoItem = ({
   iconName,
   label,
@@ -39,19 +23,21 @@ const InfoItem = ({
     <Text style={styles.Text3}>{value}</Text>
   </View>
 );
+
+
 const renderItem2 = ({item, index}: {item: any; index: number})  => (
   <View>
-    <InfoItem iconName="user" label="Nama" value={item.nama_lengkap} />
-    <InfoItem iconName="envelope" label="Email" value={item.email} />
-    <InfoItem iconName="key" label="Password" value={item.password} />
-    <InfoItem iconName="transgender-alt" label="Gender" value={item.gender} />
-    <InfoItem iconName="user-graduate" label="Kelas" value={item.kelas} />
-    <InfoItem iconName="school" label="School" value={item.asal_sekolah} />
+    <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
+    <InfoItem iconName="envelope" label="Email" value={item?.email} />
+    <InfoItem iconName="key" label="Password" value={item?.password} />
+    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
+    <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
+    <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
   </View>
 );
 const AccountScreen: React.FC = () => {
-    const {user, setUser} = useUser()
 
+    const {user, setUser} = useUser()
     const navigation = useNavigation<NavigationProp<any>>();
     const handleLogout= async ()=>{
         const result = await Logout()
@@ -60,9 +46,6 @@ const AccountScreen: React.FC = () => {
         }
     }
 
-    useEffect(()=>{
-        console.info(user, 'account screen')
-    },[user])
   return (
     <Layout style={styles.container}>
         <HeaderAccount image={user?.photoURL} name={user?.nama_lengkap} email={user?.email}/>
