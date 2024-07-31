@@ -36,10 +36,11 @@ export interface SexualBullyingResponse {
 
 export interface BullyingResponse {
   userId: string;
-  timestamp?: Date;
-  physicalBullyingResponse: PhysicalBullyingResponse;
-  verbalBullyingResponse: VerbalBullyingResponse;
-  sexualBullyingResponse: SexualBullyingResponse;
+  timestamp?: number;
+  physicalBullyingResponse: [];
+  verbalBullyingResponse: [];
+  sexualBullyingResponse: [];
+  cyberBullyingResponse: [];
 }
 
 export interface Report {
@@ -48,4 +49,5 @@ export interface Report {
   physicalBullyingResponseId: string;
   verbalBullyingResponseId: string;
   sexualBullyingResponseId: string;
+  cyberBullyingResponseId: string;
 }

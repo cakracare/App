@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {Button, IconProps, Input, Layout, Text, Icon, Modal, Spinner} from '@ui-kitten/components';
-import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Alert, Image,TouchableOpacity} from 'react-native';
 import { NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle,} from '../../service';
 import {useUser} from "../../helpers/userContext.tsx";
@@ -15,8 +15,6 @@ export default function LoginScreen():React.ReactElement {
       const {user, setUser} = useUser()
       const [loading, setLoading] = useState(false);
 
-
-
       const renderPasswordIcon = (props: IconProps) => (
         <Icon
           {...props}
@@ -26,14 +24,13 @@ export default function LoginScreen():React.ReactElement {
       );
 
       const handleLogin = async () => {
-            const result = await  signInWithEmailAndPass(email, pass);
+            setLoading(true);
+            const result = await signInWithEmailAndPass(email, pass);
             if (result.success) {
-                // @ts-ignore
-                setUser(result?.user)
+                setUser(result.user)
+                setLoading(false);
                 navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                 Alert.alert(result.message)
-                setPass('')
-                setEmail('')
             } else {
                 Alert.alert(result.message)
                 setPass('')
@@ -45,20 +42,21 @@ export default function LoginScreen():React.ReactElement {
         navigation.navigate('Register')
     }
 
-       const handleLoginWithGoogle= async ()=>{
-           const result = await signInWithGoogle()
+   const handleLoginWithGoogle= async ()=>{
+       setLoading(true);
+       signInWithGoogle().then((result)=>{
            if (result.success) {
-               console.info(result.user)
-               // @ts-ignore
-               setUser(result?.user)
+               console.info(result, '<< login screen')
+               setUser(result.user)
                navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                Alert.alert(result.message)
-
-           } else {
+           }else{
                Alert.alert(result.message)
            }
-        }
+           setLoading(false);
+       })
 
+   }
 
 
   return (
@@ -67,12 +65,9 @@ export default function LoginScreen():React.ReactElement {
         visible={loading}
         animationType="fade"
         backdropStyle={styles.backdrop}>
-        <View style={styles.modalBackground}>
-          <View style={styles.activityIndicatorWrapper}>
-            <Spinner size="large" status="primary" />
-          </View>
-        </View>
+          <Spinner size="giant" status="primary" />
       </Modal>
+
       <Image source={require('../../assets/img/logo.png')} />
       <Layout>
         <Input

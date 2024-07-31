@@ -51,7 +51,8 @@ function MainNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Cakra Care',
+          title: 'Cakra care',
+          tabBarLabel: 'Home',
           headerStyle: {backgroundColor: '#00B2FF'},
           headerTintColor: '#fff',
           headerTitleStyle: {
@@ -59,7 +60,7 @@ function MainNavigator() {
           },
         }}
       />
-      <Tab.Screen name="ReportNavigator" options={{headerShown:false}} component={ReportNavigator} />
+      <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );

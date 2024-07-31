@@ -1,4 +1,4 @@
-import {Button, Text} from '@ui-kitten/components';
+import {Button, Icon, Text} from '@ui-kitten/components';
 import React from 'react';
 import {ButtonProps} from '../Types/ButtonProps';
 
@@ -17,6 +17,7 @@ export default function ButtonCompo(props: ButtonProps) {
       onPress={props.onPress}
       disabled={props.disabled}>
       <Text>{props.text}</Text>
+
     </Button>
   );
 }

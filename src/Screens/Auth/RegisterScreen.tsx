@@ -32,11 +32,8 @@ export default function RegisterScreen() {
   const [isChecked, setIsChecked] = useState(false);
 
   const validateForm = () => {
-    // Clear all previous errors
     Object.keys(formData).forEach(field => clearFieldError(field));
-
     const { success, error } = validateUser(formData);
-
     if (!success) {
       const errorMessages = handleZodError(error);
       Object.keys(errorMessages).forEach(field => {
@@ -44,24 +41,24 @@ export default function RegisterScreen() {
       });
       return false;
     }
-
     return true;
   };
 
   const handleRegister = async () => {
     if (validateForm()) {
-      // Proceed with registration logic
       const user = validateUser(formData)
       if (user.success){
         // @ts-ignore
         const newUser = await SignUpWithEmailAndPassword(user?.data,user?.data.password, user?.data.confirm_password)
-        await Logout()
-        navigation.navigate('Login')
-        Alert.alert('register suskes')
+         if (newUser?.success){
+           await Logout()
+           navigation.navigate('Login')
+           Alert.alert('register suskes')
+         }else{
+           Alert.alert(newUser?.message)
+         }
       }
     }
-
-
   };
 
   return (

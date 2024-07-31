@@ -1,9 +1,9 @@
-import {UserSchema} from "../Types";
+import {UserSchema, User} from "../Types";
 
 export function validateUser(data: any) {
     try {
         const user = UserSchema.parse(data);
-        return { success: true, data: user };
+        return { success: true, data: user as User };
     } catch (e: any) {
         console.log("Zod Validation Error:", e.errors);
         return { success: false, error: e.errors || [] };

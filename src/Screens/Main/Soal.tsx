@@ -3,23 +3,19 @@ import { View } from 'react-native';
 import { Layout, List, Radio, Text } from '@ui-kitten/components';
 import SoalCompo from '../../components/SoalCompo';
 import ButtonCompo from '../../components/ButtonCompo';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {NavigationProp, useNavigation, useRoute} from '@react-navigation/native';
 import {getQuestionsByType} from "../../service/questions.ts";
 import {Questions} from "../../Types/Questions.ts";
+import {ParamListReport} from "../../Types";
 
 
 export default function Soal() {
     const route = useRoute();
-    // const [data, setData] = React.useState<any[]>([]);
+    const navigation = useNavigation<NavigationProp<any>>();
     const questins = route.params?.questions || [];
-
-    // console.log(questins)
-
     const [answers, setAnswers] = React.useState<Questions[]>(questins);
 
 
-
-    const navigation = useNavigation();
 
     const handleCheckedChange = (key: string | null, value: boolean) => {
         setAnswers(prevAnswers =>
@@ -64,15 +60,19 @@ export default function Soal() {
                 text="Submit"
                 status="primary"
                 onPress={() => {
-                    const result = answers.map((item: Questions) =>{
-                        console.log(item.question, (item.selectedOption?item.selectedOption:0));
-                        return {
-                            question: item.question,
-                            answersValue: item.selectedOption?item.selectedOption:0,
-                        }
-                    })
+                    const totalSum = answers.reduce((sum, item) => {
+                        return sum + (item.selectedOption || 0);
+                    }, 0);
 
-                    console.log(result)
+
+
+                    const resultObject = answers.reduce((acc, item) => {
+                        acc[item.question] = item.selectedOption || 0;
+                        return acc;
+                    }, {} as Record<string, number>);
+
+
+                    navigation.navigate('ReportDetail', { bullyResponse: {type: answers[0].type, result: resultObject, total_result_value: totalSum},});
                 }}
             />
         </Layout>
