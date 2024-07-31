@@ -3,4 +3,5 @@ export type ReportTypeProps = {
   onPress: () => void;
   status: string;
   icon: any;
+  color?: string;
 };

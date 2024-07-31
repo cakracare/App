@@ -12,7 +12,7 @@ export default function ReportComp(props: ReportTypeProps) {
         alignItems: 'center',
         width: '90%',
         height: 75,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: props.color,
         borderRadius: 10,
         marginVertical: 10,
       }}
@@ -26,7 +26,6 @@ export default function ReportComp(props: ReportTypeProps) {
         style={{
           fontSize: 20,
           fontWeight: 'bold',
-          color: '#000',
         }}>
         {props.text}
       </Text>
