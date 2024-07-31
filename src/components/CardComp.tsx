@@ -32,14 +32,14 @@ export default function CardComp(props: CardCompProps) {
             style={{
               fontSize: 16,
               fontWeight: 'bold',
-              marginStart: 10,
+              marginStart: 20,
             }}>
             {props.title}
           </Text>
           <Text
             style={{
               fontSize: 14,
-              marginStart: 10,
+              marginStart: 20,
             }}>
             {props.time}
           </Text>
