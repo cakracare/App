@@ -13,26 +13,63 @@ const SoalCompo: React.FC<SoalProps> = ({
   console.log('checked', checked);
   return (
     <View>
-      <Text>{text}</Text>
-      <Radio checked={checked === false} onChange={() => setChecked(false)}>
+      <Text
+        style={{
+          fontSize: 16,
+          marginStart: 10,
+          padding: 2,
+          marginTop: 10,
+        }}>
+        {text}
+      </Text>
+      <Radio
+        style={{
+          marginStart: 10,
+          padding: 2,
+          marginTop: 10,
+        }}
+        checked={checked === false}
+        onChange={() => setChecked(false)}>
         Tidak
       </Radio>
-      <Radio checked={checked === true} onChange={() => setChecked(true)}>
+      <Radio
+        style={{
+          marginStart: 10,
+          padding: 2,
+          marginTop: 10,
+        }}
+        checked={checked === true}
+        onChange={() => setChecked(true)}>
         Ya
       </Radio>
       {checked === true && (
         <View style={{marginStart: 40}}>
           <Radio
+            style={{
+              marginStart: 10,
+              padding: 2,
+              marginTop: 10,
+            }}
             checked={selectedOption === '1-3 kali'}
             onChange={() => setSelectedOption('1-3 kali')}>
             1-3 kali
           </Radio>
           <Radio
+            style={{
+              marginStart: 10,
+              padding: 2,
+              marginTop: 10,
+            }}
             checked={selectedOption === '4-6 kali'}
             onChange={() => setSelectedOption('4-6 kali')}>
             4-6 kali
           </Radio>
           <Radio
+            style={{
+              marginStart: 10,
+              padding: 2,
+              marginTop: 10,
+            }}
             checked={selectedOption === 'Lebih dari 6 kali'}
             onChange={() => setSelectedOption('Lebih dari 6 kali')}>
             Lebih dari 6 kali
