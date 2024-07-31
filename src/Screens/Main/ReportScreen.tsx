@@ -28,7 +28,15 @@ const ReportScreen: React.FC = () => {
           }}
         />
       </View>
-      <Text>Result Report</Text>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: 'bold',
+          marginStart: 5,
+          marginVertical: 10,
+        }}>
+        Result Report
+      </Text>
       <List
         data={['Report 1', 'Report 2', 'Report 3']}
         renderItem={({item}) => (
