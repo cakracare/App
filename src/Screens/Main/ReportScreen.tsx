@@ -39,6 +39,7 @@ const ReportScreen: React.FC = () => {
             time="12:00"
             status="success"
             title={item}
+            text="Success"
           />
         )}
       />
