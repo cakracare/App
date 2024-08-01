@@ -1,15 +1,7 @@
-/*
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import ReportComp from '../../components/ReportComp';
-import ButtonCompo from '../../components/ButtonCompo';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity, View} from 'react-native';
-import PetunjukComp from '../../components/petunjukComp';
-*/
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';        
+
+import {Icon, Layout, Text} from '@ui-kitten/components';
+import React, {useCallback} from 'react';
+import {View} from 'react-native';
 import ReportComp from '../../components/ReportComp';
 import ButtonCompo from '../../components/ButtonCompo';
 import {NavigationProp, useNavigation, useRoute} from '@react-navigation/native';
@@ -21,10 +13,10 @@ import {createLaporanBullying} from "../../service/report.ts";
 import PetunjukComp from '../../components/petunjukComp';        
 
 export default function  ReportDetail() {
-  const navigation = useNavigation<NavigationProp<ParamListReport>>();
+  const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const userid = getUserId()
-  const response = route.params?.bullyResponse || null
+  const response = route.params?.bullyResponse
   const [responses, setResponses] = React.useState<any>({});
 
     React.useEffect(() => {
@@ -44,7 +36,6 @@ export default function  ReportDetail() {
            userId: userid,
            // title
            time: getCurentTime(),
-           // desk
            verbalBullyingResponse: responses['verbal'],
            physicalBullyingResponse: responses['physical'],
            sexualBullyingResponse: responses['seksual'],
@@ -57,9 +48,9 @@ export default function  ReportDetail() {
 
     }
     
-  const getQuestions = async (type: "physical" | "verbal" | "seksual" | "cyber")=>{
+  const getQuestions = useCallback( async (type: "physical" | "verbal" | "seksual" | "cyber")=>{
       return await getQuestionsByType(type)
-  }
+  },[route])
   
   return (
     <Layout

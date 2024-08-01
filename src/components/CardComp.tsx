@@ -20,7 +20,7 @@ export default function CardComp(props: CardCompProps) {
       <Layout
         style={{
           width: '100%',
-          marginVertical: 10,
+          // marginVertical: 10,
           flexDirection: 'row',
           justifyContent: 'flex-start',
           alignContent: 'center',
@@ -47,6 +47,7 @@ export default function CardComp(props: CardCompProps) {
         <Text
           style={{
             position: 'absolute',
+            marginLeft: 20,
             right: 10,
             fontSize: 14,
             fontWeight: 'bold',

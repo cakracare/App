@@ -76,7 +76,7 @@ function MainNavigator() {
       />
 
         {
-            user?.role === 'guru'? <Tab.Screen name="HasilReport" options={{headerShown:false,title:'Reports'}} component={ReportNavigator}/>
+            user?.role === 'guru'? <Tab.Screen name="HasilReport" options={{headerShown:false,title:'Feedback'}} component={ReportNavigator}/>
                 : <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
         }
       <Tab.Screen name="Account" component={AccountScreen} />
