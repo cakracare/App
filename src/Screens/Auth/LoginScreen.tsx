@@ -31,8 +31,12 @@ export default function LoginScreen():React.ReactElement {
                 setLoading(false);
                 navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                 Alert.alert(result.message)
+                setPass('')
+                setEmail('')
             } else {
+                setLoading(false);
                 Alert.alert(result.message)
+                setLoading(false);
                 setPass('')
                 setEmail('')
             }
@@ -50,10 +54,14 @@ export default function LoginScreen():React.ReactElement {
                setUser(result.user)
                navigation.navigate('MainNavigator', {Screen: 'HomeScreen'})
                Alert.alert(result.message)
+               setLoading(false);
            }else{
+               console.log('sdfd')
+               setLoading(false);
                Alert.alert(result.message)
+
            }
-           setLoading(false);
+
        })
 
    }

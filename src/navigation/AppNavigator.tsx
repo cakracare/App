@@ -4,8 +4,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import AuthNavigator from './AuthNavigator';
 import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.ts';
-import {View} from 'react-native';
-import {Text} from '@ui-kitten/components';
+import {Image, View} from 'react-native';
+import {Layout, Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useUser} from "../helpers/userContext.tsx";
 import {getUser} from "../service/user.ts";
@@ -17,19 +17,23 @@ const AppNavigator: React.FC = () => {
   const {user, setUser} = useUser()
 
   useEffect(() => {
-     checkIfUserIsLoggedIn().then((status)=>{
+      checkIfUserIsLoggedIn().then((status)=>{
           setIsLoggedIn(status.loggedIn)
-          getUser(status.user?.uid).then((result)=>{
-            setUser(result?.data)
-          })
+
+          if (status.loggedIn == true) {
+              getUser(status.user?.uid).then((result)=>{
+                  setUser(result?.data)
+              })
+          }
       })
+
   }, []);
 
   if (isLoggedIn === null) {
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>Loading ges</Text>
-        </View>
+        <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Image source={require('../assets/img/logo.png')} />
+        </Layout>
     );
   }
 

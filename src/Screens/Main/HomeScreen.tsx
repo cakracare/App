@@ -10,6 +10,8 @@ import React from 'react';
 
 
 const HomeScreen: React.FC = () => {
+
+  //   masukkan nama user kedalam kata sambutan
   return (
       <Layout style={{flex: 1, padding: 5}}>
         <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
