@@ -125,12 +125,12 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
 
 
         const reports: Report[] = [];
-        let id: string
+
 
         snapshot.forEach(doc => {
             const data = doc.data();
-            id = doc.id || ''
             reports.push({
+                id : doc.id,
                 userId: data.userId,
                 timestamp: data.timestamp?.toDate(),
                 physicalBullyingResponseId: data.physicalBullyingResponseId,
@@ -140,10 +140,7 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
             });
         });
 
-        return {
-            id,
-            reports
-        };
+        return reports
     } catch (error) {
         console.error('Error getting reports:', error);
         throw new Error('Gagal mendapatkan laporan');
@@ -180,7 +177,7 @@ async function updateLaporanBullying(reportId: string, updatedRespon: Partial<Bu
     }
 }
 
-async function deleteLaporanBullying(reportId: string) {
+export async function deleteLaporanBullying(reportId: string | undefined) {
     try {
         const reportDoc = await firestore().collection("reports").doc(reportId).get();
         if (!reportDoc.exists) {
@@ -192,6 +189,7 @@ async function deleteLaporanBullying(reportId: string) {
         await firestore().collection("physical_bullying_responses").doc(reportData.physicalBullyingResponseId).delete();
         await firestore().collection("verbal_bullying_responses").doc(reportData.verbalBullyingResponseId).delete();
         await firestore().collection("sexual_bullying_responses").doc(reportData.sexualBullyingResponseId).delete();
+        await firestore().collection("cyber_bullying_responses").doc(reportData.cyberBullyingResponseId).delete();
         await firestore().collection("reports").doc(reportId).delete();
 
         console.log("Laporan berhasil dihapus!");

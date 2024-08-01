@@ -44,6 +44,7 @@ export interface BullyingResponse {
 }
 
 export interface Report {
+  id?: string;
   userId: string;
   timestamp?: Date;
   physicalBullyingResponseId: string;

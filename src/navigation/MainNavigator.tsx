@@ -10,8 +10,11 @@ import {ReportDetail} from '../Screens/Main/ReportDetail.tsx';
 import Soal from '../Screens/Main/Soal.tsx';
 import HasilReport from '../Screens/Main/HasilReport.tsx';
 */
+import HasilReport from '../Screens/Main/HasilReport.tsx';
 import ReportNavigator from "./ReportNavigator.tsx";
 import {Route, getFocusedRouteNameFromRoute} from "@react-navigation/native";
+import ReportDetail from "../Screens/Main/ReportDetail.tsx";
+import {useUser} from "../helpers/userContext.tsx";
 const Tab = createBottomTabNavigator<ParamListBase>();
 
 // function SecondNavigator() {
@@ -24,6 +27,8 @@ function MainNavigator() {
         }
         return 'flex';
     }
+
+    const {user,setUser} = useUser()
   const renderIcon =
     (name: string) =>
     ({color, size}: {color: string; size: number}): IconElement =>
@@ -44,6 +49,9 @@ function MainNavigator() {
               break;
             case 'Account':
               iconName = 'person';
+              break;
+            case 'HasilReport':
+              iconName = 'archive';
               break;
             default:
               iconName = 'home';
@@ -66,7 +74,11 @@ function MainNavigator() {
           },
         }}
       />
-      <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
+
+        {
+            user?.role === 'guru'? <Tab.Screen name="HasilReport" options={{title:'Reports'}} component={HasilReport}/>
+                : <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
+        }
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
@@ -87,5 +99,5 @@ function MainNavigator() {
     </Stack.Navigator>
   );
 }
-*
+*/
 export default MainNavigator;

@@ -39,6 +39,7 @@ export default function  ReportDetail() {
 
 
     const createBullyingResponse = async ()=> {
+       //  tambhakn try catch
        const bullyResponse = {
            userId: userid,
            // title
@@ -52,6 +53,8 @@ export default function  ReportDetail() {
        } as BullyingResponse;
 
        await createLaporanBullying(bullyResponse)
+       navigation.navigate('Report');
+
     }
     
   const getQuestions = async (type: "physical" | "verbal" | "seksual" | "cyber")=>{
@@ -133,6 +136,7 @@ export default function  ReportDetail() {
           text="Sexual"
           status={responses['seksual'] ? 'success':""}
           color="#4F4F4F"
+          icon={require('../../assets/img/seksual.png')}
         />
         <ReportComp
           onPress={async () => {
@@ -147,10 +151,10 @@ export default function  ReportDetail() {
         <ButtonCompo
           text="Submit"
           status="primary"
-          onPress={() => {
-            navigation.navigate('ReportScreen' as never);
-          }}
+          disabled={((responses['verbal'] && responses['physical'] && responses['seksual'] && responses['cyber'])=== undefined)}
+          onPress={createBullyingResponse}
         />
       </Layout>
+    </Layout>
   );
 }

@@ -1,4 +1,4 @@
-import {Card, Icon, Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
 import React from 'react';
 import {View} from 'react-native';
 import {CardCompProps} from '../Types/CardProps';
@@ -26,7 +26,7 @@ export default function CardComp(props: CardCompProps) {
           alignContent: 'center',
           alignItems: 'center',
         }}>
-        <Icon name="archive" fill="black" style={{width: 32, height: 32}} />
+        <Icon name="file-text" fill="black" style={{width: 32, height: 32}} />
         <View>
           <Text
             style={{

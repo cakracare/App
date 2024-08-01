@@ -11,7 +11,6 @@ import React from 'react';
 
 const HomeScreen: React.FC = () => {
   return (
-    <ScrollView>
       <Layout style={{flex: 1, padding: 5}}>
         <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
         <Text style={styles.Text5}>
@@ -53,7 +52,6 @@ const HomeScreen: React.FC = () => {
           </View>
         </Card>
       </Layout>
-    </ScrollView>
   );
 };
 

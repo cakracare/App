@@ -3,6 +3,7 @@ export type ParamListBase = {
   ReportNavigator: undefined;
   Feedback: undefined;
   Account: undefined;
+  HasilReport: undefined;
 };
 
 
