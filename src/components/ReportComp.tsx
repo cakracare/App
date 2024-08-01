@@ -8,14 +8,13 @@ export default function ReportComp(props: ReportTypeProps) {
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         width: '90%',
-        height: 100,
-        backgroundColor: '#f7f7f7',
+        height: 75,
+        backgroundColor: props.color,
         borderRadius: 10,
         marginVertical: 10,
-        padding: 10,
       }}
       onPress={props.onPress}>
       <Avatar
@@ -27,7 +26,6 @@ export default function ReportComp(props: ReportTypeProps) {
         style={{
           fontSize: 20,
           fontWeight: 'bold',
-          color: '#000',
         }}>
         {props.text}
       </Text>

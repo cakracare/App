@@ -4,6 +4,12 @@ import {Icon, IconElement} from '@ui-kitten/components';
 import HomeScreen from '../Screens/Main/HomeScreen';
 import AccountScreen from '../Screens/Main/AccountScreen';
 import {ParamListBase, ScreenProps} from '../Types';
+/*
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ReportDetail} from '../Screens/Main/ReportDetail.tsx';
+import Soal from '../Screens/Main/Soal.tsx';
+import HasilReport from '../Screens/Main/HasilReport.tsx';
+*/
 import ReportNavigator from "./ReportNavigator.tsx";
 import {Route, getFocusedRouteNameFromRoute} from "@react-navigation/native";
 const Tab = createBottomTabNavigator<ParamListBase>();
@@ -66,4 +72,20 @@ function MainNavigator() {
   );
 }
 
+/*
+function MainNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SecondNavigator"
+        component={SecondNavigator}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="HasilReport" component={HasilReport} />
+      <Stack.Screen name="ReportDetails" component={ReportDetail} />
+      <Stack.Screen name="Soal" component={Soal} />
+    </Stack.Navigator>
+  );
+}
+*
 export default MainNavigator;

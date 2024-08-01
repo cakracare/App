@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, List, Text} from '@ui-kitten/components';
 import {NavigationProp, useFocusEffect, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
 import {PermissionsAndroid, View} from 'react-native';
@@ -114,7 +114,15 @@ const ReportScreen: React.FC = () => {
           }}
         />
       </View>
-      <Text>Result Report </Text>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: 'bold',
+          marginStart: 5,
+          marginVertical: 10,
+        }}>
+        Result Report
+      </Text>
         {reports?.reports?.length > 0 ? (
             reports?.reports.map((report: Report, index: number) => (
                 <CardComp
@@ -123,6 +131,7 @@ const ReportScreen: React.FC = () => {
                     time={timeAgo(report?.timestamp)}
                     status="warning"
                     title={reports.id}
+                    text="Success"
                 />
             ))
         ) : (

@@ -22,7 +22,7 @@ export default function CardComp(props: CardCompProps) {
           width: '100%',
           marginVertical: 10,
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
           alignContent: 'center',
           alignItems: 'center',
         }}>
@@ -32,12 +32,28 @@ export default function CardComp(props: CardCompProps) {
             style={{
               fontSize: 16,
               fontWeight: 'bold',
+              marginStart: 20,
             }}>
             {props.title}
           </Text>
-          <Text>{props.time}</Text>
+          <Text
+            style={{
+              fontSize: 14,
+              marginStart: 20,
+            }}>
+            {props.time}
+          </Text>
         </View>
-        <Text status={props.status}>Selesai</Text>
+        <Text
+          style={{
+            position: 'absolute',
+            right: 10,
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: props.status === 'success' ? 'green' : 'red',
+          }}>
+          {props.text}
+        </Text>
       </Layout>
     </Card>
   );

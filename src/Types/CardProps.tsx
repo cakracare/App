@@ -3,4 +3,5 @@ export type CardCompProps = {
   time: string;
   status: string;
   title: string;
+  text: string;
 };
