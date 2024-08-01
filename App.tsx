@@ -4,8 +4,7 @@ import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {useColorScheme} from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
-import {IdProvider} from './src/helpers/IdContext';
-import {default as theme} from './custom-theme.json';
+import {UserProvider} from "./src/helpers/userContext.tsx";
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -14,12 +13,10 @@ export default function App() {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider
-        {...eva}
-        theme={{...eva[isDarkMode ? 'dark' : 'light'], ...theme}}>
-        <IdProvider>
-          <AppNavigator />
-        </IdProvider>
+      <ApplicationProvider {...eva} theme={eva.light}>
+       <UserProvider >
+           <AppNavigator />
+       </UserProvider>
       </ApplicationProvider>
     </>
   );

@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
@@ -6,51 +7,43 @@ import {checkIfUserIsLoggedIn} from '../helpers/checkIfUserIsLoggedIn.ts';
 import {View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useId} from '../helpers/IdContext.tsx';
-import {getUserId} from '../service/user.ts';
+import {useUser} from "../helpers/userContext.tsx";
+import {getUser} from "../service/user.ts";
+import auth from "@react-native-firebase/auth";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
-  const [user, setUser] = useState<Object | null>(null);
-  const {id, setId} = useId();
+  const {user, setUser} = useUser()
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      const authStatus = await checkIfUserIsLoggedIn();
-      setIsLoggedIn(authStatus.loggedIn);
-      setUser(authStatus.user);
-    };
-
-    const userid = async () => {
-      const userId = getUserId() || '';
-      setId(userId);
-    };
-    userid();
-
-    checkAuthStatus();
-    // const uid = user?.uid || ''
-    // setId(uid.toString())
-  }, [user]);
+     checkIfUserIsLoggedIn().then((status)=>{
+          setIsLoggedIn(status.loggedIn)
+          getUser(status.user?.uid).then((result)=>{
+            setUser(result?.data)
+          })
+      })
+  }, []);
 
   if (isLoggedIn === null) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Loading ges</Text>
-      </View>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>Loading ges</Text>
+        </View>
     );
   }
+
   const iniRout = isLoggedIn ? 'MainNavigator' : 'AuthNavigator';
-  console.log(iniRout);
+  console.info(isLoggedIn,'<< App navigator')
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={iniRout}
-        screenOptions={{headerShown: false}}>
-        <Stack.Screen name="MainNavigator" component={MainNavigator} />
-        <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator
+            initialRouteName={iniRout}
+            screenOptions={{headerShown: false}}>
+          <Stack.Screen name="MainNavigator" component={MainNavigator} />
+          <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 };
 

@@ -1,8 +1,13 @@
-import {Button, Layout, Text, Card} from '@ui-kitten/components';
-import {FlatList, Image, ScrollView, View} from 'react-native';
+import {
+  Layout,
+  Text,
+  Card,
+} from '@ui-kitten/components';
+import {Image, ScrollView, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
+
 
 const HomeScreen: React.FC = () => {
   return (
@@ -52,4 +57,4 @@ const HomeScreen: React.FC = () => {
   );
 };
 
-export default HomeScreen;
+export default HomeScreen

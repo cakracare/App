@@ -2,17 +2,28 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon, IconElement} from '@ui-kitten/components';
 import HomeScreen from '../Screens/Main/HomeScreen';
-import ReportScreen from '../Screens/Main/ReportScreen';
 import AccountScreen from '../Screens/Main/AccountScreen';
 import {ParamListBase, ScreenProps} from '../Types';
+/*
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ReportDetail} from '../Screens/Main/ReportDetail.tsx';
 import Soal from '../Screens/Main/Soal.tsx';
 import HasilReport from '../Screens/Main/HasilReport.tsx';
+*/
+import ReportNavigator from "./ReportNavigator.tsx";
+import {Route, getFocusedRouteNameFromRoute} from "@react-navigation/native";
 const Tab = createBottomTabNavigator<ParamListBase>();
-const Stack = createNativeStackNavigator();
 
-function SecondNavigator() {
+// function SecondNavigator() {
+function MainNavigator() {
+    function getTabBarVisibility(route: Partial<Route<string>>) {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+
+        if (routeName === 'ReportDetail' || routeName === 'Soal') {
+            return 'none';
+        }
+        return 'flex';
+    }
   const renderIcon =
     (name: string) =>
     ({color, size}: {color: string; size: number}): IconElement =>
@@ -28,7 +39,7 @@ function SecondNavigator() {
             case 'Home':
               iconName = 'home';
               break;
-            case 'Report':
+            case 'ReportNavigator':
               iconName = 'video-off';
               break;
             case 'Account':
@@ -40,12 +51,14 @@ function SecondNavigator() {
           }
           return renderIcon(iconName)({color, size});
         },
+          tabBarStyle: {display: getTabBarVisibility(route)},
       })}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Cakra Care',
+          title: 'Cakra care',
+          tabBarLabel: 'Home',
           headerStyle: {backgroundColor: '#00B2FF'},
           headerTintColor: '#fff',
           headerTitleStyle: {
@@ -53,12 +66,13 @@ function SecondNavigator() {
           },
         }}
       />
-      <Tab.Screen name="Report" component={ReportScreen} />
+      <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
 }
 
+/*
 function MainNavigator() {
   return (
     <Stack.Navigator>
@@ -73,5 +87,5 @@ function MainNavigator() {
     </Stack.Navigator>
   );
 }
-
+*
 export default MainNavigator;
