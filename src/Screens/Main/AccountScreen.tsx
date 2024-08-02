@@ -6,7 +6,8 @@ import styles from '../../style/AccountStyle.tsx';
 import {HeaderAccount} from '../../components/HeaderAccount.tsx';
 import {Logout} from '../../service';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {useUser} from "../../helpers/userContext.tsx";
+import {useUser} from '../../helpers/userContext.tsx';
+import ButtonCompo from '../../components/ButtonCompo.tsx';
 
 const InfoItem = ({
   iconName,
@@ -24,8 +25,7 @@ const InfoItem = ({
   </View>
 );
 
-
-const renderItem2 = ({item, index}: {item: any; index: number})  => (
+const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
@@ -36,19 +36,22 @@ const renderItem2 = ({item, index}: {item: any; index: number})  => (
   </View>
 );
 const AccountScreen: React.FC = () => {
-
-    const {user, setUser} = useUser()
-    const navigation = useNavigation<NavigationProp<any>>();
-    const handleLogout= async ()=>{
-        const result = await Logout()
-        if (result.success) {
-            navigation.navigate('AuthNavigator',{Screen: 'LoginScreen'});
-        }
+  const {user, setUser} = useUser();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const handleLogout = async () => {
+    const result = await Logout();
+    if (result.success) {
+      navigation.navigate('AuthNavigator', {Screen: 'LoginScreen'});
     }
+  };
 
   return (
     <Layout style={styles.container}>
-        <HeaderAccount image={user?.photoURL} name={user?.nama_lengkap} email={user?.email}/>
+      <HeaderAccount
+        image={user?.photoURL}
+        name={user?.nama_lengkap}
+        email={user?.email}
+      />
       <View>
         <View style={styles.container4}>
           <Text style={styles.Text4}>Account Details</Text>
@@ -58,9 +61,10 @@ const AccountScreen: React.FC = () => {
           </View>
         </View>
         {renderItem2({item: user, index: 0})}
-        <Button onPress={handleLogout}>logut</Button>
+        <View>
+          <Button onPress={handleLogout}>logut</Button>
+        </View>
       </View>
-
     </Layout>
   );
 };
