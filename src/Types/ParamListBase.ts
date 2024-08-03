@@ -3,11 +3,13 @@ export type ParamListBase = {
   ReportNavigator: undefined;
   Feedback: undefined;
   Account: undefined;
+  HasilReport: undefined;
 };
 
 
 export type ParamListReport = {
-  Report: undefined;
+  Report: { questions: any[] };
   ReportDetail: undefined;
-  Soal: { questions: any[] };
+  Soal: undefined;
+  HasilReport: undefined;
 }

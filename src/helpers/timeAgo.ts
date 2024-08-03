@@ -1,7 +1,7 @@
 import firestore, {FirebaseFirestoreTypes} from "@react-native-firebase/firestore";
 
 
-export function timeAgo(date: FirebaseFirestoreTypes.Timestamp) {
+export function timeAgo(date: Date) {
 
     // @ts-ignore
     const seconds = Math.floor((new Date() - date) / 1000);

@@ -45,7 +45,7 @@ export const getUser = async (uid: string | undefined) => {
         if (!userDocument.exists) {
             throw new Error('User does not exist!');
         }
-        console.info('user berhasil ditambahkan')
+        console.info('user berhasil di cari')
         return { success: true, data: userDocument.data() as User};
     } catch (error) {
         console.error(error, '<< get data user');

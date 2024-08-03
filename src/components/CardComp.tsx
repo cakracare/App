@@ -1,4 +1,4 @@
-import {Card, Icon, Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
 import React from 'react';
 import {View} from 'react-native';
 import {CardCompProps} from '../Types/CardProps';
@@ -10,6 +10,7 @@ export default function CardComp(props: CardCompProps) {
         width: '100%',
         marginTop: 10,
         borderColor: 'gray',
+
       }}
       onPress={
         () => {
@@ -20,13 +21,13 @@ export default function CardComp(props: CardCompProps) {
       <Layout
         style={{
           width: '100%',
-          marginVertical: 10,
+          // marginVertical: 10,
           flexDirection: 'row',
           justifyContent: 'flex-start',
           alignContent: 'center',
           alignItems: 'center',
         }}>
-        <Icon name="archive" fill="black" style={{width: 32, height: 32}} />
+        <Icon name="file-text" fill="black" style={{width: 32, height: 32}} />
         <View>
           <Text
             style={{
@@ -47,6 +48,7 @@ export default function CardComp(props: CardCompProps) {
         <Text
           style={{
             position: 'absolute',
+            marginLeft: 20,
             right: 10,
             fontSize: 14,
             fontWeight: 'bold',

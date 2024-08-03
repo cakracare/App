@@ -4,15 +4,20 @@ import ReportScreen from "../Screens/Main/ReportScreen.tsx";
 import ReportDetail from "../Screens/Main/ReportDetail.tsx";
 import Soal from "../Screens/Main/Soal.tsx";
 import {ParamListReport} from "../Types";
+import {useUser} from "../helpers/userContext.tsx";
+import HasilReport from "../Screens/Main/HasilReport.tsx";
 
 
 const ReportStack = createNativeStackNavigator<ParamListReport>();
 function ReportNavigator () {
+    const {user, setUser} = useUser();
+    const title = user?.role === 'guru'?'Reports' : 'Report'
     return (
         <ReportStack.Navigator>
-            <ReportStack.Screen name="Report" component={ReportScreen} />
+            <ReportStack.Screen name="Report" options={{title: `${title}` }} component={ReportScreen} />
             <ReportStack.Screen name="ReportDetail" component={ReportDetail} options={{title: 'Buat laporan'}}/>
             <ReportStack.Screen name="Soal" component={Soal} options={{title: 'Isi soal'}} />
+            <ReportStack.Screen name={'HasilReport'} component={HasilReport}/>
         </ReportStack.Navigator>
     );
 };

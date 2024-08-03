@@ -14,6 +14,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     marginStart: 10,
+    width: '90%',
   },
   container2: {
     padding: 10,
@@ -28,8 +29,8 @@ export default StyleSheet.create({
   },
   Text1: {
     fontSize: 15,
-    marginEnd: 50,
-    paddingBottom: 5,
+    marginRight: 50,
+    paddingEnd: 3,
   },
   Text2: {
     fontSize: 20,
