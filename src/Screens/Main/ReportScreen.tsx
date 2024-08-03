@@ -1,9 +1,19 @@
-import React, {useCallback, useState} from 'react';
-import {Button, Layout,  Text} from '@ui-kitten/components';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Button, Card, Icon, Layout, List, Text} from '@ui-kitten/components';
 import {NavigationProp, useFocusEffect, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
 import {Alert,View} from 'react-native';
 import CardComp from '../../components/CardComp';
+/*
+import {getUserId} from '../../service/user.ts';
+import {getReportsByUser} from '../../service/report.ts';
+import {timeAgo} from '../../helpers/timeAgo.ts';
+import {Report} from '../../Types';
+import {useUser} from '../../helpers/userContext.tsx';
+import * as XLSX from 'xlsx';
+import RNFS from 'react-native-fs';
+import {getCurentTime, getFormattedTime} from '../../helpers/getCurentTime.ts';
+*/
 import {getUser, getUserId} from "../../service/user.ts";
 import {fetchUsersWithReports, getReportsByUser} from "../../service/report.ts";
 import {timeAgo} from "../../helpers/timeAgo.ts";
@@ -136,8 +146,6 @@ const ReportScreen: React.FC = () => {
         ) : (
             <Text>No reports found</Text>
         )}
-
-        {/*<Button onPress={handleClick}>sdfdsf</Button>*/}
     </Layout>
   );
 };

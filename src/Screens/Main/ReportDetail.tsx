@@ -1,4 +1,31 @@
 
+/*
+import {Button, Icon, Layout, Text} from '@ui-kitten/components';
+import React from 'react';
+import ReportComp from '../../components/ReportComp';
+import ButtonCompo from '../../components/ButtonCompo';
+import {useNavigation} from '@react-navigation/native';
+import {TouchableOpacity, View} from 'react-native';
+import PetunjukComp from '../../components/petunjukComp';
+
+import {Button, Icon, Layout, Text} from '@ui-kitten/components';
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import ReportComp from '../../components/ReportComp';
+import ButtonCompo from '../../components/ButtonCompo';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import {getQuestionsByType} from '../../service/questions.ts';
+import {getUserId} from '../../service/user.ts';
+import {BullyingResponse, ParamListReport} from '../../Types';
+import {getCurentTime} from '../../helpers/getCurentTime.ts';
+import {createLaporanBullying} from '../../service/report.ts';
+import PetunjukComp from '../../components/petunjukComp';
+*/
+
 import {Icon, Input, InputProps, Layout, Text} from '@ui-kitten/components';
 import React, {useCallback} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -28,18 +55,15 @@ export default function  ReportDetail() {
   const titleInputState = useInputState();
   const deskirpsiInputState = useInputState();
   console.log(responses)
-
-
-    React.useEffect(() => {
-        // Update the responses state with the data from route params
-        if (response) {
-            setResponses((prevResponses: any) => ({
-                ...prevResponses,
-                [response.type]: response.total_result_value,
-            }));
-        }
-    }, [response]);
-
+  React.useEffect(() => {
+    // Update the responses state with the data from route params
+    if (response) {
+      setResponses((prevResponses: any) => ({
+        ...prevResponses,
+        [response.type]: response.total_result_value,
+      }));
+    }
+  }, [response]);
 
     const createBullyingResponse = async ()=> {
        //  tambhakn try catch
