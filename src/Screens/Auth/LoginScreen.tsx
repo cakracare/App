@@ -66,7 +66,6 @@ export default function LoginScreen(): React.ReactElement {
         setLoading(false);
       } else {
         setLoading(false);
-        setLoading(false);
         Alert.alert(result.message);
       }
     });
