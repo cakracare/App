@@ -22,7 +22,7 @@ function MainNavigator() {
     function getTabBarVisibility(route: Partial<Route<string>>) {
         const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
-        if (routeName === 'ReportDetail' || routeName === 'Soal') {
+        if (routeName === 'ReportDetail' || routeName === 'Soal' || routeName === 'HasilReport') {
             return 'none';
         }
         return 'flex';
@@ -45,7 +45,7 @@ function MainNavigator() {
               iconName = 'home';
               break;
             case 'ReportNavigator':
-              iconName = 'video-off';
+              iconName = user?.role === 'siswa'? 'video-off' : 'archive';
               break;
             case 'Account':
               iconName = 'person';
@@ -75,10 +75,8 @@ function MainNavigator() {
         }}
       />
 
-        {
-            user?.role === 'guru'? <Tab.Screen name="HasilReport" options={{headerShown:false,title:'Feedback'}} component={ReportNavigator}/>
-                : <Tab.Screen name="ReportNavigator" options={{headerShown:false,title:'report'}} component={ReportNavigator} />
-        }
+        <Tab.Screen name="ReportNavigator" options={{headerShown:false,title: user?.role === 'guru'? 'Feedback' : 'report' }} component={ReportNavigator}/>
+
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );

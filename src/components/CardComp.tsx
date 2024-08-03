@@ -10,6 +10,7 @@ export default function CardComp(props: CardCompProps) {
         width: '100%',
         marginTop: 10,
         borderColor: 'gray',
+
       }}
       onPress={
         () => {

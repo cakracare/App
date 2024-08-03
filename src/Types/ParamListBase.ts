@@ -11,4 +11,5 @@ export type ParamListReport = {
   Report: { questions: any[] };
   ReportDetail: undefined;
   Soal: undefined;
+  HasilReport: undefined;
 }

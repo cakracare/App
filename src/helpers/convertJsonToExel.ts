@@ -1,38 +1,68 @@
 import * as XLSX from 'xlsx';
 import RNFS from 'react-native-fs';
-import {PermissionsAndroid} from "react-native";
-import {getCurentTime, getFormattedTime} from "./getCurentTime.ts";
+import { PermissionsAndroid } from "react-native";
+import { getCurentTime, getFormattedTime } from "./getCurentTime.ts";
 
+export const exportDataToExcel = async (data: [] | undefined) => {
+    const hasPermission = await checkPermissions();
+    console.log(hasPermission);
 
+    if (!hasPermission) {
+        const permissionGranted = await requestExternalWritePermission();
+        if (!permissionGranted) {
+            console.log('Permission denied, cannot proceed with export');
+            return false;
+        }
+    }
 
-export const exportDataToExcel = (data: []|undefined) => {
     let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(data)
-    XLSX.utils.book_append_sheet(wb,ws,"response")
-    const wbout = XLSX.write(wb, {type:'binary', bookType:"xlsx"});
+    let ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, "response");
+    const wbout = XLSX.write(wb, { type: 'binary', bookType: "xlsx" });
 
+    let status: boolean = false;
     // Write generated excel to Storage
-    RNFS.writeFile(RNFS.DownloadDirectoryPath+ `/ReportBullyResponse_${getFormattedTime(getCurentTime())}.xlsx`, wbout, 'ascii').then((r)=>{
-        console.log('Success');
-    }).catch((e)=>{
+    try {
+        await RNFS.writeFile(RNFS.DownloadDirectoryPath + `/ReportBullyResponse_${getFormattedTime(getCurentTime())}.xlsx`, wbout, 'ascii');
+        status = true;
+    } catch (e) {
         console.log('Error', e);
-    });
+        status = false;
+    }
 
+    return status;
 }
-
-
 
 const permissions = [
     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
     PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-    PermissionsAndroid.PERMISSIONS.CAMERA, // Tambahkan izin lain jika diperlukan
 ];
 
 const checkPermissions = async () => {
-    const results = {};
     for (const permission of permissions) {
         const result = await PermissionsAndroid.check(permission);
-        results[permission] = result;
+        if (!result) {
+            return false;
+        }
     }
-    return results;
+    return true;
+};
+
+const requestExternalWritePermission = async () => {
+    try {
+        const granted = await PermissionsAndroid.requestMultiple(permissions);
+        if (
+            granted[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] === PermissionsAndroid.RESULTS.GRANTED &&
+            granted[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+            console.log('You can use the storage');
+            return true;
+        } else {
+            console.log('Storage permission denied');
+            return false;
+        }
+    } catch (err) {
+        console.warn(err);
+        return false;
+    }
 };

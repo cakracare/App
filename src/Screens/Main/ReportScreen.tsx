@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Button, Layout,  Text} from '@ui-kitten/components';
 import {NavigationProp, useFocusEffect, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
 import {Alert,View} from 'react-native';
 import CardComp from '../../components/CardComp';
-import {getUserId} from "../../service/user.ts";
-import {getReportsByUser} from "../../service/report.ts";
+import {getUser, getUserId} from "../../service/user.ts";
+import {fetchUsersWithReports, getReportsByUser} from "../../service/report.ts";
 import {timeAgo} from "../../helpers/timeAgo.ts";
 import {Report} from "../../Types";
 import {useUser} from "../../helpers/userContext.tsx";
+import {exportDataToExcel} from "../../helpers/convertJsonToExel.ts";
 
 
 const ReportScreen: React.FC = () => {
@@ -23,7 +24,7 @@ const ReportScreen: React.FC = () => {
             const fetchReports = async () => {
                 try {
                     const reportData = await getReportsByUser(userId, user?.role);
-                    setReports(reportData);
+                    setReports(reportData.data);
                 } catch (error) {
                     console.error('Error fetching reports:', error);
                 }
@@ -35,6 +36,7 @@ const ReportScreen: React.FC = () => {
                 // Cleanup if necessary
             };
         }, [userId])
+
     );
 
     /*
@@ -57,6 +59,7 @@ const ReportScreen: React.FC = () => {
 
 
 
+
     // const userreport = getUser(reports[3]?.userId).then((user)=>{
     //     console.log(reports[2], user?.data?.nama_lengkap, user?.data?.alamat_lengkap, user?.data?.kelas)
     // });
@@ -72,15 +75,15 @@ const ReportScreen: React.FC = () => {
     //     alamat_lengkap: 'Jl. Merdeka No. 123',
     //     gender: 'Male'
     // };
-    //
-    // function isObjectComplete(obj: any, requiredFields: any) {
-    //     for (let field of requiredFields) {
-    //         if (!obj.hasOwnProperty(field) || obj[field] === '' || obj[field] === null || obj[field] === undefined) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
+
+        const data = useCallback(async ()=>{
+            const allReportUser = await fetchUsersWithReports(user?.role!)
+           const isDownloaded =  await exportDataToExcel(allReportUser)
+            if (isDownloaded){
+                Alert.alert('Suskes')
+            }
+        },[])
+
 
    if (!user?.alamat_lengkap) {
       Alert.alert('Invalid data','data tidak lengkap, silahkah dilengkapi terlbih dahulu')
@@ -107,7 +110,7 @@ const ReportScreen: React.FC = () => {
                       // lakukan pengecekan apakah data user sudah lengkap
                       navigation.navigate('ReportNavigator', {screen: "ReportDetail"});
                   }}
-              /> : <Button>Download response laporan</Button>
+              /> : <Button onPress={data}>Download response laporan</Button>
           }
       </View>
       <Text
@@ -123,13 +126,11 @@ const ReportScreen: React.FC = () => {
             reports.map((report: Report, index: number) => (
                 <CardComp
                     key={index}
-                    onPress={() => console.log('Report pressed', report.userId)}
+                    onPress={() =>  navigation.navigate('HasilReport', {idreport: report.id})}
                     time={timeAgo(report?.timestamp!)}
                     status="danger"
-                    title={report?.id}
-                    text="not complete"
-
-
+                    title={report.title}
+                    text={report.status}
                 />
             ))
         ) : (

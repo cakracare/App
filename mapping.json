@@ -7,8 +7,8 @@
       "appearances": {
         "outline": {
           "mapping": {
-            "bodyPaddingHorizontal": 5,
-            "bodyPaddingVertical": 5
+            "bodyPaddingHorizontal": 10,
+            "bodyPaddingVertical": 10
           }
         }
       }
