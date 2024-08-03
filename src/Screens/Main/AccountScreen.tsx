@@ -61,8 +61,25 @@ const AccountScreen: React.FC = () => {
           </View>
         </View>
         {renderItem2({item: user, index: 0})}
-        <View>
-          <Button onPress={handleLogout}>logut</Button>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginHorizontal: 20,
+            marginTop: 20,
+          }}>
+          <ButtonCompo
+            status="success"
+            text="edit"
+            width={150}
+            onPress={handleLogout}
+          />
+          <ButtonCompo
+            status="danger"
+            text="Logout"
+            width={150}
+            onPress={handleLogout}
+          />
         </View>
       </View>
     </Layout>

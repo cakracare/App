@@ -8,7 +8,7 @@ export default function ButtonCompo(props: ButtonProps) {
       style={{
         marginVertical: 10,
         borderRadius: 10,
-        width: 300,
+        width: props.width,
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 0,
@@ -17,7 +17,6 @@ export default function ButtonCompo(props: ButtonProps) {
       onPress={props.onPress}
       disabled={props.disabled}>
       <Text>{props.text}</Text>
-
     </Button>
   );
 }

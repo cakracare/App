@@ -151,6 +151,7 @@ export default function ReportDetail() {
           color="#4B4B4B"
         />
         <ButtonCompo
+          width={300}
           text="Submit"
           status="primary"
           onPress={() => {

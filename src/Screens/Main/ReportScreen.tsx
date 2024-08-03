@@ -117,6 +117,7 @@ const ReportScreen: React.FC = () => {
           marginVertical: 10,
         }}>
         <ButtonCompo
+          width={300}
           text="Report"
           status="primary"
           onPress={() => {
