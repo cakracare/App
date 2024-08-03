@@ -1,9 +1,11 @@
 import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
 import React from 'react';
-import {View} from 'react-native';
+import {useColorScheme, View} from 'react-native';
 import {CardCompProps} from '../Types/CardProps';
 
 export default function CardComp(props: CardCompProps) {
+  const colorScheme = useColorScheme();
+  const iconColor = colorScheme === 'dark' ? 'white' : 'black';
   return (
     <Card
       style={{
@@ -26,7 +28,11 @@ export default function CardComp(props: CardCompProps) {
           alignContent: 'center',
           alignItems: 'center',
         }}>
-        <Icon name="file-text" fill="black" style={{width: 32, height: 32}} />
+        <Icon
+          name="file-text"
+          fill={iconColor}
+          style={{width: 32, height: 32}}
+        />
         <View>
           <Text
             style={{
@@ -51,7 +57,7 @@ export default function CardComp(props: CardCompProps) {
             right: 10,
             fontSize: 14,
             fontWeight: 'bold',
-            color: props.status === 'success' ? 'green' : 'red',
+            color: props.status,
           }}>
           {props.text}
         </Text>

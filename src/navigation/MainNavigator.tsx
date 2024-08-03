@@ -26,7 +26,8 @@ function MainNavigator() {
     if (
       routeName === 'ReportDetail' ||
       routeName === 'Soal' ||
-      routeName === 'HasilReport'
+      routeName === 'HasilReport' ||
+      routeName === 'EditProfil'
     ) {
       return 'none';
     }

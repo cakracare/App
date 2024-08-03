@@ -3,20 +3,22 @@ import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
 import {forminput} from '../Types/FormInputprops';
 
 export default function FormInput(props: forminput) {
-  const isPasswordField = props.label.toLowerCase().includes('password' || 'confirm password');
+  const isPasswordField = props.label
+    .toLowerCase()
+    .includes('password' || 'confirm password');
   return (
-      <Layout style={styles.form}>
-        <Text style={styles.label}>{props.label}</Text>
-        <Input
-            style={styles.input}
-            placeholder={props.placeholder}
-            value={props.value}
-            onChangeText={props.onChangeText}
-            status={props.status} // Apply status prop
-            secureTextEntry={isPasswordField}
-        />
-        {props.error && <Text style={styles.errorText}>{props.error}</Text>}
-      </Layout>
+    <Layout style={styles.form}>
+      <Text style={styles.label}>{props.label}</Text>
+      <Input
+        style={styles.input}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={props.onChangeText}
+        status={props.status} // Apply status prop
+        secureTextEntry={isPasswordField}
+      />
+      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+    </Layout>
   );
 }
 const styles = StyleSheet.create({
@@ -33,7 +35,6 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 5,
     borderRadius: 10,
-    backgroundColor: '#EEEDEB',
   },
   errorText: {
     color: 'red',

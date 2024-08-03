@@ -1,30 +1,3 @@
-/*
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import ReportComp from '../../components/ReportComp';
-import ButtonCompo from '../../components/ButtonCompo';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity, View} from 'react-native';
-import PetunjukComp from '../../components/petunjukComp';
-
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import ReportComp from '../../components/ReportComp';
-import ButtonCompo from '../../components/ButtonCompo';
-import {
-  NavigationProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
-import {getQuestionsByType} from '../../service/questions.ts';
-import {getUserId} from '../../service/user.ts';
-import {BullyingResponse, ParamListReport} from '../../Types';
-import {getCurentTime} from '../../helpers/getCurentTime.ts';
-import {createLaporanBullying} from '../../service/report.ts';
-import PetunjukComp from '../../components/petunjukComp';
-*/
-
 import {Icon, Input, InputProps, Layout, Text} from '@ui-kitten/components';
 import React, {useCallback} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -107,11 +80,6 @@ export default function ReportDetail() {
             alignItems: 'center',
             marginVertical: 10,
           }}>
-          <Icon
-            name="edit-outline"
-            fill="black"
-            style={{width: 30, height: 30}}
-          />
           <View>
             <Text
               style={{
@@ -138,19 +106,14 @@ export default function ReportDetail() {
           />
         </View>
         <Input
-          label={() => (
-            <Text style={{fontWeight: 'bold', color: 'black'}}>
-              Judul laporan
-            </Text>
-          )}
+          label={() => <Text style={{fontWeight: 'bold'}}>Judul laporan</Text>}
           size="medium"
-          // placeholder='Medium'
           style={{width: '90%', marginTop: 50}}
           {...titleInputState}
         />
         <Input
           label={() => (
-            <Text style={{fontWeight: 'bold', color: 'black'}}>
+            <Text style={{fontWeight: 'bold'}}>
               Deskripsi lekejadian laporan
             </Text>
           )}
@@ -174,7 +137,7 @@ export default function ReportDetail() {
           text="Verbal"
           status={responses['verbal'] ? 'success' : ''}
           icon={require('../../assets/img/speaking.png')}
-          color="#7C7C7C"
+          color="#2E6CB2"
         />
         <ReportComp
           onPress={async () => {
@@ -184,7 +147,7 @@ export default function ReportDetail() {
           text="Physical"
           status={responses['physical'] ? 'success' : ''}
           icon={require('../../assets/img/physical.png')}
-          color="#717171"
+          color="#2E6CB2"
         />
         <ReportComp
           onPress={async () => {
@@ -193,7 +156,7 @@ export default function ReportDetail() {
           }}
           text="Sexual"
           status={responses['seksual'] ? 'success' : ''}
-          color="#4F4F4F"
+          color="#2E6CB2"
           icon={require('../../assets/img/seksual.png')}
         />
         <ReportComp
@@ -204,11 +167,12 @@ export default function ReportDetail() {
           text="Cyber"
           status={responses['cyber'] ? 'success' : ''}
           icon={require('../../assets/img/cyber.png')}
-          color="#4B4B4B"
+          color="#2E6CB2"
         />
         <ButtonCompo
           text="Submit"
           status="primary"
+          width={300}
           disabled={
             (responses['verbal'] &&
               responses['physical'] &&

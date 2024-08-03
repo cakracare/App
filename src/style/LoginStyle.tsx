@@ -20,7 +20,7 @@ export default StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  input: {marginTop: 20, borderRadius: 10, backgroundColor: '#EEEDEB'},
+  input: {marginTop: 20, borderRadius: 10},
   modalBackground: {
     flex: 1,
     alignItems: 'center',
