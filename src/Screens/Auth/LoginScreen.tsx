@@ -83,6 +83,7 @@ export default function LoginScreen(): React.ReactElement {
         <Input
           placeholder="Enter your email"
           style={styles.input}
+          textStyle={{color: 'black'}}
           value={email}
           onChangeText={nextValue => setEmail(nextValue)}
         />
@@ -91,6 +92,7 @@ export default function LoginScreen(): React.ReactElement {
           accessoryRight={renderPasswordIcon}
           secureTextEntry={!passwordVisible}
           style={styles.input}
+          textStyle={{color: 'black'}}
           value={pass}
           onChangeText={nextValue => setPass(nextValue)}
         />
