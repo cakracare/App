@@ -8,6 +8,16 @@ import {
 import ButtonCompo from '../../components/ButtonCompo';
 import {Alert, View} from 'react-native';
 import CardComp from '../../components/CardComp';
+/*
+import {getUserId} from '../../service/user.ts';
+import {getReportsByUser} from '../../service/report.ts';
+import {timeAgo} from '../../helpers/timeAgo.ts';
+import {Report} from '../../Types';
+import {useUser} from '../../helpers/userContext.tsx';
+import * as XLSX from 'xlsx';
+import RNFS from 'react-native-fs';
+import {getCurentTime, getFormattedTime} from '../../helpers/getCurentTime.ts';
+*/
 import {getUser, getUserId} from '../../service/user.ts';
 import {fetchUsersWithReports, getReportsByUser} from '../../service/report.ts';
 import {timeAgo} from '../../helpers/timeAgo.ts';
@@ -75,6 +85,22 @@ const ReportScreen: React.FC = () => {
   //     gender: 'Male'
   // };
 
+  // const userreport = getUser(reports[3]?.userId).then((user)=>{
+  //     console.log(reports[2], user?.data?.nama_lengkap, user?.data?.alamat_lengkap, user?.data?.kelas)
+  // });
+
+  // const data = {
+  //     nama_lengkap: 'John Doe',
+  //     email: 'johndoe@example.com',
+  //     usia: 17,
+  //     role: 'Student',
+  //     kelas: '12A',
+  //     asal_sekolah: 'SMA 1',
+  //     no_ortu: '081234567890',
+  //     alamat_lengkap: 'Jl. Merdeka No. 123',
+  //     gender: 'Male'
+  // };
+
   const data = useCallback(async () => {
     const allReportUser = await fetchUsersWithReports(user?.role!);
     const isDownloaded = await exportDataToExcel(allReportUser);
@@ -104,7 +130,6 @@ const ReportScreen: React.FC = () => {
         }}>
         {user?.role === 'siswa' ? (
           <ButtonCompo
-            width={300}
             disabled={!user?.alamat_lengkap}
             text="Report"
             status="primary"

@@ -47,6 +47,7 @@ export default function LoginScreen(): React.ReactElement {
       setPass('');
       setEmail('');
     }
+    }
   };
 
   const handleRegister = () => {
@@ -62,7 +63,9 @@ export default function LoginScreen(): React.ReactElement {
         navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
         Alert.alert(result.message);
         setLoading(false);
+        setLoading(false);
       } else {
+        setLoading(false);
         setLoading(false);
         Alert.alert(result.message);
       }
