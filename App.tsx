@@ -6,6 +6,7 @@ import {useColorScheme} from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
 import {UserProvider} from './src/helpers/userContext.tsx';
 import {default as theme} from './custom-theme.json';
+import {default as mapping} from './mapping.json';
 export default function App() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
@@ -15,6 +16,7 @@ export default function App() {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider
         {...eva}
+        customMapping={mapping}
         theme={{...eva[isDarkMode ? 'dark' : 'light'], ...theme}}>
         <UserProvider>
           <AppNavigator />

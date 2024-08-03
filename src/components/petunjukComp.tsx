@@ -8,7 +8,8 @@ export default function PetunjukComp(props: PetunjukTypeProps) {
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginEnd: 50,
+        marginEnd: 10,
+        width: '96%',
       }}>
       <Text
         style={{

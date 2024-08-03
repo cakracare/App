@@ -1,3 +1,5 @@
+import {FirebaseFirestoreTypes} from "@react-native-firebase/firestore";
+
 export interface PhysicalBullyingResponse {
   kekerasan_dengan_anggota_tubuh: number;
   kekerasan_dengan_benda: number;
@@ -37,17 +39,24 @@ export interface SexualBullyingResponse {
 export interface BullyingResponse {
   userId: string;
   timestamp?: number;
-  physicalBullyingResponse: [];
-  verbalBullyingResponse: [];
-  sexualBullyingResponse: [];
-  cyberBullyingResponse: [];
+  title: string;
+  deskripsi: string;
+  physicalPointResponse: number;
+  verbalPointResponse: number;
+  sexualPointResponse: number;
+  cyberPointResponse: number;
+  status: string;
 }
 
 export interface Report {
+  id?: string;
   userId: string;
-  timestamp?: Date;
-  physicalBullyingResponseId: string;
-  verbalBullyingResponseId: string;
-  sexualBullyingResponseId: string;
-  cyberBullyingResponseId: string;
+  timestamp?: FirebaseFirestoreTypes.Timestamp;
+  title: string,
+  deskripsi: string,
+  physicalPointResponse: number;
+  verbalPointResponse: number;
+  sexualPointResponse: number;
+  cyberPointResponse: number;
+  status: string;
 }

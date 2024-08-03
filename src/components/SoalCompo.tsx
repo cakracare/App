@@ -1,7 +1,8 @@
-import { Layout, Radio, Text } from '@ui-kitten/components';
+import {Card, Layout, Radio, Text} from '@ui-kitten/components';
 import React from 'react';
 import { View } from 'react-native';
 import { SoalProps } from '../Types/SoalProps';
+import styles from "react-native-webview/lib/WebView.styles";
 
 const SoalCompo: React.FC<SoalProps> = ({
 /*
@@ -96,8 +97,8 @@ const SoalCompo: React.FC<SoalProps> = ({
     };
 
     return (
-        <View>
-            <Text>{text}</Text>
+        <Card style={{marginBottom: 10}}>
+            <Text>{text!}</Text>
             <Radio checked={!checked} onChange={() => handleCheckChange(false)}>
                 Tidak
             </Radio>
@@ -117,7 +118,7 @@ const SoalCompo: React.FC<SoalProps> = ({
                     ))}
                 </View>
             )}
-        </View>
+        </Card>
     );
 };
 

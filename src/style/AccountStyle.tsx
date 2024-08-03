@@ -51,6 +51,7 @@ export default StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     textAlignVertical: 'center',
+
   },
   Text3: {
     flex: 1,

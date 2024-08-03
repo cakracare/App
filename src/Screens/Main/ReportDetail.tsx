@@ -1,15 +1,6 @@
-/*
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import ReportComp from '../../components/ReportComp';
-import ButtonCompo from '../../components/ButtonCompo';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity, View} from 'react-native';
-import PetunjukComp from '../../components/petunjukComp';
-*/
-import {Button, Icon, Layout, Text} from '@ui-kitten/components';
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Icon, Input, InputProps, Layout, Text} from '@ui-kitten/components';
+import React, {useCallback} from 'react';
+import {ScrollView, View} from 'react-native';
 import ReportComp from '../../components/ReportComp';
 import ButtonCompo from '../../components/ButtonCompo';
 import {
@@ -23,93 +14,131 @@ import {BullyingResponse, ParamListReport} from '../../Types';
 import {getCurentTime} from '../../helpers/getCurentTime.ts';
 import {createLaporanBullying} from '../../service/report.ts';
 import PetunjukComp from '../../components/petunjukComp';
+import {StyleSheet} from 'react-native';
+
+const useInputState = (initialValue = ''): InputProps => {
+  const [value, setValue] = React.useState(initialValue);
+  return {value, onChangeText: setValue};
+};
 
 export default function ReportDetail() {
-  const navigation = useNavigation<NavigationProp<ParamListReport>>();
+  const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const userid = getUserId();
-  const response = route.params?.bullyResponse || null;
+  const response = route.params?.bullyResponse;
   const [responses, setResponses] = React.useState<any>({});
-
+  const titleInputState = useInputState();
+  const deskirpsiInputState = useInputState();
+  console.log(responses);
   React.useEffect(() => {
     // Update the responses state with the data from route params
     if (response) {
       setResponses((prevResponses: any) => ({
         ...prevResponses,
-        [response.type]: response.result,
+        [response.type]: response.total_result_value,
       }));
     }
   }, [response]);
 
   const createBullyingResponse = async () => {
+    //  tambhakn try catch
     const bullyResponse = {
       userId: userid,
-      // title
+      title: titleInputState.value,
+      deskripsi: deskirpsiInputState.value,
       time: getCurentTime(),
-      // desk
-      verbalBullyingResponse: responses['verbal'],
-      physicalBullyingResponse: responses['physical'],
-      sexualBullyingResponse: responses['seksual'],
-      cyberBullyingResponse: responses['cyber'],
-      // status
+      verbalPointResponse: responses['verbal'],
+      physicalPointResponse: responses['physical'],
+      sexualPointResponse: responses['seksual'],
+      cyberPointResponse: responses['cyber'],
+      status: 'proses',
     } as BullyingResponse;
 
     await createLaporanBullying(bullyResponse);
+    navigation.navigate('Report');
   };
 
-  const getQuestions = async (
-    type: 'physical' | 'verbal' | 'seksual' | 'cyber',
-  ) => {
-    return await getQuestionsByType(type);
-  };
+  const getQuestions = useCallback(
+    async (type: 'physical' | 'verbal' | 'seksual' | 'cyber') => {
+      return await getQuestionsByType(type);
+    },
+    [route],
+  );
 
   return (
-    <Layout
-      style={{
-        flex: 1,
-        padding: 10,
-      }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: 10,
-        }}>
-        <Icon
-          name="edit-outline"
-          fill="black"
-          style={{width: 30, height: 30}}
-        />
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              marginStart: 5,
-            }}>
-            Petunjuk Teknis Pengisian :
-          </Text>
-        </View>
-      </View>
-      <View>
-        <PetunjukComp
-          number={1}
-          text="Silahkan Mengisi Seluruh Pertanyaan yang ada dengan jujur."
-        />
-        <PetunjukComp
-          number={2}
-          text="Silahkan isi pertanyaan semua kategori dibawah ini."
-        />
-        <PetunjukComp
-          number={3}
-          text="Jika  semua kategori sudah diisi, silahkan klik tombol “Sumbit”."
-        />
-      </View>
+    <ScrollView>
       <Layout
         style={{
+          flex: 1,
+          padding: 10,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 10,
+          }}>
+          <Icon
+            name="edit-outline"
+            fill="black"
+            style={{width: 30, height: 30}}
+          />
+          <View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginStart: 5,
+              }}>
+              Petunjuk Teknis Pengisian :
+            </Text>
+          </View>
+        </View>
+        <View>
+          <PetunjukComp
+            number={1}
+            text="Silahkan Mengisi Seluruh Pertanyaan yang ada dengan jujur."
+          />
+          <PetunjukComp
+            number={2}
+            text="Silahkan isi pertanyaan semua kategori dibawah ini."
+          />
+          <PetunjukComp
+            number={3}
+            text="Jika  semua kategori sudah diisi, silahkan klik tombol “Sumbit”."
+          />
+        </View>
+        <Input
+          label={() => (
+            <Text style={{fontWeight: 'bold', color: 'black'}}>
+              Judul laporan
+            </Text>
+          )}
+          size="medium"
+          // placeholder='Medium'
+          style={{width: '90%', marginTop: 50}}
+          {...titleInputState}
+        />
+        <Input
+          label={() => (
+            <Text style={{fontWeight: 'bold', color: 'black'}}>
+              Deskripsi lekejadian laporan
+            </Text>
+          )}
+          multiline={true}
+          textStyle={{
+            minHeight: 100,
+            padding: 5,
+            textAlignVertical: 'top',
+            width: '90%',
+          }}
+          style={{width: '90%', margin: 10}}
+          // placeholder='Multiline'
+          {...deskirpsiInputState}
+        />
+
         <ReportComp
           onPress={async () => {
             const qust = await getQuestions('verbal');
@@ -154,11 +183,28 @@ export default function ReportDetail() {
           width={300}
           text="Submit"
           status="primary"
-          onPress={() => {
-            navigation.navigate('ReportScreen' as never);
-          }}
+          disabled={
+            (responses['verbal'] &&
+              responses['physical'] &&
+              responses['seksual'] &&
+              responses['cyber']) === undefined
+          }
+          onPress={createBullyingResponse}
         />
+        {/*</Layout>*/}
       </Layout>
-    </Layout>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    marginVertical: 2,
+  },
+  inputTextStyle: {
+    minHeight: 100,
+    padding: 5,
+    textAlignVertical: 'top',
+    width: '90%',
+  },
+});

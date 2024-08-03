@@ -33,6 +33,8 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
     <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
+    <InfoItem iconName="user-graduate" label="Status" value={item?.role} />
+    <InfoItem iconName="home" label="Alamat rumah" value={item?.alamat_lengkap} />
   </View>
 );
 const AccountScreen: React.FC = () => {

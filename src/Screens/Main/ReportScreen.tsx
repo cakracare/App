@@ -6,16 +6,14 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
-import {PermissionsAndroid, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import CardComp from '../../components/CardComp';
-import {getUserId} from '../../service/user.ts';
-import {getReportsByUser} from '../../service/report.ts';
+import {getUser, getUserId} from '../../service/user.ts';
+import {fetchUsersWithReports, getReportsByUser} from '../../service/report.ts';
 import {timeAgo} from '../../helpers/timeAgo.ts';
 import {Report} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
-import * as XLSX from 'xlsx';
-import RNFS from 'react-native-fs';
-import {getCurentTime, getFormattedTime} from '../../helpers/getCurentTime.ts';
+import {exportDataToExcel} from '../../helpers/convertJsonToExel.ts';
 
 const ReportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -29,7 +27,7 @@ const ReportScreen: React.FC = () => {
       const fetchReports = async () => {
         try {
           const reportData = await getReportsByUser(userId, user?.role);
-          setReports(reportData);
+          setReports(reportData.data);
         } catch (error) {
           console.error('Error fetching reports:', error);
         }
@@ -43,66 +41,54 @@ const ReportScreen: React.FC = () => {
     }, [userId]),
   );
 
-  const exportDataToExcel = () => {
-    let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(reports?.reports);
-    XLSX.utils.book_append_sheet(wb, ws, 'Users');
-    const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
-
-    // Write generated excel to Storage
-    RNFS.writeFile(
-      RNFS.DownloadDirectoryPath +
-        `/ReportBullyResponse_${getFormattedTime(getCurentTime())}.xlsx`,
-      wbout,
-      'ascii',
-    )
-      .then(r => {
-        console.log('Success');
-      })
-      .catch(e => {
-        console.log('Error', e);
-      });
-  };
-  const handleClick = async () => {
-    try {
-      // Check for Permission (check if permission is already given or not)
-      let isPermitedExternalStorage = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      );
-      let isPermitedReadStorage = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      );
-
-      if (!isPermitedExternalStorage) {
-        // Ask for permission
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-
-        if (
-          granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          // Permission Granted (calling our exportDataToExcel function)
-          exportDataToExcel();
-          console.log('Permission granted');
-        } else {
-          // Permission denied
-          console.log('Permission denied');
-        }
-      } else {
-        // Already have Permission (calling our exportDataToExcel function)
-        exportDataToExcel();
-      }
-    } catch (e) {
-      console.log('Error while checking permission');
-      console.log(e);
-      return;
+  /*
+    result laporan = [
+        {
+        "nama pelapor" : 'sdfsdf',
+        "kelas" : '',
+        "alamat" : '',
+        "tgl laporan" '',
+        "verbal" : 0,
+        "fisik" : 0,
+        "seksual" : 0,
+        "cyber" : 0,
+        "skor total" : 0,
+        "kategori" : 0,
+        "feedback" : 0,
     }
-  };
+    ]
+     */
+
+  // const userreport = getUser(reports[3]?.userId).then((user)=>{
+  //     console.log(reports[2], user?.data?.nama_lengkap, user?.data?.alamat_lengkap, user?.data?.kelas)
+  // });
+
+  // const data = {
+  //     nama_lengkap: 'John Doe',
+  //     email: 'johndoe@example.com',
+  //     usia: 17,
+  //     role: 'Student',
+  //     kelas: '12A',
+  //     asal_sekolah: 'SMA 1',
+  //     no_ortu: '081234567890',
+  //     alamat_lengkap: 'Jl. Merdeka No. 123',
+  //     gender: 'Male'
+  // };
+
+  const data = useCallback(async () => {
+    const allReportUser = await fetchUsersWithReports(user?.role!);
+    const isDownloaded = await exportDataToExcel(allReportUser);
+    if (isDownloaded) {
+      Alert.alert('Suskes');
+    }
+  }, []);
+
+  if (!user?.alamat_lengkap) {
+    Alert.alert(
+      'Invalid data',
+      'data tidak lengkap, silahkah dilengkapi terlbih dahulu',
+    );
+  }
 
   return (
     <Layout
@@ -116,14 +102,20 @@ const ReportScreen: React.FC = () => {
           justifyContent: 'center',
           marginVertical: 10,
         }}>
-        <ButtonCompo
-          width={300}
-          text="Report"
-          status="primary"
-          onPress={() => {
-            navigation.navigate('ReportNavigator', {screen: 'ReportDetail'});
-          }}
-        />
+        {user?.role === 'siswa' ? (
+          <ButtonCompo
+            width={300}
+            disabled={!user?.alamat_lengkap}
+            text="Report"
+            status="primary"
+            onPress={() => {
+              // lakukan pengecekan apakah data user sudah lengkap
+              navigation.navigate('ReportNavigator', {screen: 'ReportDetail'});
+            }}
+          />
+        ) : (
+          <Button onPress={data}>Download response laporan</Button>
+        )}
       </View>
       <Text
         style={{
@@ -134,15 +126,17 @@ const ReportScreen: React.FC = () => {
         }}>
         Result Report
       </Text>
-      {reports?.reports?.length > 0 ? (
-        reports?.reports.map((report: Report, index: number) => (
+      {reports?.length > 0 ? (
+        reports.map((report: Report, index: number) => (
           <CardComp
             key={index}
-            onPress={() => console.log('Report pressed')}
-            time={timeAgo(report?.timestamp)}
-            status="warning"
-            title={reports.id}
-            text="Success"
+            onPress={() =>
+              navigation.navigate('HasilReport', {idreport: report.id})
+            }
+            time={timeAgo(report?.timestamp!)}
+            status="danger"
+            title={report.title}
+            text={report.status}
           />
         ))
       ) : (

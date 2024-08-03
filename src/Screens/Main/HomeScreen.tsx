@@ -3,33 +3,37 @@ import {
   Text,
   Card,
 } from '@ui-kitten/components';
-import {Image, ScrollView, View} from 'react-native';
+import {Image, Linking, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
+import {useUser} from "../../helpers/userContext.tsx";
 
 
 const HomeScreen: React.FC = () => {
+    const {user, setUser} = useUser()
+
+  //   masukkan nama user kedalam kata sambutan
   return (
-    <ScrollView>
       <Layout style={{flex: 1, padding: 5}}>
-        <Text style={styles.Text4}>Selamat Datang di Aplikasi Kami !</Text>
+        <Text style={styles.Text4}>Selamat Datang, {user?.nama_lengkap!} !</Text>
         <Text style={styles.Text5}>
           Memberdayakan dan Mendidik Pelawan Penindasan
         </Text>
-        <Card style={styles.Card}>
+        <Card style={styles.Card} onPress={async ()=>{
+            await Linking.openURL('https://www.halodoc.com/kesehatan/bullying')
+        }}>
           <View style={styles.container}>
             <Image
               source={{
-                uri: 'https://emojiguide.com/wp-content/uploads/platform/google/44140.png',
+                uri: 'https://disdik.purwakartakab.go.id/asset/foto_berita/Bullying-Kompasiana.jpg',
               }}
               style={styles.Image}
             />
             <View style={styles.container1}>
               <Text style={styles.Text}>Bullying</Text>
               <Text numberOfLines={3} style={styles.Text1}>
-                Learn about the different types of bullying and its impact on
-                individuals.
+                  Bullying merupakan tindakan mengganggu, mengusik, atau menyakiti orang lain secara fisik atau psikis.
               </Text>
             </View>
           </View>
@@ -53,7 +57,6 @@ const HomeScreen: React.FC = () => {
           </View>
         </Card>
       </Layout>
-    </ScrollView>
   );
 };
 
