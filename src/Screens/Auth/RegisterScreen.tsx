@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
-import {Alert, Image, ScrollView, StyleSheet} from 'react-native';
+import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
@@ -53,76 +53,78 @@ export default function RegisterScreen() {
         if (newUser?.success) {
           await Logout();
           navigation.navigate('Login');
-          Alert.alert('register suskes');
+          ToastAndroid.show(newUser?.message, ToastAndroid.SHORT);
         } else {
-          Alert.alert(newUser?.message);
+          ToastAndroid.show(newUser?.message, ToastAndroid.SHORT);
         }
       }
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../../assets/img/logo.png')} />
-      <Layout style={styles.form}>
-        {[
-          'nama_lengkap',
-          'email',
-          'usia',
-          'kelas',
-          'asal_sekolah',
-          'gender',
-          'no_ortu',
-          'alamat_lengkap',
-        ].map(field => (
+    <Layout>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require('../../assets/img/logo.png')} />
+        <Layout style={styles.form}>
+          {[
+            'nama_lengkap',
+            'email',
+            'usia',
+            'kelas',
+            'asal_sekolah',
+            'gender',
+            'no_ortu',
+            'alamat_lengkap',
+          ].map(field => (
+            <FormInput
+              key={field}
+              label={field
+                .replace(/_/g, ' ')
+                .replace(/([A-Z])/g, ' $1')
+                .trim()}
+              placeholder=""
+              value={formData[field]}
+              onChangeText={value => handleInputChange(field, value)}
+              status={errors[field] ? 'danger' : 'basic'} // Set status based on error
+              error={errors[field] || null}
+            />
+          ))}
           <FormInput
-            key={field}
-            label={field
-              .replace(/_/g, ' ')
-              .replace(/([A-Z])/g, ' $1')
-              .trim()}
+            label="Password"
             placeholder=""
-            value={formData[field]}
-            onChangeText={value => handleInputChange(field, value)}
-            status={errors[field] ? 'danger' : 'basic'} // Set status based on error
-            error={errors[field] || null}
+            value={formData.password}
+            onChangeText={value => handleInputChange('password', value)}
+            status={errors.password ? 'danger' : 'basic'}
+            error={errors.password} // Pass error message
+            secureTextEntry
           />
-        ))}
-        <FormInput
-          label="Password"
-          placeholder=""
-          value={formData.password}
-          onChangeText={value => handleInputChange('password', value)}
-          status={errors.password ? 'danger' : 'basic'}
-          error={errors.password} // Pass error message
-          secureTextEntry
-        />
-        <Text style={styles.label}>Minimum 8 characters</Text>
-        <FormInput
-          label="Confirm Password"
-          placeholder=""
-          value={formData.confirm_password}
-          onChangeText={value => handleInputChange('confirm_password', value)}
-          status={errors.confirm_password ? 'danger' : 'basic'}
-          error={errors.confirm_password} // Pass error message
-          secureTextEntry
-        />
-        <Text style={styles.label}>Minimum 8 characters</Text>
-        <CheckBox
-          style={styles.checkbox}
-          checked={isChecked}
-          onChange={setIsChecked}>
-          Saya Setuju dengan ketentuan diatas
-        </CheckBox>
-        <ButtonCompo
-          status="primary"
-          width={300}
-          onPress={handleRegister}
-          disabled={!isChecked}
-          text="Daftar"
-        />
-      </Layout>
-    </ScrollView>
+          <Text style={styles.label}>Minimum 8 characters</Text>
+          <FormInput
+            label="Confirm Password"
+            placeholder=""
+            value={formData.confirm_password}
+            onChangeText={value => handleInputChange('confirm_password', value)}
+            status={errors.confirm_password ? 'danger' : 'basic'}
+            error={errors.confirm_password} // Pass error message
+            secureTextEntry
+          />
+          <Text style={styles.label}>Minimum 8 characters</Text>
+          <CheckBox
+            style={styles.checkbox}
+            checked={isChecked}
+            onChange={setIsChecked}>
+            Saya Setuju dengan ketentuan diatas
+          </CheckBox>
+          <ButtonCompo
+            status="primary"
+            width={300}
+            onPress={handleRegister}
+            disabled={!isChecked}
+            text="Daftar"
+          />
+        </Layout>
+      </ScrollView>
+    </Layout>
   );
 }
 
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#FFFFFF',
   },
   form: {
     width: 300,

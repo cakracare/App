@@ -12,10 +12,10 @@ import HasilReport from '../Screens/Main/HasilReport.tsx';
 */
 
 import HasilReport from '../Screens/Main/HasilReport.tsx';
-import ReportNavigator from "./ReportNavigator.tsx";
-import {Route, getFocusedRouteNameFromRoute} from "@react-navigation/native";
-import ReportDetail from "../Screens/Main/ReportDetail.tsx";
-import {useUser} from "../helpers/userContext.tsx";
+import ReportNavigator from './ReportNavigator.tsx';
+import {Route, getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import ReportDetail from '../Screens/Main/ReportDetail.tsx';
+import {useUser} from '../helpers/userContext.tsx';
 const Tab = createBottomTabNavigator<ParamListBase>();
 
 // function SecondNavigator() {
@@ -23,13 +23,18 @@ function MainNavigator() {
   function getTabBarVisibility(route: Partial<Route<string>>) {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
-        if (routeName === 'ReportDetail' || routeName === 'Soal' || routeName === 'HasilReport') {
-            return 'none';
-        }
-        return 'flex';
+    if (
+      routeName === 'ReportDetail' ||
+      routeName === 'Soal' ||
+      routeName === 'HasilReport' ||
+      routeName === 'EditProfil'
+    ) {
+      return 'none';
     }
+    return 'flex';
+  }
 
-    const {user,setUser} = useUser()
+  const {user, setUser} = useUser();
   const renderIcon =
     (name: string) =>
     ({color, size}: {color: string; size: number}): IconElement =>
@@ -46,7 +51,7 @@ function MainNavigator() {
               iconName = 'home';
               break;
             case 'ReportNavigator':
-              iconName = user?.role === 'siswa'? 'video-off' : 'archive';
+              iconName = user?.role === 'siswa' ? 'video-off' : 'archive';
               break;
             case 'Account':
               iconName = 'person';
@@ -76,11 +81,16 @@ function MainNavigator() {
         }}
       />
 
-
-        <Tab.Screen name="ReportNavigator" options={{headerShown:false,title: user?.role === 'guru'? 'Feedback' : 'report' }} component={ReportNavigator}/>
+      <Tab.Screen
+        name="ReportNavigator"
+        options={{
+          headerShown: false,
+          title: user?.role === 'guru' ? 'Feedback' : 'report',
+        }}
+        component={ReportNavigator}
+      />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
 }
-
 export default MainNavigator;

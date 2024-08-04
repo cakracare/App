@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
-import {View} from 'react-native';
+import {ScrollView, useColorScheme, View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
 import {HeaderAccount} from '../../components/HeaderAccount.tsx';
 import {Logout} from '../../service';
@@ -17,13 +17,17 @@ const InfoItem = ({
   iconName: string;
   label: string;
   value: string;
-}) => (
-  <View style={styles.container3}>
-    <Icon2 name={iconName} size={20} color={'black'} style={styles.icon} />
-    <Text style={styles.Text2}>{label}</Text>
-    <Text style={styles.Text3}>{value}</Text>
-  </View>
-);
+}) => {
+  const colorScheme = useColorScheme();
+  const iconColor = colorScheme === 'dark' ? 'white' : 'black';
+  return (
+    <View style={styles.container3}>
+      <Icon2 name={iconName} size={20} color={iconColor} style={styles.icon} />
+      <Text style={styles.Text2}>{label}</Text>
+      <Text style={styles.Text3}>{value}</Text>
+    </View>
+  );
+};
 
 const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
@@ -33,8 +37,12 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
     <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
-    <InfoItem iconName="user-graduate" label="Status" value={item?.role} />
-    <InfoItem iconName="home" label="Alamat rumah" value={item?.alamat_lengkap} />
+    <InfoItem iconName="user-cog" label="Status" value={item?.role} />
+    <InfoItem
+      iconName="home"
+      label="Alamat rumah"
+      value={item?.alamat_lengkap}
+    />
   </View>
 );
 const AccountScreen: React.FC = () => {
@@ -49,41 +57,43 @@ const AccountScreen: React.FC = () => {
 
   return (
     <Layout style={styles.container}>
-      <HeaderAccount
-        image={user?.photoURL}
-        name={user?.nama_lengkap}
-        email={user?.email}
-      />
-      <View>
-        <View style={styles.container4}>
-          <Text style={styles.Text4}>Account Details</Text>
-          <View style={styles.container5}>
-            <Text style={styles.Text5}>edit</Text>
-            <Icon2 name="angle-right" size={20} color={'black'} />
+      <ScrollView>
+        <HeaderAccount
+          image={user?.photoURL}
+          name={user?.nama_lengkap}
+          email={user?.email}
+        />
+        <View>
+          <View style={styles.container4}>
+            <Text style={styles.Text4}>Account Details</Text>
+          </View>
+          {renderItem2({item: user, index: 0})}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              marginTop: 20,
+            }}>
+            <ButtonCompo
+              status="success"
+              text="edit"
+              width={150}
+              onPress={() =>
+                navigation.navigate('EditProfil', {
+                  user: user,
+                })
+              }
+            />
+            <ButtonCompo
+              status="danger"
+              text="Logout"
+              width={150}
+              onPress={handleLogout}
+            />
           </View>
         </View>
-        {renderItem2({item: user, index: 0})}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-            marginTop: 20,
-          }}>
-          <ButtonCompo
-            status="success"
-            text="edit"
-            width={150}
-            onPress={handleLogout}
-          />
-          <ButtonCompo
-            status="danger"
-            text="Logout"
-            width={150}
-            onPress={handleLogout}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </Layout>
   );
 };

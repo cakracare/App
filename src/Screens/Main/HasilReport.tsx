@@ -1,68 +1,111 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
-import { Input, Button, Layout, Text, Card } from '@ui-kitten/components';
-import {NavigationProp, useNavigation, useRoute} from '@react-navigation/native';
-import {getLaporanBullying} from "../../service/report.ts";
-import {Report} from "../../Types";
-import {useUser} from "../../helpers/userContext.tsx";
+import {StyleSheet, ScrollView, View} from 'react-native';
+import {Input, Button, Layout, Text, Card} from '@ui-kitten/components';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import {getLaporanBullying} from '../../service/report.ts';
+import {Report} from '../../Types';
+import {useUser} from '../../helpers/userContext.tsx';
+import HasilCompo from '../../components/CardHasil.tsx';
+import CardHasil from '../../components/CardHasil.tsx';
 
 export default function HasilReport() {
   const [feedback, setFeedback] = useState('');
   const [report, setReport] = useState<Report>({});
-  const [time,setTime]=useState('')
+  const [time, setTime] = useState('');
   const route = useRoute();
-  const response = route.params?.idreport
-  const {user,setUser}=useUser()
+  const response = route.params?.idreport;
+  const {user, setUser} = useUser();
 
   useEffect(() => {
-     const data = async ()=>{
-       return getLaporanBullying(response)
-     }
+    const data = async () => {
+      return getLaporanBullying(response);
+    };
 
-     data().then((result  )=>{
-       setReport(result.data)
-     })
-
-  },[]);
+    data().then(result => {
+      setReport(result.data);
+    });
+  }, []);
 
   return (
-      <Layout style={styles.container}>
+    <Layout style={styles.container}>
+      {user!.role === 'guru' ? (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Card style={styles.card}>
-            <Text category='label' style={styles.text}>Nama Pelapor: {user?.nama_lengkap}</Text>
-            <Text category='label' style={styles.text}>Kelas: {user?.kelas}</Text>
-            <Text category='label' style={styles.text}>Alamat: {user?.alamat_lengkap}</Text>
-            <Text category='label' style={styles.text}>tgl pelaporan: {report.timestamp?.toString().slice(0,16)}</Text>
-            <Text category='h5' style={styles.header}>Hasil Report</Text>
-            <Text category='label' style={styles.text}>Verbal Point Response: {report.verbalPointResponse}</Text>
-            <Text category='label' style={styles.text}>Physical Point Response: {report.physicalPointResponse}</Text>
-            <Text category='label' style={styles.text}>Sexual Point Response: {report.sexualPointResponse}</Text>
-            <Text category='label' style={styles.text}>Cyber Point Response: {report.cyberPointResponse}</Text>
-            <Text category='label' style={styles.text}>===================================</Text>
-            <Text category='label' style={styles.text}>Total Point Response: {report.cyberPointResponse + report.cyberPointResponse
-                + report.sexualPointResponse + report.verbalPointResponse}</Text>
-            <Text category='label' style={styles.text}>Status: {report.status}</Text>
+            <CardHasil label="Nama Pelapor :" text={user?.nama_lengkap} />
+            <CardHasil label="Kelas :" text={user?.kelas} />
+            <CardHasil label="Alamat :" text={user?.alamat_lengkap} />
+            <CardHasil
+              label="Tgl Pelaporan :"
+              text={report.timestamp?.toString().slice(0, 16)}
+            />
+          </Card>
+          <Card style={styles.card}>
+            <Text category="h5" style={styles.header}>
+              Hasil Report
+            </Text>
+            <CardHasil label="Verbal :" text={report.verbalPointResponse} />
+            <CardHasil label="Cyber :" text={report.cyberPointResponse} />
+            <CardHasil label="Physical :" text={report.physicalPointResponse} />
+            <CardHasil label="Sexual :" text={report.sexualPointResponse} />
+            <Text category="label" style={styles.text}>
+              ===================================
+            </Text>
+            <CardHasil
+              label="Total Point Response :"
+              text={
+                report.cyberPointResponse +
+                report.physicalPointResponse +
+                report.sexualPointResponse +
+                report.verbalPointResponse
+              }
+            />
+            <CardHasil label="Status :" text={report.status} />
 
             <Input
-                label={() => <Text style={{fontWeight:"bold",color:'black'}}>Deskripsi lekejadian laporan</Text>}
-                disabled={user?.role==='siswa'}
-                multiline={true}
-                textStyle={{minHeight: 100,
-                  padding: 5,
-                  textAlignVertical: 'top'}}
+              label={() => (
+                <Text style={{fontWeight: 'bold', marginVertical: 20}}>
+                  Masukkan Feedback
+                </Text>
+              )}
+              disabled={user?.role === 'siswa'}
+              multiline={true}
+              textStyle={{
+                minHeight: 100,
+                padding: 5,
+                textAlignVertical: 'top',
+              }}
             />
-            {user!.role === 'guru'?<Button style={styles.button}>
-            Submit
-          </Button>:''}
+            <Button style={styles.button}>Submit</Button>
           </Card>
         </ScrollView>
-      </Layout>
+      ) : (
+        <Input
+          label={() => (
+            <Text style={{fontWeight: 'bold', marginVertical: 20}}>
+              Feedback
+            </Text>
+          )}
+          disabled={user?.role === 'siswa'}
+          multiline={true}
+          textStyle={{
+            minHeight: 100,
+            padding: 5,
+            textAlignVertical: 'top',
+          }}
+        />
+      )}
+    </Layout>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
   },
   scrollContainer: {
     padding: 20,
@@ -71,11 +114,11 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    padding: 20,
+    marginTop: 10,
   },
   header: {
     marginBottom: 15,
-    margin: 15
+    margin: 15,
   },
   text: {
     marginVertical: 5,

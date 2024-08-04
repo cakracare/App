@@ -1,27 +1,26 @@
-import React from 'react';
-import {Layout, Text} from '@ui-kitten/components';
-import {PetunjukTypeProps} from '../Types/PetunjukTypeProps';
+import {Card, Layout, Text} from '@ui-kitten/components';
+import {HasilProps} from '../Types/CardHasilProps';
 
-export default function PetunjukComp(props: PetunjukTypeProps) {
+export default function HasilCompo(props: HasilProps) {
   return (
     <Layout
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginEnd: 10,
         width: '96%',
       }}>
       <Text
         style={{
-          fontSize: 16,
-          marginStart: 30,
+          fontSize: 12,
+          fontWeight: 'bold',
           padding: 2,
         }}>
-        {props.number.toString()}
+        {props.label}
       </Text>
       <Text
         style={{
-          fontSize: 16,
+          fontWeight: 'bold',
+          fontSize: 12,
           marginStart: 10,
           padding: 2,
         }}>

@@ -1,103 +1,79 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Card, Icon, Layout, List, Text} from '@ui-kitten/components';
-import {NavigationProp, useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  Button,
+  Card,
+  Icon,
+  Layout,
+  List,
+  Modal,
+  Spinner,
+  Text,
+} from '@ui-kitten/components';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo';
-import {Alert,View} from 'react-native';
+import {
+  Alert,
+  ToastAndroid,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from 'react-native';
 import CardComp from '../../components/CardComp';
-/*
-import {getUserId} from '../../service/user.ts';
-import {getReportsByUser} from '../../service/report.ts';
+
+import {getUser, getUserId} from '../../service/user.ts';
+import {fetchUsersWithReports, getReportsByUser} from '../../service/report.ts';
 import {timeAgo} from '../../helpers/timeAgo.ts';
 import {Report} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
-import * as XLSX from 'xlsx';
-import RNFS from 'react-native-fs';
-import {getCurentTime, getFormattedTime} from '../../helpers/getCurentTime.ts';
-*/
-import {getUser, getUserId} from "../../service/user.ts";
-import {fetchUsersWithReports, getReportsByUser} from "../../service/report.ts";
-import {timeAgo} from "../../helpers/timeAgo.ts";
-import {Report} from "../../Types";
-import {useUser} from "../../helpers/userContext.tsx";
-import {exportDataToExcel} from "../../helpers/convertJsonToExel.ts";
-
+import {exportDataToExcel} from '../../helpers/convertJsonToExel.ts';
 
 const ReportScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
-  const userId =  getUserId() || ''
-  const {user,setUser} = useUser()
+  const userId = getUserId() || '';
+  const {user, setUser} = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
-    const [reports, setReports] = useState<any>({});
+  const [reports, setReports] = useState<any>({});
 
-    useFocusEffect(
-        React.useCallback(() => {
-            const fetchReports = async () => {
-                try {
-                    const reportData = await getReportsByUser(userId, user?.role);
-                    setReports(reportData.data);
-                } catch (error) {
-                    console.error('Error fetching reports:', error);
-                }
-            };
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchReports = async () => {
+        try {
+          const reportData = await getReportsByUser(userId, user?.role);
+          setReports(reportData.data);
+        } catch (error) {
+          console.error('Error fetching reports:', error);
+        }
+      };
 
-            fetchReports();
+      fetchReports();
 
-            return () => {
-                // Cleanup if necessary
-            };
-        }, [userId])
+      return () => {
+        // Cleanup if necessary
+      };
+    }, [userId]),
+  );
 
-    );
-
-    /*
-    result laporan = [
-        {
-        "nama pelapor" : 'sdfsdf',
-        "kelas" : '',
-        "alamat" : '',
-        "tgl laporan" '',
-        "verbal" : 0,
-        "fisik" : 0,
-        "seksual" : 0,
-        "cyber" : 0,
-        "skor total" : 0,
-        "kategori" : 0,
-        "feedback" : 0,
+  const data = useCallback(async () => {
+    setIsLoading(true);
+    const allReportUser = await fetchUsersWithReports(user?.role!);
+    const isDownloaded = await exportDataToExcel(allReportUser);
+    if (isDownloaded) {
+      ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
+      setIsLoading(false);
     }
-    ]
-     */
+  }, []);
 
-
-
-
-    // const userreport = getUser(reports[3]?.userId).then((user)=>{
-    //     console.log(reports[2], user?.data?.nama_lengkap, user?.data?.alamat_lengkap, user?.data?.kelas)
-    // });
-
-    // const data = {
-    //     nama_lengkap: 'John Doe',
-    //     email: 'johndoe@example.com',
-    //     usia: 17,
-    //     role: 'Student',
-    //     kelas: '12A',
-    //     asal_sekolah: 'SMA 1',
-    //     no_ortu: '081234567890',
-    //     alamat_lengkap: 'Jl. Merdeka No. 123',
-    //     gender: 'Male'
-    // };
-
-        const data = useCallback(async ()=>{
-            const allReportUser = await fetchUsersWithReports(user?.role!)
-           const isDownloaded =  await exportDataToExcel(allReportUser)
-            if (isDownloaded){
-                Alert.alert('Suskes')
-            }
-        },[])
-
-
-   if (!user?.alamat_lengkap) {
-      Alert.alert('Invalid data','data tidak lengkap, silahkah dilengkapi terlbih dahulu')
-   }
+  if (!user?.alamat_lengkap) {
+    Alert.alert(
+      'Invalid data',
+      'data tidak lengkap, silahkah dilengkapi terlbih dahulu',
+    );
+  }
 
   return (
     <Layout
@@ -105,24 +81,14 @@ const ReportScreen: React.FC = () => {
         flex: 1,
         padding: 10,
       }}>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginVertical: 10,
+      <Modal
+        visible={isLoading}
+        animationType="fade"
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}>
-          {
-              user?.role === 'siswa'? <ButtonCompo
-                  disabled={!user?.alamat_lengkap}
-                  text="Report"
-                  status="primary"
-                  onPress={() => {
-                      // lakukan pengecekan apakah data user sudah lengkap
-                      navigation.navigate('ReportNavigator', {screen: "ReportDetail"});
-                  }}
-              /> : <Button onPress={data}>Download response laporan</Button>
-          }
-      </View>
+        <Spinner size="giant" status="primary" />
+      </Modal>
       <Text
         style={{
           fontSize: 20,
@@ -132,20 +98,63 @@ const ReportScreen: React.FC = () => {
         }}>
         Result Report
       </Text>
-        {reports?.length > 0 ? (
-            reports.map((report: Report, index: number) => (
-                <CardComp
-                    key={index}
-                    onPress={() =>  navigation.navigate('HasilReport', {idreport: report.id})}
-                    time={timeAgo(report?.timestamp!)}
-                    status="danger"
-                    title={report.title}
-                    text={report.status}
-                />
-            ))
-        ) : (
-            <Text>No reports found</Text>
-        )}
+      {reports?.length > 0 ? (
+        reports.map((report: Report, index: number) => (
+          <CardComp
+            key={index}
+            onPress={() =>
+              navigation.navigate('HasilReport', {idreport: report.id})
+            }
+            time={timeAgo(report?.timestamp!)}
+            status={report.status === 'success' ? '#06D001' : 'orange'}
+            title={report.title}
+            text={report.status}
+          />
+        ))
+      ) : (
+        <Text>No reports found</Text>
+      )}
+      {user?.role === 'siswa' ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('ReportNavigator', {screen: 'ReportDetail'});
+          }}
+          style={{
+            position: 'absolute',
+            right: 10,
+            bottom: 10,
+            backgroundColor: '#439BFF',
+            borderRadius: 10,
+            padding: 10,
+            width: 50,
+            height: 50,
+          }}>
+          <Icon
+            name="plus-outline"
+            fill={'white'}
+            style={{width: 32, height: 32}}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={data}
+          style={{
+            position: 'absolute',
+            right: 10,
+            bottom: 10,
+            backgroundColor: '#439BFF',
+            borderRadius: 10,
+            padding: 10,
+            width: 50,
+            height: 50,
+          }}>
+          <Icon
+            name="download"
+            fill={'white'}
+            style={{width: 32, height: 32}}
+          />
+        </TouchableOpacity>
+      )}
     </Layout>
   );
 };

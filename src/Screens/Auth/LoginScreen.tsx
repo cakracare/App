@@ -9,7 +9,7 @@ import {
   Modal,
   Spinner,
 } from '@ui-kitten/components';
-import {Alert, Image, TouchableOpacity} from 'react-native';
+import {Alert, Image, ToastAndroid, TouchableOpacity} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle} from '../../service';
 import {useUser} from '../../helpers/userContext.tsx';
@@ -39,11 +39,12 @@ export default function LoginScreen(): React.ReactElement {
       setUser(result.user);
       setLoading(false);
       navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-      Alert.alert(result.message);
-      setPass('')
-      setEmail('')
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
+      setPass('');
+      setEmail('');
     } else {
-      Alert.alert(result.message);
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
+      setLoading(false);
       setPass('');
       setEmail('');
     }
@@ -60,11 +61,12 @@ export default function LoginScreen(): React.ReactElement {
         console.info(result, '<< login screen');
         setUser(result.user);
         navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-        Alert.alert(result.message);
+        ToastAndroid.show(result.message, ToastAndroid.SHORT);
+        setLoading(false);
         setLoading(false);
       } else {
         setLoading(false);
-        Alert.alert(result.message);
+        ToastAndroid.show(result.message, ToastAndroid.SHORT);
       }
     });
   };
@@ -104,6 +106,7 @@ export default function LoginScreen(): React.ReactElement {
           width={300}
           status="primary"
           text="Login"
+          disabled={email === '' || pass === ''}
           onPress={handleLogin}
         />
         <Layout style={styles.container1}>
