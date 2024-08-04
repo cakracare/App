@@ -7,7 +7,7 @@ const useForm = (initialState: any) => {
     const handleInputChange = (name: string, value: string) => {
         setFormData({
             ...formData,
-            [name]: value,
+            [name]: value || '',
         });
         clearFieldError(name);
     };

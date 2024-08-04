@@ -1,22 +1,33 @@
 import {Layout} from '@ui-kitten/components';
-import {Image, ScrollView, StyleSheet} from 'react-native';
+import {Alert, Image, ScrollView, StyleSheet} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
+import React from "react";
+import ButtonCompo from "../../components/ButtonCompo.tsx";
+import {useUser} from "../../helpers/userContext.tsx";
+import {getUserId, updateUser} from "../../service/user.ts";
 
 export default function EditProfil() {
-  const initialState = {
-    nama_lengkap: '',
-    email: '',
-    usia: '',
-    kelas: '',
-    asal_sekolah: '',
-    no_ortu: '',
-    alamat_lengkap: '',
-    password: '',
-    confirm_password: '',
-  };
+  const navigation = useNavigation<NavigationProp<any>>();
+  const route = useRoute();
+  const {user,setUser}=useUser()
+  const userCurrent = route.params?.user;
+  console.log(userCurrent,'dfgfdg');
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
-    useForm(initialState);
+    useForm(userCurrent);
+
+
+  const handleUpdateAccount = async ()=>{
+      setUser(formData)
+     const result = await updateUser(getUserId()!,formData)
+    console.log(result)
+    if (result.success){
+      Alert.alert(result.message)
+      navigation.navigate('Account')
+    }
+
+  }
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
@@ -46,6 +57,12 @@ export default function EditProfil() {
             />
           ))}
         </Layout>
+        <ButtonCompo
+            width={300}
+            status="primary"
+            text="Simpan"
+            onPress={handleUpdateAccount}
+        />
       </ScrollView>
     </Layout>
   );

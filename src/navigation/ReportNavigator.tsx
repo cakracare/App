@@ -30,7 +30,7 @@ function ReportNavigator() {
         options={{title: 'Isi soal'}}
       />
       <ReportStack.Screen name={'HasilReport'} component={HasilReport} />
-      <ReportStack.Screen name="EditProfil" component={EditProfile} />
+      {/*<ReportStack.Screen name={"EditProfil"} component={EditProfile} />*/}
     </ReportStack.Navigator>
   );
 }

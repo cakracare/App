@@ -51,7 +51,7 @@ export default function ReportDetail() {
       physicalPointResponse: responses['physical'],
       sexualPointResponse: responses['seksual'],
       cyberPointResponse: responses['cyber'],
-      status: 'proses',
+      status: 'process',
     } as BullyingResponse;
 
     await createLaporanBullying(bullyResponse);
@@ -174,10 +174,10 @@ export default function ReportDetail() {
           status="primary"
           width={300}
           disabled={
-            (responses['verbal'] &&
+            ((responses['verbal'] &&
               responses['physical'] &&
               responses['seksual'] &&
-              responses['cyber']) === undefined
+              responses['cyber'] ) === undefined) || ( (titleInputState.value && deskirpsiInputState.value) === '')
           }
           onPress={createBullyingResponse}
         />

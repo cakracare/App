@@ -6,38 +6,79 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {getLaporanBullying} from '../../service/report.ts';
-import {Report} from '../../Types';
+import {getLaporanBullying, updateLaporanBullying} from '../../service/report.ts';
+import {Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
 import HasilCompo from '../../components/CardHasil.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
+import {getUser} from "../../service/user.ts";
 
 export default function HasilReport() {
+  const navigation = useNavigation<NavigationProp<any>>();
   const [feedback, setFeedback] = useState('');
   const [report, setReport] = useState<Report>({});
+  const [userReport, setUserReport] = useState<User>({});
   const [time, setTime] = useState('');
   const route = useRoute();
-  const response = route.params?.idreport;
+  const idReport = route.params?.idreport;
   const {user, setUser} = useUser();
+  // const [feedback,SetFeedback]=useState('')
 
   useEffect(() => {
     const data = async () => {
-      return getLaporanBullying(response);
+      const laporan = await getLaporanBullying(idReport);
+      const dataUser  = await getUser(laporan.data?.userId);
+      return {laporan,dataUser}
     };
 
+
     data().then(result => {
-      setReport(result.data);
+      setReport(result.laporan.data);
+      setUserReport(result.dataUser.data)
     });
   }, []);
 
+  const handleUdpateReport = async ()=>{
+    // console.log('sdfsdf')
+      try {
+        report.feedback = feedback || report.feedback
+        report.status = 'success'
+        const iupdateReport = await updateLaporanBullying(idReport,report)
+        // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
+        if (iupdateReport.success){
+          navigation.navigate('Report')
+        }
+      }catch(e){
+        console.log(e)
+      }
+    // console.log('Udpate Report');
+  }
+  console.log(report.feedback);
+
+  const total_point = report.cyberPointResponse +
+      report.physicalPointResponse +
+      report.sexualPointResponse +
+      report.verbalPointResponse
+
+
+  const kategori = ()=>{
+    if(total_point < 18){
+      return 'ringan'
+    }else if(total_point > 18 || total_point <32){
+      return 'sedang'
+    }else if(total_point > 18){
+      return 'berat'
+    }
+  }
+
   return (
     <Layout style={styles.container}>
-      {user!.role === 'guru' ? (
+      {user?.role === 'guru' ? (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Card style={styles.card}>
-            <CardHasil label="Nama Pelapor :" text={user?.nama_lengkap} />
-            <CardHasil label="Kelas :" text={user?.kelas} />
-            <CardHasil label="Alamat :" text={user?.alamat_lengkap} />
+            <CardHasil label="Nama Pelapor :" text={userReport?.nama_lengkap} />
+            <CardHasil label="Kelas :" text={userReport?.kelas} />
+            <CardHasil label="Alamat :" text={userReport?.alamat_lengkap} />
             <CardHasil
               label="Tgl Pelaporan :"
               text={report.timestamp?.toString().slice(0, 16)}
@@ -56,13 +97,9 @@ export default function HasilReport() {
             </Text>
             <CardHasil
               label="Total Point Response :"
-              text={
-                report.cyberPointResponse +
-                report.physicalPointResponse +
-                report.sexualPointResponse +
-                report.verbalPointResponse
-              }
+              text={total_point}
             />
+            <CardHasil label="Kategori :" text={kategori()} />
             <CardHasil label="Status :" text={report.status} />
 
             <Input
@@ -73,13 +110,15 @@ export default function HasilReport() {
               )}
               disabled={user?.role === 'siswa'}
               multiline={true}
+              value={report.feedback}
               textStyle={{
                 minHeight: 100,
                 padding: 5,
                 textAlignVertical: 'top',
               }}
+              onChangeText={nextValue => setFeedback(nextValue)}
             />
-            <Button style={styles.button}>Submit</Button>
+            <Button style={styles.button} onPress={handleUdpateReport}>Submit</Button>
           </Card>
         </ScrollView>
       ) : (
@@ -91,6 +130,7 @@ export default function HasilReport() {
           )}
           disabled={user?.role === 'siswa'}
           multiline={true}
+          value={report.feedback}
           textStyle={{
             minHeight: 100,
             padding: 5,

@@ -59,4 +59,5 @@ export interface Report {
   sexualPointResponse: number;
   cyberPointResponse: number;
   status: string;
+  feedback?: string
 }
