@@ -3,4 +3,5 @@ export type ButtonProps = {
   onPress: () => void;
   disabled?: boolean;
   status: string;
+  width: number;
 };

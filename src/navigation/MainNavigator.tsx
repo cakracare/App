@@ -10,6 +10,7 @@ import {ReportDetail} from '../Screens/Main/ReportDetail.tsx';
 import Soal from '../Screens/Main/Soal.tsx';
 import HasilReport from '../Screens/Main/HasilReport.tsx';
 */
+
 import HasilReport from '../Screens/Main/HasilReport.tsx';
 import ReportNavigator from "./ReportNavigator.tsx";
 import {Route, getFocusedRouteNameFromRoute} from "@react-navigation/native";
@@ -19,8 +20,8 @@ const Tab = createBottomTabNavigator<ParamListBase>();
 
 // function SecondNavigator() {
 function MainNavigator() {
-    function getTabBarVisibility(route: Partial<Route<string>>) {
-        const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+  function getTabBarVisibility(route: Partial<Route<string>>) {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
         if (routeName === 'ReportDetail' || routeName === 'Soal' || routeName === 'HasilReport') {
             return 'none';
@@ -59,7 +60,7 @@ function MainNavigator() {
           }
           return renderIcon(iconName)({color, size});
         },
-          tabBarStyle: {display: getTabBarVisibility(route)},
+        tabBarStyle: {display: getTabBarVisibility(route)},
       })}>
       <Tab.Screen
         name="Home"
@@ -75,27 +76,11 @@ function MainNavigator() {
         }}
       />
 
-        <Tab.Screen name="ReportNavigator" options={{headerShown:false,title: user?.role === 'guru'? 'Feedback' : 'report' }} component={ReportNavigator}/>
 
+        <Tab.Screen name="ReportNavigator" options={{headerShown:false,title: user?.role === 'guru'? 'Feedback' : 'report' }} component={ReportNavigator}/>
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
 }
 
-/*
-function MainNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="SecondNavigator"
-        component={SecondNavigator}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="HasilReport" component={HasilReport} />
-      <Stack.Screen name="ReportDetails" component={ReportDetail} />
-      <Stack.Screen name="Soal" component={Soal} />
-    </Stack.Navigator>
-  );
-}
-*/
 export default MainNavigator;

@@ -5,7 +5,6 @@ import { SoalProps } from '../Types/SoalProps';
 import styles from "react-native-webview/lib/WebView.styles";
 
 const SoalCompo: React.FC<SoalProps> = ({
-
                                             text,
                                             checked,
                                             setChecked,
