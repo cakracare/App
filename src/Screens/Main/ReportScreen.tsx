@@ -59,13 +59,17 @@ const ReportScreen: React.FC = () => {
   );
 
   const data = useCallback(async () => {
-    setIsLoading(true);
-    const allReportUser = await fetchUsersWithReports(user?.role!);
-    console.log(allReportUser.length)
-    const isDownloaded = await exportDataToExcel(allReportUser);
-    if (isDownloaded) {
-      ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
-      setIsLoading(false);
+    try {
+        setIsLoading(true);
+        const allReportUser = await fetchUsersWithReports(user?.role!);
+        console.log(allReportUser.length)
+        const isDownloaded = await exportDataToExcel(allReportUser);
+        if (isDownloaded) {
+            ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
+            setIsLoading(false);
+        }
+    }catch (e){
+        console.log(e)
     }
   }, []);
 

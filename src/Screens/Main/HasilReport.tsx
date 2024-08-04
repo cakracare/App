@@ -34,63 +34,68 @@ export default function HasilReport() {
   const idReport = route.params?.idreport;
   const {user, setUser} = useUser();
   const [loading, setLoading] = useState(false);
-  // const [feedback,SetFeedback]=useState('')
+  const [kategori,setKategori]=useState('')
+  const total_point = report.cyberPointResponse +
+      report.physicalPointResponse +
+      report.sexualPointResponse +
+      report.verbalPointResponse
 
   useEffect(() => {
     const data = async () => {
       const laporan = await getLaporanBullying(idReport);
-      const dataUser = await getUser(laporan.data?.userId);
-      return {laporan, dataUser};
+      const dataUser  = await getUser(laporan.data?.userId);
+      return {laporan,dataUser}
     };
+
 
     data().then(result => {
       setReport(result.laporan.data);
-      setUserReport(result.dataUser.data);
+      setUserReport(result.dataUser.data)
     });
-  }, []);
 
-  const handleUdpateReport = async () => {
+
+
+
+
+    if(total_point < 18){
+      setKategori('ringan')
+    }else if(total_point > 18 || total_point <32){
+      setKategori('sedang')
+    }else if(total_point > 18){
+      setKategori('berat')
+    }
+  }, [total_point]);
+
+  const handleUdpateReport = async ()=>{
     // console.log('sdfsdf')
-    try {
-      setLoading(true);
-      report.feedback = feedback || report.feedback;
-      report.status = 'success';
-      const iupdateReport = await updateLaporanBullying(idReport, report);
-      // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
-      if (iupdateReport.success) {
-        navigation.navigate('Report');
+      try {
+        setLoading(true);
+        report.feedback = feedback || report.feedback
+        report.status = 'success'
+        report.kategori = kategori
+        const iupdateReport = await updateLaporanBullying(idReport,report)
+        // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
+        setLoading(false);
+        if (iupdateReport.success){
+          navigation.navigate('Report')
+        }
+      }catch(e){
+        console.log(e)
+        setLoading(false);
       }
-    } catch (e) {
-      console.log(e);
-    }
     // console.log('Udpate Report');
-  };
-  console.log(report.feedback);
+  }
 
-  const total_point =
-    report.cyberPointResponse +
-    report.physicalPointResponse +
-    report.sexualPointResponse +
-    report.verbalPointResponse;
 
-  const kategori = () => {
-    if (total_point < 18) {
-      return 'ringan';
-    } else if (total_point > 18 || total_point < 32) {
-      return 'sedang';
-    } else if (total_point > 18) {
-      return 'berat';
-    }
-  };
 
   return (
     <Layout style={styles.container}>
       <Modal
-        visible={loading}
-        animationType="fade"
-        backdropStyle={{
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }}>
+          visible={loading}
+          animationType="fade"
+          backdropStyle={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}>
         <Spinner size="giant" status="primary" />
       </Modal>
       {user?.role === 'guru' ? (
@@ -98,16 +103,16 @@ export default function HasilReport() {
           <Card style={styles.card}>
             <CardHasil label="Nama Pelapor :" text={userReport?.nama_lengkap} />
             <CardHasil
-              label="Kelas                 :"
-              text={userReport?.kelas}
+                label="Kelas                 :"
+                text={userReport?.kelas}
             />
             <CardHasil
-              label="Alamat              :"
-              text={userReport?.alamat_lengkap}
+                label="Alamat              :"
+                text={userReport?.alamat_lengkap}
             />
             <CardHasil
-              label="Tgl Pelaporan  :"
-              text={report.timestamp?.toString().slice(0, 16)}
+                label="Tgl Pelaporan  :"
+                text={report.timestamp?.toString().slice(0, 16)}
             />
           </Card>
           <Card style={styles.card}>
@@ -122,8 +127,9 @@ export default function HasilReport() {
               ===================================
             </Text>
             <CardHasil label="Total Point Response :" text={total_point} />
-            <CardHasil label="Kategori :" text={kategori()} />
+            <CardHasil label="Kategori :" text={kategori} />
             <CardHasil label="Status :" text={report.status} />
+
 
             <Input
               label={() => (
@@ -141,9 +147,7 @@ export default function HasilReport() {
               }}
               onChangeText={nextValue => setFeedback(nextValue)}
             />
-            <Button style={styles.button} onPress={handleUdpateReport}>
-              Submit
-            </Button>
+            <Button style={styles.button} onPress={handleUdpateReport}>Submit</Button>
           </Card>
         </ScrollView>
       ) : (

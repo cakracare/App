@@ -222,7 +222,7 @@ type CombinedReport = {
     seksual: number;
     cyber: number;
     skorTotal: number;
-    kategori: string;
+    kategori?: string;
     status: string,
     feedback: string;
 };
@@ -272,7 +272,7 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
                     seksual: report.sexualPointResponse,
                     cyber: report.cyberPointResponse,
                     skorTotal: report.verbalPointResponse + report.physicalPointResponse + report.sexualPointResponse + report.cyberPointResponse,
-                    kategori: report.title,
+                    kategori: report.kategori,
                     status: report.status,
                     feedback: report.feedback || ''
                 });

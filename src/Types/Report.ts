@@ -58,6 +58,7 @@ export interface Report {
   verbalPointResponse: number;
   sexualPointResponse: number;
   cyberPointResponse: number;
+  kategori?:string;
   status: string;
   feedback?: string
 }
