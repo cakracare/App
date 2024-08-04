@@ -9,7 +9,7 @@ import {
   Modal,
   Spinner,
 } from '@ui-kitten/components';
-import {Alert, Image, ToastAndroid, TouchableOpacity} from 'react-native';
+import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle} from '../../service';
 import {useUser} from '../../helpers/userContext.tsx';
@@ -80,7 +80,36 @@ export default function LoginScreen(): React.ReactElement {
         <Spinner size="giant" status="primary" />
       </Modal>
 
-      <Image source={require('../../assets/img/logo.png')} />
+      <View
+        style={{
+          flexDirection: 'row',
+          marginBottom: 20,
+        }}>
+        <Image
+          source={require('../../assets/img/logo1.png')}
+          style={{
+            width: 100,
+            height: 100,
+            resizeMode: 'contain',
+          }}
+        />
+        <Image
+          source={require('../../assets/img/logo.png')}
+          style={{
+            width: 100,
+            height: 100,
+            resizeMode: 'contain',
+          }}
+        />
+        <Image
+          source={require('../../assets/img/logo2.png')}
+          style={{
+            width: 100,
+            height: 100,
+            resizeMode: 'contain',
+          }}
+        />
+      </View>
       <Layout>
         <Input
           placeholder="Enter your email"

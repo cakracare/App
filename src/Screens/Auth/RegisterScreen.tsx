@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
-import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
@@ -64,7 +71,36 @@ export default function RegisterScreen() {
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
-        <Image source={require('../../assets/img/logo.png')} />
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 20,
+          }}>
+          <Image
+            source={require('../../assets/img/logo1.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+          <Image
+            source={require('../../assets/img/logo.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+          <Image
+            source={require('../../assets/img/logo2.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+        </View>
         <Layout style={styles.form}>
           {[
             'nama_lengkap',
