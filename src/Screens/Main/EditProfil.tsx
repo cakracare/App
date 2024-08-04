@@ -2,6 +2,7 @@ import {Layout} from '@ui-kitten/components';
 import {Image, ScrollView, StyleSheet} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
+import ButtonCompo from '../../components/ButtonCompo';
 
 export default function EditProfil() {
   const initialState = {
@@ -46,6 +47,12 @@ export default function EditProfil() {
             />
           ))}
         </Layout>
+        <ButtonCompo
+          width={300}
+          status="primary"
+          text="Simpan"
+          onPress={() => console.log('Simpan')}
+        />
       </ScrollView>
     </Layout>
   );
