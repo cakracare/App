@@ -50,10 +50,16 @@ export default function HasilReport() {
             <Text category="h5" style={styles.header}>
               Hasil Report
             </Text>
-            <CardHasil label="Verbal     :" text={report.verbalPointResponse} />
-            <CardHasil label="Cyber      :" text={report.cyberPointResponse} />
-            <CardHasil label="Physical :" text={report.physicalPointResponse} />
-            <CardHasil label="Sexual    :" text={report.sexualPointResponse} />
+            <CardHasil
+              label="Verbal      :"
+              text={report.verbalPointResponse}
+            />
+            <CardHasil label="Cyber       :" text={report.cyberPointResponse} />
+            <CardHasil
+              label="Physical  :"
+              text={report.physicalPointResponse}
+            />
+            <CardHasil label="Sexual     :" text={report.sexualPointResponse} />
             <Text category="label" style={styles.text}>
               ===================================
             </Text>
