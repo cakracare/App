@@ -1,5 +1,6 @@
 import {Card, Layout, Text} from '@ui-kitten/components';
 import {HasilProps} from '../Types/CardHasilProps';
+import {View} from 'react-native';
 
 export default function HasilCompo(props: HasilProps) {
   return (
@@ -17,15 +18,17 @@ export default function HasilCompo(props: HasilProps) {
         }}>
         {props.label}
       </Text>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 12,
-          marginStart: 10,
-          padding: 2,
-        }}>
-        {props.text}
-      </Text>
+      <View>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 12,
+            marginStart: 10,
+            padding: 2,
+          }}>
+          {props.text}
+        </Text>
+      </View>
     </Layout>
   );
 }

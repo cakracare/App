@@ -36,10 +36,13 @@ export default function HasilReport() {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Card style={styles.card}>
             <CardHasil label="Nama Pelapor :" text={user?.nama_lengkap} />
-            <CardHasil label="Kelas :" text={user?.kelas} />
-            <CardHasil label="Alamat :" text={user?.alamat_lengkap} />
+            <CardHasil label="Kelas                 :" text={user?.kelas} />
             <CardHasil
-              label="Tgl Pelaporan :"
+              label="Alamat              :"
+              text={user?.alamat_lengkap}
+            />
+            <CardHasil
+              label="Tgl Pelaporan  :"
               text={report.timestamp?.toString().slice(0, 16)}
             />
           </Card>
@@ -47,10 +50,10 @@ export default function HasilReport() {
             <Text category="h5" style={styles.header}>
               Hasil Report
             </Text>
-            <CardHasil label="Verbal :" text={report.verbalPointResponse} />
-            <CardHasil label="Cyber :" text={report.cyberPointResponse} />
+            <CardHasil label="Verbal     :" text={report.verbalPointResponse} />
+            <CardHasil label="Cyber      :" text={report.cyberPointResponse} />
             <CardHasil label="Physical :" text={report.physicalPointResponse} />
-            <CardHasil label="Sexual :" text={report.sexualPointResponse} />
+            <CardHasil label="Sexual    :" text={report.sexualPointResponse} />
             <Text category="label" style={styles.text}>
               ===================================
             </Text>

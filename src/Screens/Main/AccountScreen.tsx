@@ -28,12 +28,16 @@ const InfoItem = ({
     </View>
   );
 };
-
+const hidePassword = (password: string) => '*'.repeat(password.length);
 const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
-    <InfoItem iconName="key" label="Password" value={item?.password} />
+    <InfoItem
+      iconName="key"
+      label="Password"
+      value={hidePassword(item?.password)}
+    />
     <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
