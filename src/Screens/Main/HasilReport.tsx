@@ -1,6 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
-import {Input, Button, Layout, Text, Card} from '@ui-kitten/components';
+import {
+  Input,
+  Button,
+  Layout,
+  Text,
+  Card,
+  Spinner,
+  Modal,
+} from '@ui-kitten/components';
 import {
   NavigationProp,
   useNavigation,
@@ -25,6 +33,7 @@ export default function HasilReport() {
   const route = useRoute();
   const idReport = route.params?.idreport;
   const {user, setUser} = useUser();
+  const [loading, setLoading] = useState(false);
   // const [feedback,SetFeedback]=useState('')
 
   useEffect(() => {
@@ -43,6 +52,7 @@ export default function HasilReport() {
   const handleUdpateReport = async () => {
     // console.log('sdfsdf')
     try {
+      setLoading(true);
       report.feedback = feedback || report.feedback;
       report.status = 'success';
       const iupdateReport = await updateLaporanBullying(idReport, report);
@@ -75,6 +85,14 @@ export default function HasilReport() {
 
   return (
     <Layout style={styles.container}>
+      <Modal
+        visible={loading}
+        animationType="fade"
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}>
+        <Spinner size="giant" status="primary" />
+      </Modal>
       {user?.role === 'guru' ? (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Card style={styles.card}>
