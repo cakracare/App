@@ -1,6 +1,17 @@
 import React, {useState} from 'react';
 import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
+<<<<<<< HEAD
 import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
+=======
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from 'react-native';
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
@@ -64,6 +75,7 @@ export default function RegisterScreen() {
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
+<<<<<<< HEAD
         <Image source={require('../../assets/img/logo.png')} />
         <Layout style={styles.form}>
           {[
@@ -98,6 +110,71 @@ export default function RegisterScreen() {
             error={errors.password} // Pass error message
             secureTextEntry
           />
+=======
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 20,
+          }}>
+          <Image
+            source={require('../../assets/img/logo1.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+          <Image
+            source={require('../../assets/img/logo.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+          <Image
+            source={require('../../assets/img/logo2.png')}
+            style={{
+              width: 100,
+              height: 100,
+              resizeMode: 'contain',
+            }}
+          />
+        </View>
+        <Layout style={styles.form}>
+          {[
+            'nama_lengkap',
+            'email',
+            'usia',
+            'kelas',
+            'asal_sekolah',
+            'gender',
+            'no_ortu',
+            'alamat_lengkap',
+          ].map(field => (
+            <FormInput
+              key={field}
+              label={field
+                .replace(/_/g, ' ')
+                .replace(/([A-Z])/g, ' $1')
+                .trim()}
+              placeholder=""
+              value={formData[field]}
+              onChangeText={value => handleInputChange(field, value)}
+              status={errors[field] ? 'danger' : 'basic'} // Set status based on error
+              error={errors[field] || null}
+            />
+          ))}
+          <FormInput
+            label="Password"
+            placeholder=""
+            value={formData.password}
+            onChangeText={value => handleInputChange('password', value)}
+            status={errors.password ? 'danger' : 'basic'}
+            error={errors.password} // Pass error message
+            secureTextEntry
+          />
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
           <Text style={styles.label}>Minimum 8 characters</Text>
           <FormInput
             label="Confirm Password"

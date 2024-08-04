@@ -1,4 +1,4 @@
-import { BullyingResponse, Report, UserRole } from "../Types";
+import {BullyingResponse, Report, UserRole} from "../Types";
 import firestore from "@react-native-firebase/firestore";
 
 /**
@@ -20,13 +20,13 @@ export async function createLaporanBullying(respon: BullyingResponse) {
             verbalPointResponse: respon.verbalPointResponse,
             sexualPointResponse: respon.sexualPointResponse,
             cyberPointResponse: respon.cyberPointResponse,
-            status: respon.status
+            status: respon.status,
         };
 
         await firestore().collection("reports").add(report);
         console.info("Laporan berhasil ditambahkan!");
         return { success: true };
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error membuat laporan:", error);
         return { success: false, error: error.message };
     }
@@ -48,8 +48,7 @@ export async function getLaporanBullying(reportId: string) {
         const data = reportDoc.data()
 
         if (data!.timestamp) {
-            const timestamp = data!.timestamp.toDate();
-            data!.timestamp = timestamp;
+            data!.timestamp = data!.timestamp.toDate();
         }
 
         console.log("Laporan:", data);
@@ -111,7 +110,7 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
         });
 
         return { success: true, data: reports };
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error mendapatkan laporan:', error);
         return { success: false, error: error.message };
     }
@@ -130,6 +129,7 @@ export async function updateLaporanBullying(reportId: string, updatedRespon: Par
             console.log("Laporan tidak ditemukan!");
             return { success: false, error: "Laporan tidak ditemukan" };
         }
+        await firestore().collection('reports').doc(reportId).update(updatedRespon);
 
         console.log("Laporan berhasil diperbarui!");
         return { success: true };
@@ -196,18 +196,19 @@ type User = {
     role: string;
 };
 
-type Report = {
-    id: string;
-    userId: string;
-    timestamp: Date;
-    title: string;
-    deskripsi: string;
-    physicalPointResponse: number;
-    verbalPointResponse: number;
-    sexualPointResponse: number;
-    cyberPointResponse: number;
-    status: string;
-};
+// type Report = {
+//     feedback?: string;
+//     id: string;
+//     userId: string;
+//     timestamp: Date;
+//     title: string;
+//     deskripsi: string;
+//     physicalPointResponse: number;
+//     verbalPointResponse: number;
+//     sexualPointResponse: number;
+//     cyberPointResponse: number;
+//     status: string;
+// };
 
 type CombinedReport = {
     namaPelapor: string;
@@ -221,7 +222,7 @@ type CombinedReport = {
     seksual: number;
     cyber: number;
     skorTotal: number;
-    kategori: string;
+    kategori?: string;
     status: string,
     feedback: string;
 };
@@ -246,13 +247,19 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
             ...doc.data(),
             timestamp: doc.data().timestamp.toDate(),
         })) as Report[];
+        // console.log(reports.length, 'sadfsafsdadsasfd')
 
         // Combine users and their reports into the desired structure
         const combinedReports: CombinedReport[] = [];
 
-        users.forEach(user => {
-            const userReports = reports.filter(report => report.userId === user.id);
-            userReports.forEach(report => {
+        reports.forEach(report => {
+            console.log('report')
+            // Find the corresponding user for each report
+            const user = users.find(user => user.id === report.userId);
+
+            // Ensure the user is found
+            if (user) {
+                console.log('report')
                 combinedReports.push({
                     namaPelapor: user.nama_lengkap,
                     kelas: user.kelas,
@@ -265,13 +272,13 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
                     seksual: report.sexualPointResponse,
                     cyber: report.cyberPointResponse,
                     skorTotal: report.verbalPointResponse + report.physicalPointResponse + report.sexualPointResponse + report.cyberPointResponse,
-                    kategori: report.title,
+                    kategori: report.kategori,
                     status: report.status,
                     feedback: report.feedback || ''
-
                 });
-            });
+            }
         });
+        console.log(combinedReports.length, 'sadfsafsdadsasfd')
 
         return combinedReports;
     } catch (error) {

@@ -18,26 +18,44 @@ const InfoItem = ({
   label: string;
   value: string;
 }) => {
+<<<<<<< HEAD
+=======
+    const securePasswordEntry= (value:string)=> {
+        return value && value.replace(/./g, '*')
+    }
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === 'dark' ? 'white' : 'black';
   return (
     <View style={styles.container3}>
       <Icon2 name={iconName} size={20} color={iconColor} style={styles.icon} />
       <Text style={styles.Text2}>{label}</Text>
+<<<<<<< HEAD
       <Text style={styles.Text3}>{value}</Text>
     </View>
   );
 };
 const hidePassword = (password: string) => '*'.repeat(password.length);
+=======
+      <Text style={styles.Text3} >{label == 'Password'?securePasswordEntry(value):value}</Text>
+    </View>
+  );
+};
+
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
 const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
+<<<<<<< HEAD
     <InfoItem
       iconName="key"
       label="Password"
       value={hidePassword(item?.password)}
     />
+=======
+    <InfoItem iconName="key" label="Password"  value={item?.password} />
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
     <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
@@ -58,6 +76,7 @@ const AccountScreen: React.FC = () => {
       navigation.navigate('AuthNavigator', {Screen: 'LoginScreen'});
     }
   };
+  // console.log(user)
 
   return (
     <Layout style={styles.container}>
@@ -84,9 +103,13 @@ const AccountScreen: React.FC = () => {
               text="edit"
               width={150}
               onPress={() =>
+<<<<<<< HEAD
                 navigation.navigate('EditProfil', {
                   user: user,
                 })
+=======
+                navigation.navigate('AccountNavigator',{screen: 'EditProfil', params: {user: user}})
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
               }
             />
             <ButtonCompo

@@ -29,8 +29,12 @@ function ReportNavigator() {
         component={Soal}
         options={{title: 'Isi soal'}}
       />
+<<<<<<< HEAD
       <ReportStack.Screen name={'HasilReport'} component={HasilReport} />
       <ReportStack.Screen name={'EditProfile'} component={EditProfile} />
+=======
+      <ReportStack.Screen name={'HasilReport'} options={{title: 'Ringkasan Report'}} component={HasilReport} />
+>>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
     </ReportStack.Navigator>
   );
 }

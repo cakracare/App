@@ -18,17 +18,15 @@ export default function HasilCompo(props: HasilProps) {
         }}>
         {props.label}
       </Text>
-      <View>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 12,
-            marginStart: 10,
-            padding: 2,
-          }}>
-          {props.text}
-        </Text>
-      </View>
+      <Text
+        style={{
+          fontWeight: 'bold',
+          fontSize: 12,
+          marginStart: 10,
+          padding: 2,
+        }}>
+        {props.text}
+      </Text>
     </Layout>
   );
 }
