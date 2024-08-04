@@ -9,11 +9,7 @@ import {
   Modal,
   Spinner,
 } from '@ui-kitten/components';
-<<<<<<< HEAD
-import {Alert, Image, ToastAndroid, TouchableOpacity} from 'react-native';
-=======
 import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle} from '../../service';
 import {useUser} from '../../helpers/userContext.tsx';

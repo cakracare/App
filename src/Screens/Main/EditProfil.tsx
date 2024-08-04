@@ -1,30 +1,12 @@
-import {Layout} from '@ui-kitten/components';
-<<<<<<< HEAD
-import {Image, ScrollView, StyleSheet} from 'react-native';
-import FormInput from '../../components/FormInput';
-import useForm from '../../helpers/useFormHooks';
-import ButtonCompo from '../../components/ButtonCompo';
-
-export default function EditProfil() {
-  const initialState = {
-    nama_lengkap: '',
-    email: '',
-    usia: '',
-    kelas: '',
-    asal_sekolah: '',
-    no_ortu: '',
-    alamat_lengkap: '',
-    password: '',
-    confirm_password: '',
-  };
-  const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
-    useForm(initialState);
-  return (
-    <Layout>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image source={require('../../assets/img/logo.png')} />
-=======
-import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Layout, Modal, Spinner} from '@ui-kitten/components';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {
@@ -38,6 +20,7 @@ import {useUser} from '../../helpers/userContext.tsx';
 import {getUserId, updateUser} from '../../service/user.ts';
 
 export default function EditProfil() {
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const {user, setUser} = useUser();
@@ -47,16 +30,25 @@ export default function EditProfil() {
     useForm(userCurrent);
 
   const handleUpdateAccount = async () => {
+    setLoading(true);
     setUser(formData);
     const result = await updateUser(getUserId()!, formData);
     console.log(result);
     if (result.success) {
-      Alert.alert(result.message);
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
       navigation.navigate('Account');
     }
   };
   return (
     <Layout>
+      <Modal
+        visible={loading}
+        animationType="fade"
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}>
+        <Spinner size="giant" status="primary" />
+      </Modal>
       <ScrollView contentContainerStyle={styles.container}>
         <View
           style={{
@@ -88,7 +80,6 @@ export default function EditProfil() {
             }}
           />
         </View>
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
         <Layout style={styles.form}>
           {[
             'nama_lengkap',
@@ -118,11 +109,7 @@ export default function EditProfil() {
           width={300}
           status="primary"
           text="Simpan"
-<<<<<<< HEAD
-          onPress={() => console.log('Simpan')}
-=======
           onPress={handleUpdateAccount}
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
         />
       </ScrollView>
     </Layout>
