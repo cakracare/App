@@ -2,8 +2,6 @@ import firestore from '@react-native-firebase/firestore';
 import {Questions} from "../Types/Questions.ts";
 
 // Fungsi untuk menambahkan pertanyaan
-
-// BERIAKN RETURN YANG PASTI
 export const addQuestion = async (question: Questions) => {
     try {
         await firestore().collection('questions').doc(question.id).set(question);

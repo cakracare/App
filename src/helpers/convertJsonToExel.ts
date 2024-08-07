@@ -19,10 +19,8 @@ export const exportDataToExcel = async (data: [] | undefined) => {
     }
   }
 
-  // console.log(hasPermission);
-
   let wb = XLSX.utils.book_new();
-  let ws = XLSX.utils.json_to_sheet(data);
+  let ws = XLSX.utils.json_to_sheet(data!);
   XLSX.utils.book_append_sheet(wb, ws, 'response');
   const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 

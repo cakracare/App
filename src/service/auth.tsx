@@ -1,10 +1,9 @@
 import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import firestore, {FirebaseFirestoreTypes} from "@react-native-firebase/firestore";
 import {GoogleSignin} from "@react-native-google-signin/google-signin";
 import {User, UserSchema} from '../Types'
 import {createUser, getUser} from "./user.ts";
 import {handleFirebaseError} from "../helpers/handlingErrorFirebaseAuth.ts";
-
 
 
 // Configuration : google
@@ -12,9 +11,74 @@ GoogleSignin.configure({
     webClientId: '448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com',
 })
 
+/**
+ * Register new user
+ * @param user - payload user
+ * @param password - password user
+ * @param confirm_password - password Confirm
+ * @returns Success or failure status
+ */
+export async function SignUpWithEmailAndPassword(user:User, password:string,confirm_password:string) {
+    try {
+        // Validasi password
+        if (password !== confirm_password) {
+            return { success: false, data: null, message: 'Password tidak sama' };
+        }
 
-/*
-Login with email & password
+        // Check apakah user bisa daftar sebagai guru atau tidak
+
+        // daftarkan email dan password yang sudah dicek ke firebase auth
+        const userCredential = await auth().createUserWithEmailAndPassword(user.email,password);
+        console.log(userCredential, '<< signup email password')
+
+        // jika user gagal dibuat maka retur gagal
+        if (!userCredential.user) {
+            return {
+                success: false,
+                message: 'User gagal dibuat, pastikan semua data yang anda masukkan benar'
+            };
+        }
+
+        // jika berhadil dibuat update data user credensial sesuai dengan data yang didapatkan dari register
+        await userCredential.user.updateProfile({
+            displayName: user.nama_lengkap,
+            photoURL: user.photoURL
+        });
+
+        //  send auth message
+
+        // uploud data user ke firestore
+        const newUser = await  createUser(user,userCredential.user.uid)
+        if (!newUser.success){
+            return {
+                success: false,
+                message: newUser.message,
+            }
+        }
+        await auth().signOut();
+
+        return {
+            success: true,
+            message: 'User berhasil dibuat!'
+        }
+
+    } catch (error: any) {
+        // kirim pesan ketika terjadi error
+        console.error(error, '<< regisrter user')
+        const message = handleFirebaseError(error)
+        return {
+            success: false,
+            message: message || 'Terjadi kesalahan ketika membuat akun, silakan coba lagi'
+        };
+    }
+}
+
+
+/**
+ * Sign in with email & password
+ * @param email  - email user
+ * @param password - password user
+ * @returns Success or failure status & data user
  */
 export const signInWithEmailAndPass = async (email: string, password: string) => {
     try {
@@ -23,6 +87,12 @@ export const signInWithEmailAndPass = async (email: string, password: string) =>
         console.info(userCredential, '<< login with email password');
 
         // lakukan pengecekan apakah email berhasil login atau tidak
+        if(!userCredential){
+            return {
+                success: false,
+                message: 'User Not Found'
+            }
+        }
 
         //ambil data user dari firestore
         const user = await getUser(userCredential.user.uid);
@@ -46,119 +116,95 @@ export const signInWithEmailAndPass = async (email: string, password: string) =>
 };
 
 
-
-/*
-sign up with email & password
-butuh sedikit optomasi di bagian pengecekan
+/**
+ * Login with Gmail
+ * @returns Success or failure status
  */
-export async function SignUpWithEmailAndPassword(user:User, password:string,confirm_password:string) {
+const MAX_RETRIES = 5;
+
+export const signInWithGoogle = async (attempt = 1): Promise<{ success: boolean, user?: User, message: string }> => {
     try {
-        // Validasi password
-        if (password !== confirm_password) {
-            return { success: false, data: null, message: 'Password tidak sama' };
-        }
-
-        // check apakah user terdaftaar autau belum
-
-        // daftarkan email dan password yang sudah dicek ke firebase auth
-        const userCredential = await auth().createUserWithEmailAndPassword(user.email,password);
-        console.log(userCredential, '<< signup email password')
-
-        // check apakah user credensial ada atau tidak
-        if (userCredential.user) {
-            // jika ada update data user credensia sesuai dengan data yang didapatkan dari register
-            await userCredential.user.updateProfile({
-                displayName: user.nama_lengkap,
-                photoURL: user.photoURL
-            });
-           //  send auth message
-
-           // uploud data user ke firestore
-           return await  createUser(user,userCredential.user.uid)
-        }
-
-    } catch (error: any) {
-        // kirim pesan ketika terjadi error
-        console.error(error, '<< regisrter user')
-        const message = handleFirebaseError(error)
-        return {
-            success: false,
-            message: message
-        };
-    }
-}
-
-
-/*
-Login with gmail
- */
-export const signInWithGoogle = async () => {
-    try {
-        // ambil token dari device
+        // Ambil token dari device
         const { idToken } = await GoogleSignin.signIn();
-        // ambil data dari google credensial mengguakan token yagn sudah didapatkan
+        // Ambil data dari Google credential menggunakan token yang sudah didapatkan
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-        // login menggunakan credensial yang sudha didapat
+        // Login menggunakan credential yang sudah didapat
         const userCredential = await auth().signInWithCredential(googleCredential);
-        // ambil data user
+        // Ambil data user
         const user = userCredential.user;
-        // check apakah user sudha terdaftar atau belum, jika belum maka harus registrasi terlebih dahulu
-        //ambil data user dari firestore
-        const userDoc = await firestore().collection('users').doc(user.uid).get();
-        console.info(userDoc.exists, 'login with gmail')
+        // Ambil data user dari Firestore
+        const userDoc = await fetchUserDocWithRetry(user.uid);
+        console.info(userDoc.exists, 'login with gmail');
 
-        // jika belum ada user akan register ulang
+        // Jika belum ada user akan register ulang
         if (!userDoc.exists) {
-            try {
-                const datauser: User = UserSchema.parse({
-                    nama_lengkap : user.displayName,
-                    email : user.email,
-                    photoURL : user.photoURL})
-                await createUser(datauser, user.uid);
-                console.log('<< sukses create user')
-                return {
-                    success: true,
-                    user: datauser as User,
-                    message: 'Login successful with Google!'
-                };
-            } catch (createUserError: any) {
-                console.log(createUserError, '<< create user eror')
-                await auth().signOut();
-                return {
-                    success: false,
-                    message: `Failed to create user: ${createUserError.message}`
-                };
-            }
+            const datauser: User = UserSchema.parse({
+                nama_lengkap: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL
+            });
+            await createUser(datauser, user.uid);
+            console.info('<< sukses create user');
+            return {
+                success: true,
+                user: datauser as User,
+                message: 'Register successful with Google!'
+            };
         }
 
-        // jika user sudah ada maka kirim pesan sukses
+        // Jika user sudah ada maka kirim pesan sukses
         return {
             success: true,
             user: userDoc.data() as User,
             message: 'Login successful with Google!'
         };
     } catch (error: any) {
-        const message = handleFirebaseError(error)
-        console.error(message, '<< auth with google')
-        return {
-            success: false,
-            message: error.message
-        };
+        console.error(error);
+        if (error.code === 'auth/network-request-failed' && attempt <= MAX_RETRIES) {
+            const delay = Math.pow(2, attempt) * 100; // Backoff eksponensial
+            console.log(`Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return signInWithGoogle(attempt + 1);
+        } else {
+            await auth().signOut();
+            const message = handleFirebaseError(error);
+            console.error(message, '<< auth with google');
+            return {
+                success: false,
+                message: message || error.message
+            };
+        }
+    }
+};
+
+const fetchUserDocWithRetry = async (uid: string, attempt = 1): Promise<FirebaseFirestoreTypes.DocumentSnapshot> => {
+    try {
+        return await firestore().collection('users').doc(uid).get();
+    } catch (error: any) {
+        if (error.code === 'unavailable' && attempt <= MAX_RETRIES) {
+            const delay = Math.pow(2, attempt) * 100; // Backoff eksponensial
+            console.log(`Retrying to fetch user doc in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchUserDocWithRetry(uid, attempt + 1);
+        } else {
+            throw error;
+        }
     }
 };
 
 // Fungsi untuk Logout
 export async function Logout() {
     try {
-
         // logout, cek apakah user menggunakan user biasa atau gmail
         await GoogleSignin.signOut() || await auth().signOut();
+        console.info('Berhasil logout')
         return {
             success: true,
             message: 'Logout berhasil.'
         };
     } catch (error: any) {
+        console.error(error)
         const message = handleFirebaseError(error)
         console.error(message, '<< logout')
         return {

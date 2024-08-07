@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, ScrollView, View} from 'react-native';
+import React, { useEffect, useState} from 'react';
+import {StyleSheet, ScrollView} from 'react-native';
 import {
   Input,
   Button,
@@ -17,12 +17,11 @@ import {
 import {
   getLaporanBullying,
   updateLaporanBullying,
-} from '../../service/report.ts';
+  getUser
+} from '../../service';
 import {Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
-import HasilCompo from '../../components/CardHasil.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
-import {getUser} from '../../service/user.ts';
 
 export default function HasilReport() {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -43,14 +42,17 @@ export default function HasilReport() {
   useEffect(() => {
     const data = async () => {
       const laporan = await getLaporanBullying(idReport);
-      const dataUser  = await getUser(laporan.data?.userId);
-      return {laporan,dataUser}
+      const dataLaporan = laporan.data as Report
+      const user  = await getUser(laporan.data?.userId);
+      const dataUser = user.data as User
+
+      return {dataLaporan,dataUser}
     };
 
 
     data().then(result => {
-      setReport(result.laporan.data);
-      setUserReport(result.dataUser.data)
+      setReport(result.dataLaporan);
+      setUserReport(result.dataUser)
     });
 
 
@@ -74,7 +76,6 @@ export default function HasilReport() {
         report.status = 'success'
         report.kategori = kategori
         const iupdateReport = await updateLaporanBullying(idReport,report)
-        // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
         setLoading(false);
         if (iupdateReport.success){
           navigation.navigate('Report')
@@ -83,7 +84,6 @@ export default function HasilReport() {
         console.log(e)
         setLoading(false);
       }
-    // console.log('Udpate Report');
   }
 
 
@@ -126,8 +126,8 @@ export default function HasilReport() {
             <Text category="label" style={styles.text}>
               ===================================
             </Text>
-            <CardHasil label="Total Point Response :" text={total_point} />
-            <CardHasil label="Kategori :" text={kategori} />
+            <CardHasil label="Total Point Response :" text={report.skor_total || total_point} />
+            <CardHasil label="Kategori :" text={report.kategori||kategori} />
             <CardHasil label="Status :" text={report.status} />
 
 
@@ -137,7 +137,7 @@ export default function HasilReport() {
                   Masukkan Feedback
                 </Text>
               )}
-              disabled={user?.role === 'siswa'}
+              disabled={user.role === 'siswa'}
               multiline={true}
               value={report.feedback}
               textStyle={{

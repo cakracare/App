@@ -45,13 +45,15 @@ export interface BullyingResponse {
   verbalPointResponse: number;
   sexualPointResponse: number;
   cyberPointResponse: number;
+  skor_total?: number;
+  kategori?: string;
   status: string;
 }
 
 export interface Report {
   id?: string;
   userId: string;
-  timestamp?: FirebaseFirestoreTypes.Timestamp;
+  timestamp?: Date;
   title: string,
   deskripsi: string,
   physicalPointResponse: number;
@@ -59,6 +61,7 @@ export interface Report {
   sexualPointResponse: number;
   cyberPointResponse: number;
   kategori?:string;
+  skor_total?:number;
   status: string;
   feedback?: string
 }

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Button, Layout, Text} from '@ui-kitten/components';
+import React from 'react';
+import {Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {ScrollView, useColorScheme, View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
@@ -37,8 +37,8 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
     <InfoItem iconName="key" label="Password"  value={item?.password} />
-    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
-    <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
+    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender =='male'?'laki - laki ':'perempuan'} />
+    <InfoItem iconName="user-graduate" label={item.role === 'guru'?'wali kelas':'kelas'} value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
     <InfoItem iconName="user-cog" label="Status" value={item?.role} />
     <InfoItem
@@ -49,15 +49,16 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
   </View>
 );
 const AccountScreen: React.FC = () => {
-  const {user, setUser} = useUser();
+
   const navigation = useNavigation<NavigationProp<any>>();
+  const {user, setUser} = useUser();
   const handleLogout = async () => {
     const result = await Logout();
     if (result.success) {
       navigation.navigate('AuthNavigator', {Screen: 'LoginScreen'});
     }
   };
-  // console.log(user)
+
 
   return (
     <Layout style={styles.container}>

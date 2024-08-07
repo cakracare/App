@@ -1,5 +1,5 @@
 import {Layout} from '@ui-kitten/components';
-import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, Image, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {
@@ -10,26 +10,31 @@ import {
 import React from 'react';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from '../../helpers/userContext.tsx';
-import {getUserId, updateUser} from '../../service/user.ts';
+import {getUserId, updateUser} from '../../service';
 
 export default function EditProfil() {
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const {user, setUser} = useUser();
   const userCurrent = route.params?.user;
-  console.log(userCurrent, 'dfgfdg');
-  const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
-    useForm(userCurrent);
+  const {formData, handleInputChange, errors, setFieldError, clearFieldError} = useForm(userCurrent);
 
   const handleUpdateAccount = async () => {
+    formData.kelas = formData['wali kelas'] || formData.kelas
+    formData.no_ortu = formData['no pribadi'] || formData['no ortu']
     setUser(formData);
+    console.log(user,'asdsad');
     const result = await updateUser(getUserId()!, formData);
-    console.log(result);
     if (result.success) {
-      Alert.alert(result.message);
+
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
       navigation.navigate('Account');
     }
   };
+
+  const labelKelas = user?.role === 'guru'?'wali kelas':'kelas'
+  const no_hp = user?.role === 'guru'?'no pribadi':'no ortu'
+
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
@@ -68,14 +73,14 @@ export default function EditProfil() {
             'nama_lengkap',
             'email',
             'usia',
-            'kelas',
+            labelKelas,
             'asal_sekolah',
             'gender',
-            'no_ortu',
+            no_hp,
             'alamat_lengkap',
           ].map(field => (
             <FormInput
-              key={field}
+              key={field === ('wali kelas' || 'kelas')?'kelas':field}
               label={field
                 .replace(/_/g, ' ')
                 .replace(/([A-Z])/g, ' $1')
