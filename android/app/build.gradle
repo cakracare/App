@@ -82,16 +82,13 @@ android {
         applicationId "com.cakracare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "5.0"
     }
-    signingConfigs {
-        release {
-                    storeFile file('CakraCare.keystore')
-                    storePassword '12345678'
-                    keyAlias 'Cakracare'
-                    keyPassword '12345678'
+    lintOptions {
+            abortOnError false
         }
+    signingConfigs {
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -99,11 +96,13 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('CakraCare.keystore')
-            storePassword '12345678'
-            keyAlias 'Cakracare'
-            keyPassword '12345678'
-        }
+              if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+              }
+            }
     }
     buildTypes {
         debug {
@@ -112,7 +111,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -125,12 +124,18 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'com.google.android.play:integrity:1.4.0'
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
 }
+
+
+
+
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

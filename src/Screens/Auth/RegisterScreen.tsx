@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
+import {Text, CheckBox, Layout, RadioGroup, Radio} from '@ui-kitten/components';
 import {
-  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -31,7 +30,6 @@ export default function RegisterScreen() {
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
     useForm(initialState);
   const navigation = useNavigation<NavigationProp<any>>();
-
   const [isChecked, setIsChecked] = useState(false);
 
   const validateForm = () => {
@@ -51,11 +49,10 @@ export default function RegisterScreen() {
     if (validateForm()) {
       const user = validateUser(formData);
       if (user.success) {
-        // @ts-ignore
         const newUser = await SignUpWithEmailAndPassword(
-          user?.data,
-          user?.data.password,
-          user?.data.confirm_password,
+          user.data!,
+          user.data!.password!,
+          user.data!.confirm_password!,
         );
         if (newUser?.success) {
           await Logout();

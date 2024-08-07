@@ -1,6 +1,6 @@
-import {Icon, Input, InputProps, Layout, Text} from '@ui-kitten/components';
-import React, {useCallback} from 'react';
-import {ScrollView, View} from 'react-native';
+import {Input, InputProps, Layout, Text} from '@ui-kitten/components';
+import React, {useCallback, useState} from 'react';
+import {ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import ReportComp from '../../components/ReportComp';
 import ButtonCompo from '../../components/ButtonCompo';
 import {
@@ -10,11 +10,10 @@ import {
 } from '@react-navigation/native';
 import {getQuestionsByType} from '../../service/questions.ts';
 import {getUserId} from '../../service/user.ts';
-import {BullyingResponse, ParamListReport} from '../../Types';
+import {BullyingResponse} from '../../Types';
 import {getCurentTime} from '../../helpers/getCurentTime.ts';
 import {createLaporanBullying} from '../../service/report.ts';
 import PetunjukComp from '../../components/petunjukComp';
-import {StyleSheet} from 'react-native';
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = React.useState(initialValue);
@@ -27,6 +26,7 @@ export default function ReportDetail() {
   const userid = getUserId();
   const response = route.params?.bullyResponse;
   const [responses, setResponses] = React.useState<any>({});
+  const [kategori, setKategori] = useState('');
   const titleInputState = useInputState();
   const deskirpsiInputState = useInputState();
   console.log(responses);
@@ -54,7 +54,17 @@ export default function ReportDetail() {
       status: 'process',
     } as BullyingResponse;
 
-    await createLaporanBullying(bullyResponse);
+    bullyResponse.skor_total =
+      bullyResponse.cyberPointResponse +
+      bullyResponse.physicalPointResponse +
+      bullyResponse.sexualPointResponse +
+      bullyResponse.verbalPointResponse;
+    bullyResponse.kategori = kategori;
+    const newReport = await createLaporanBullying(bullyResponse);
+    if (!newReport.success) {
+      ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
+    }
+    ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     navigation.navigate('Report');
   };
 
@@ -63,6 +73,14 @@ export default function ReportDetail() {
       return await getQuestionsByType(type);
     },
     [route],
+  );
+
+  console.log(
+    (responses['verbal'] ||
+      responses['physical'] ||
+      responses['seksual'] ||
+      responses['cyber']) === undefined ||
+      (titleInputState.value && deskirpsiInputState.value) === '',
   );
 
   return (
@@ -113,9 +131,7 @@ export default function ReportDetail() {
         />
         <Input
           label={() => (
-            <Text style={{fontWeight: 'bold'}}>
-              Deskripsi lekejadian laporan
-            </Text>
+            <Text style={{fontWeight: 'bold'}}>Deskripsi kejadian laporan</Text>
           )}
           multiline={true}
           textStyle={{
@@ -135,7 +151,7 @@ export default function ReportDetail() {
             navigation.navigate('Soal', {questions: qust});
           }}
           text="Verbal"
-          status={responses['verbal'] ? 'success' : ''}
+          status={responses['verbal'] >= 0 ? 'success' : ''}
           icon={require('../../assets/img/speaking.png')}
           color="#2E6CB2"
         />
@@ -145,7 +161,7 @@ export default function ReportDetail() {
             navigation.navigate('Soal', {questions: qust});
           }}
           text="Physical"
-          status={responses['physical'] ? 'success' : ''}
+          status={responses['physical'] >= 0 ? 'success' : ''}
           icon={require('../../assets/img/physical.png')}
           color="#2E6CB2"
         />
@@ -155,7 +171,7 @@ export default function ReportDetail() {
             navigation.navigate('Soal', {questions: qust});
           }}
           text="Sexual"
-          status={responses['seksual'] ? 'success' : ''}
+          status={responses['seksual'] >= 0 ? 'success' : ''}
           color="#2E6CB2"
           icon={require('../../assets/img/seksual.png')}
         />
@@ -165,7 +181,7 @@ export default function ReportDetail() {
             navigation.navigate('Soal', {questions: qust});
           }}
           text="Cyber"
-          status={responses['cyber'] ? 'success' : ''}
+          status={responses['cyber'] >= 0 ? 'success' : ''}
           icon={require('../../assets/img/cyber.png')}
           color="#2E6CB2"
         />

@@ -9,7 +9,7 @@ import {
   Modal,
   Spinner,
 } from '@ui-kitten/components';
-import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {signInWithEmailAndPass, signInWithGoogle} from '../../service';
 import {useUser} from '../../helpers/userContext.tsx';
@@ -57,17 +57,14 @@ export default function LoginScreen(): React.ReactElement {
   const handleLoginWithGoogle = async () => {
     setLoading(true);
     signInWithGoogle().then(result => {
-      if (result.success) {
-        console.info(result, '<< login screen');
-        setUser(result.user);
-        navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-        ToastAndroid.show(result.message, ToastAndroid.SHORT);
+       console.info(result, '<< login screen');
+       setUser(result.user);
+       setLoading(false);
+       navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
+       ToastAndroid.show(result.message, ToastAndroid.SHORT);
+    }).catch((err)=>{
         setLoading(false);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        ToastAndroid.show(result.message, ToastAndroid.SHORT);
-      }
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
     });
   };
 

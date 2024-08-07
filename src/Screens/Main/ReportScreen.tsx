@@ -113,7 +113,7 @@ const ReportScreen: React.FC = () => {
             time={timeAgo(report?.timestamp!)}
             status={report.status === 'success' ? '#06D001' : 'orange'}
             title={report.title}
-            text={report.status}
+            text={report.status === 'success' ? 'tertangani' : report.status}
           />
         ))
       ) : (

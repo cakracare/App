@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Button, Layout, Text} from '@ui-kitten/components';
+import React from 'react';
+import {Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {ScrollView, useColorScheme, View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
@@ -53,6 +53,7 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
 const AccountScreen: React.FC = () => {
   const {user, setUser} = useUser();
   const navigation = useNavigation<NavigationProp<any>>();
+  const {user, setUser} = useUser();
   const handleLogout = async () => {
     const result = await Logout();
     if (result.success) {
