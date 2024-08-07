@@ -108,7 +108,6 @@ export default function RegisterScreen() {
             'usia',
             'kelas',
             'asal_sekolah',
-            'gender',
             'no_ortu',
             'alamat_lengkap',
           ].map(field => (
