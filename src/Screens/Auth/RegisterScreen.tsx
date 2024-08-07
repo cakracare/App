@@ -1,18 +1,22 @@
 import React, {useState} from 'react';
-import {Text, CheckBox, Layout, RadioGroup, Radio} from '@ui-kitten/components';
 import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  ToastAndroid,
-  View,
-} from 'react-native';
+  Button,
+  Text,
+  CheckBox,
+  Input,
+  Layout,
+  Select,
+  SelectItem,
+  IndexPath,
+} from '@ui-kitten/components';
+import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
 import {Logout, SignUpWithEmailAndPassword} from '../../service';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
+import {Picker} from '@react-native-picker/picker';
 
 const initialState = {
   nama_lengkap: '',
@@ -30,6 +34,9 @@ export default function RegisterScreen() {
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
     useForm(initialState);
   const navigation = useNavigation<NavigationProp<any>>();
+  const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
+    new IndexPath(0),
+  );
   const [isChecked, setIsChecked] = useState(false);
 
   const validateForm = () => {
@@ -49,10 +56,11 @@ export default function RegisterScreen() {
     if (validateForm()) {
       const user = validateUser(formData);
       if (user.success) {
+        // @ts-ignore
         const newUser = await SignUpWithEmailAndPassword(
-          user.data!,
-          user.data!.password!,
-          user.data!.confirm_password!,
+          user?.data,
+          user?.data.password,
+          user?.data.confirm_password,
         );
         if (newUser?.success) {
           await Logout();
@@ -68,36 +76,7 @@ export default function RegisterScreen() {
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 20,
-          }}>
-          <Image
-            source={require('../../assets/img/logo1.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-          <Image
-            source={require('../../assets/img/logo.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-          <Image
-            source={require('../../assets/img/logo2.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-        </View>
+        <Image source={require('../../assets/img/logo.png')} />
         <Layout style={styles.form}>
           {[
             'nama_lengkap',
@@ -121,6 +100,43 @@ export default function RegisterScreen() {
               error={errors[field] || null}
             />
           ))}
+          <Select
+            label={() => (
+              <Text
+                style={{
+                  marginStart: 10,
+                  marginTop: 10,
+                  color: 'grey',
+                  paddingVertical: 5,
+                }}>
+                gender
+              </Text>
+            )}
+            selectedIndex={selectedIndex}
+            onSelect={index => {
+              setSelectedIndex(index);
+              handleInputChange(
+                'gender',
+                index.row === 1
+                  ? 'laki-laki'
+                  : index.row === 2
+                  ? 'perempuan'
+                  : 'other',
+              );
+            }}
+            value={
+              selectedIndex.row === 0
+                ? 'Select Gender'
+                : selectedIndex.row === 1
+                ? 'Laki-laki'
+                : selectedIndex.row === 2
+                ? 'perempuan'
+                : 'Lainya'
+            }>
+            <SelectItem title="Laki-laki" />
+            <SelectItem title="Perempuan" />
+            <SelectItem title="Lainya" />
+          </Select>
           <FormInput
             label="Password"
             placeholder=""
