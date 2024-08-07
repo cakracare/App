@@ -1,23 +1,22 @@
 import React, {useState} from 'react';
-import {Button, Text, CheckBox, Input, Layout} from '@ui-kitten/components';
-<<<<<<< HEAD
-import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
-=======
 import {
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  ToastAndroid,
-  View,
-} from 'react-native';
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
+  Button,
+  Text,
+  CheckBox,
+  Input,
+  Layout,
+  Select,
+  SelectItem,
+  IndexPath,
+} from '@ui-kitten/components';
+import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
 import {Logout, SignUpWithEmailAndPassword} from '../../service';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
+import {Picker} from '@react-native-picker/picker';
 
 const initialState = {
   nama_lengkap: '',
@@ -35,7 +34,9 @@ export default function RegisterScreen() {
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
     useForm(initialState);
   const navigation = useNavigation<NavigationProp<any>>();
-
+  const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
+    new IndexPath(0),
+  );
   const [isChecked, setIsChecked] = useState(false);
 
   const validateForm = () => {
@@ -75,7 +76,6 @@ export default function RegisterScreen() {
   return (
     <Layout>
       <ScrollView contentContainerStyle={styles.container}>
-<<<<<<< HEAD
         <Image source={require('../../assets/img/logo.png')} />
         <Layout style={styles.form}>
           {[
@@ -101,6 +101,44 @@ export default function RegisterScreen() {
               error={errors[field] || null}
             />
           ))}
+          <Select
+            label={() => (
+              <Text
+                style={{
+                  marginStart: 10,
+                  marginTop: 10,
+                  color: 'grey',
+                  paddingVertical: 5,
+                }}>
+                gender
+              </Text>
+            )}
+            selectedIndex={selectedIndex}
+            onSelect={index => {
+              setSelectedIndex(index);
+              handleInputChange(
+                'gender',
+                index.row === 1
+                  ? 'laki-laki'
+                  : index.row === 2
+                  ? 'perempuan'
+                  : 'other',
+              );
+            }}
+            value={
+              selectedIndex.row === 0
+                ? 'Select Gender'
+                : selectedIndex.row === 1
+                ? 'Laki-laki'
+                : selectedIndex.row === 2
+                ? 'perempuan'
+                : 'Lainya'
+            }>
+            <SelectItem title="Select Gender" />
+            <SelectItem title="Male" />
+            <SelectItem title="Female" />
+            <SelectItem title="Other" />
+          </Select>
           <FormInput
             label="Password"
             placeholder=""
@@ -110,71 +148,6 @@ export default function RegisterScreen() {
             error={errors.password} // Pass error message
             secureTextEntry
           />
-=======
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 20,
-          }}>
-          <Image
-            source={require('../../assets/img/logo1.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-          <Image
-            source={require('../../assets/img/logo.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-          <Image
-            source={require('../../assets/img/logo2.png')}
-            style={{
-              width: 100,
-              height: 100,
-              resizeMode: 'contain',
-            }}
-          />
-        </View>
-        <Layout style={styles.form}>
-          {[
-            'nama_lengkap',
-            'email',
-            'usia',
-            'kelas',
-            'asal_sekolah',
-            'gender',
-            'no_ortu',
-            'alamat_lengkap',
-          ].map(field => (
-            <FormInput
-              key={field}
-              label={field
-                .replace(/_/g, ' ')
-                .replace(/([A-Z])/g, ' $1')
-                .trim()}
-              placeholder=""
-              value={formData[field]}
-              onChangeText={value => handleInputChange(field, value)}
-              status={errors[field] ? 'danger' : 'basic'} // Set status based on error
-              error={errors[field] || null}
-            />
-          ))}
-          <FormInput
-            label="Password"
-            placeholder=""
-            value={formData.password}
-            onChangeText={value => handleInputChange('password', value)}
-            status={errors.password ? 'danger' : 'basic'}
-            error={errors.password} // Pass error message
-            secureTextEntry
-          />
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
           <Text style={styles.label}>Minimum 8 characters</Text>
           <FormInput
             label="Confirm Password"

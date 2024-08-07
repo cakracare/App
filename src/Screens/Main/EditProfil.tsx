@@ -1,29 +1,4 @@
 import {Layout} from '@ui-kitten/components';
-<<<<<<< HEAD
-import {Image, ScrollView, StyleSheet} from 'react-native';
-import FormInput from '../../components/FormInput';
-import useForm from '../../helpers/useFormHooks';
-import ButtonCompo from '../../components/ButtonCompo';
-
-export default function EditProfil() {
-  const initialState = {
-    nama_lengkap: '',
-    email: '',
-    usia: '',
-    kelas: '',
-    asal_sekolah: '',
-    no_ortu: '',
-    alamat_lengkap: '',
-    password: '',
-    confirm_password: '',
-  };
-  const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
-    useForm(initialState);
-  return (
-    <Layout>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image source={require('../../assets/img/logo.png')} />
-=======
 import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
@@ -88,7 +63,6 @@ export default function EditProfil() {
             }}
           />
         </View>
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
         <Layout style={styles.form}>
           {[
             'nama_lengkap',
@@ -118,11 +92,7 @@ export default function EditProfil() {
           width={300}
           status="primary"
           text="Simpan"
-<<<<<<< HEAD
-          onPress={() => console.log('Simpan')}
-=======
           onPress={handleUpdateAccount}
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
         />
       </ScrollView>
     </Layout>

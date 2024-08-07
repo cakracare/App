@@ -16,10 +16,7 @@ import ReportNavigator from './ReportNavigator.tsx';
 import {Route, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import ReportDetail from '../Screens/Main/ReportDetail.tsx';
 import {useUser} from '../helpers/userContext.tsx';
-<<<<<<< HEAD
-=======
-import AccountNavigator from "./AcccountNavigator.tsx";
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
+import AccountNavigator from './AcccountNavigator.tsx';
 const Tab = createBottomTabNavigator<ParamListBase>();
 
 // function SecondNavigator() {
@@ -89,19 +86,15 @@ function MainNavigator() {
         name="ReportNavigator"
         options={{
           headerShown: false,
-<<<<<<< HEAD
-          title: user?.role === 'guru' ? 'Feedback' : 'report',
-        }}
-        component={ReportNavigator}
-      />
-      <Tab.Screen name="Account" component={AccountScreen} />
-=======
           title: user?.role === 'guru' ? 'Feedback' : 'Report',
         }}
         component={ReportNavigator}
       />
-      <Tab.Screen name="AccountNavigator" options={{headerShown:false,title:'Account'}} component={AccountNavigator} />
->>>>>>> 6771e169155eb616d5e61e2a351a71f3d59ed0da
+      <Tab.Screen
+        name="AccountNavigator"
+        options={{headerShown: false, title: 'Account'}}
+        component={AccountNavigator}
+      />
     </Tab.Navigator>
   );
 }
