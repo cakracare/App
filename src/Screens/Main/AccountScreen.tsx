@@ -53,7 +53,6 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
 const AccountScreen: React.FC = () => {
   const {user, setUser} = useUser();
   const navigation = useNavigation<NavigationProp<any>>();
-  const {user, setUser} = useUser();
   const handleLogout = async () => {
     const result = await Logout();
     if (result.success) {
