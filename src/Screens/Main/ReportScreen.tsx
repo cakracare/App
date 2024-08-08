@@ -60,29 +60,25 @@ const ReportScreen: React.FC = () => {
 
   const data = useCallback(async () => {
     try {
-        setIsLoading(true);
-        const allReportUser = await fetchUsersWithReports(user?.role!);
-        console.log(allReportUser)
-        const isDownloaded = await exportDataToExcel(allReportUser);
-        if (isDownloaded) {
-            ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
-            setIsLoading(false);
-        }
-    }catch (e){
-        console.log(e)
+      setIsLoading(true);
+      const allReportUser = await fetchUsersWithReports(user?.role!);
+      console.log(allReportUser.length);
+      const isDownloaded = await exportDataToExcel(allReportUser);
+      if (isDownloaded) {
+        ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
+        setIsLoading(false);
+      }
+    } catch (e) {
+      console.log(e);
     }
-
-
   }, []);
 
-    if (!user?.alamat_lengkap) {
-        Alert.alert(
-            'Invalid data',
-            'data tidak lengkap, silahkah dilengkapi terlbih dahulu',
-        );
-    }
-
-
+  if (!user?.alamat_lengkap) {
+    Alert.alert(
+      'Invalid data',
+      'data tidak lengkap, silahkah dilengkapi terlbih dahulu',
+    );
+  }
 
   return (
     <Layout
@@ -117,7 +113,7 @@ const ReportScreen: React.FC = () => {
             time={timeAgo(report?.timestamp!)}
             status={report.status === 'success' ? '#06D001' : 'orange'}
             title={report.title}
-            text={report.status === 'success'?'tertangani':report.status}
+            text={report.status === 'success' ? 'tertangani' : report.status}
           />
         ))
       ) : (

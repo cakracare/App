@@ -1,5 +1,6 @@
 import {Card, Layout, Text} from '@ui-kitten/components';
 import {HasilProps} from '../Types/CardHasilProps';
+import {View} from 'react-native';
 
 export default function HasilCompo(props: HasilProps) {
   return (

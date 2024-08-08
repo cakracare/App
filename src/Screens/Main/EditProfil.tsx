@@ -1,5 +1,12 @@
-import {Layout} from '@ui-kitten/components';
-import {Alert, Image, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
+import {Layout, Modal, Spinner} from '@ui-kitten/components';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {
@@ -13,30 +20,38 @@ import {useUser} from '../../helpers/userContext.tsx';
 import {getUserId, updateUser} from '../../service';
 
 export default function EditProfil() {
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const {user, setUser} = useUser();
   const userCurrent = route.params?.user;
-  const {formData, handleInputChange, errors, setFieldError, clearFieldError} = useForm(userCurrent);
+  const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
+    useForm(userCurrent);
 
   const handleUpdateAccount = async () => {
-    formData.kelas = formData['wali kelas'] || formData.kelas
-    formData.no_ortu = formData['no pribadi'] || formData['no ortu']
+    setLoading(true);
     setUser(formData);
-    console.log(user,'asdsad');
+    console.log(user, 'asdsad');
     const result = await updateUser(getUserId()!, formData);
     if (result.success) {
-
       ToastAndroid.show(result.message, ToastAndroid.SHORT);
       navigation.navigate('Account');
     }
   };
 
-  const labelKelas = user?.role === 'guru'?'wali kelas':'kelas'
-  const no_hp = user?.role === 'guru'?'no pribadi':'no ortu'
+  const labelKelas = user?.role === 'guru' ? 'wali kelas' : 'kelas';
+  const no_hp = user?.role === 'guru' ? 'no pribadi' : 'no ortu';
 
   return (
     <Layout>
+      <Modal
+        visible={loading}
+        animationType="fade"
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}>
+        <Spinner size="giant" status="primary" />
+      </Modal>
       <ScrollView contentContainerStyle={styles.container}>
         <View
           style={{
@@ -80,7 +95,7 @@ export default function EditProfil() {
             'alamat_lengkap',
           ].map(field => (
             <FormInput
-              key={field === ('wali kelas' || 'kelas')?'kelas':field}
+              key={field === ('wali kelas' || 'kelas') ? 'kelas' : field}
               label={field
                 .replace(/_/g, ' ')
                 .replace(/([A-Z])/g, ' $1')

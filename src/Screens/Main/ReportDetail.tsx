@@ -3,7 +3,11 @@ import React, {useCallback, useState} from 'react';
 import {ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import ReportComp from '../../components/ReportComp';
 import ButtonCompo from '../../components/ButtonCompo';
-import {NavigationProp, useNavigation, useRoute,} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {getQuestionsByType} from '../../service/questions.ts';
 import {getUserId} from '../../service/user.ts';
 import {BullyingResponse} from '../../Types';
@@ -22,7 +26,7 @@ export default function ReportDetail() {
   const userid = getUserId();
   const response = route.params?.bullyResponse;
   const [responses, setResponses] = React.useState<any>({});
-  const [kategori,setKategori]=useState('')
+  const [kategori, setKategori] = useState('');
   const titleInputState = useInputState();
   const deskirpsiInputState = useInputState();
   console.log(responses);
@@ -50,16 +54,17 @@ export default function ReportDetail() {
       status: 'process',
     } as BullyingResponse;
 
-    bullyResponse.skor_total = bullyResponse.cyberPointResponse +
-        bullyResponse.physicalPointResponse +
-        bullyResponse.sexualPointResponse +
-        bullyResponse.verbalPointResponse;
-    bullyResponse.kategori = kategori
-    const newReport =await createLaporanBullying(bullyResponse);
-    if(!newReport.success) {
+    bullyResponse.skor_total =
+      bullyResponse.cyberPointResponse +
+      bullyResponse.physicalPointResponse +
+      bullyResponse.sexualPointResponse +
+      bullyResponse.verbalPointResponse;
+    bullyResponse.kategori = kategori;
+    const newReport = await createLaporanBullying(bullyResponse);
+    if (!newReport.success) {
       ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     }
-    ToastAndroid.show(newReport.message!,ToastAndroid.SHORT);
+    ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     navigation.navigate('Report');
   };
 
@@ -70,10 +75,13 @@ export default function ReportDetail() {
     [route],
   );
 
-  console.log( ((responses['verbal'] ||
+  console.log(
+    (responses['verbal'] ||
       responses['physical'] ||
       responses['seksual'] ||
-      responses['cyber'] ) === undefined) ||   ( (titleInputState.value && deskirpsiInputState.value) === ''))
+      responses['cyber']) === undefined ||
+      (titleInputState.value && deskirpsiInputState.value) === '',
+  );
 
   return (
     <ScrollView>
@@ -123,9 +131,7 @@ export default function ReportDetail() {
         />
         <Input
           label={() => (
-            <Text style={{fontWeight: 'bold'}}>
-              Deskripsi kejadian laporan
-            </Text>
+            <Text style={{fontWeight: 'bold'}}>Deskripsi kejadian laporan</Text>
           )}
           multiline={true}
           textStyle={{
@@ -165,7 +171,7 @@ export default function ReportDetail() {
             navigation.navigate('Soal', {questions: qust});
           }}
           text="Sexual"
-          status={responses['seksual'] >= 0  ? 'success' : ''}
+          status={responses['seksual'] >= 0 ? 'success' : ''}
           color="#2E6CB2"
           icon={require('../../assets/img/seksual.png')}
         />
@@ -184,10 +190,11 @@ export default function ReportDetail() {
           status="primary"
           width={300}
           disabled={
-              ((responses['verbal'] ||
-                  responses['physical'] ||
-                  responses['seksual'] ||
-                  responses['cyber'] ) === undefined) ||   ( (titleInputState.value && deskirpsiInputState.value) === '')
+            (responses['verbal'] &&
+              responses['physical'] &&
+              responses['seksual'] &&
+              responses['cyber']) === undefined ||
+            (titleInputState.value && deskirpsiInputState.value) === ''
           }
           onPress={createBullyingResponse}
         />

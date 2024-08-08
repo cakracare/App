@@ -18,16 +18,18 @@ const InfoItem = ({
   label: string;
   value: string;
 }) => {
-    const securePasswordEntry= (value:string)=> {
-        return value && value.replace(/./g, '*')
-    }
+  const securePasswordEntry = (value: string) => {
+    return value && value.replace(/./g, '*');
+  };
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === 'dark' ? 'white' : 'black';
   return (
     <View style={styles.container3}>
       <Icon2 name={iconName} size={20} color={iconColor} style={styles.icon} />
       <Text style={styles.Text2}>{label}</Text>
-      <Text style={styles.Text3} >{label == 'Password'?securePasswordEntry(value):value}</Text>
+      <Text style={styles.Text3}>
+        {label == 'Password' ? securePasswordEntry(value) : value}
+      </Text>
     </View>
   );
 };
@@ -36,9 +38,9 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
   <View>
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
-    <InfoItem iconName="key" label="Password"  value={item?.password} />
-    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender =='male'?'laki - laki ':'perempuan'} />
-    <InfoItem iconName="user-graduate" label={item.role === 'guru'?'wali kelas':'kelas'} value={item?.kelas} />
+    <InfoItem iconName="key" label="Password" value={item?.password} />
+    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
+    <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
     <InfoItem iconName="user-cog" label="Status" value={item?.role} />
     <InfoItem
@@ -49,7 +51,7 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
   </View>
 );
 const AccountScreen: React.FC = () => {
-
+  const {user, setUser} = useUser();
   const navigation = useNavigation<NavigationProp<any>>();
   const {user, setUser} = useUser();
   const handleLogout = async () => {
@@ -58,7 +60,7 @@ const AccountScreen: React.FC = () => {
       navigation.navigate('AuthNavigator', {Screen: 'LoginScreen'});
     }
   };
-
+  // console.log(user)
 
   return (
     <Layout style={styles.container}>
@@ -85,7 +87,10 @@ const AccountScreen: React.FC = () => {
               text="edit"
               width={150}
               onPress={() =>
-                navigation.navigate('AccountNavigator',{screen: 'EditProfil', params: {user: user}})
+                navigation.navigate('AccountNavigator', {
+                  screen: 'EditProfil',
+                  params: {user: user},
+                })
               }
             />
             <ButtonCompo
