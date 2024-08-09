@@ -1,15 +1,18 @@
-import {Layout, Text, Card} from '@ui-kitten/components';
+import {Layout, Text, Card, Button} from '@ui-kitten/components';
 import {Image, Linking, ScrollView, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
 import {useUser} from '../../helpers/userContext.tsx';
 import {Platform} from 'react-native';
+import {checkConnections, sendEmail} from "../../helpers/sendMail.ts";
 
 const HomeScreen: React.FC = () => {
   const version = Platform.Version;
   const {user, setUser} = useUser();
   console.log('version', version);
+
+
 
   //   masukkan nama user kedalam kata sambutan
   return (

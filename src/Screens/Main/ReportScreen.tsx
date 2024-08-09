@@ -1,10 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback,useState} from 'react';
 import {
-  Button,
-  Card,
   Icon,
   Layout,
-  List,
   Modal,
   Spinner,
   Text,
@@ -14,18 +11,13 @@ import {
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import ButtonCompo from '../../components/ButtonCompo';
 import {
-  Alert,
-  ToastAndroid,
-  TouchableOpacity,
-  useColorScheme,
-  View,
+    Alert, ScrollView,
+    ToastAndroid,
+    TouchableOpacity,
 } from 'react-native';
 import CardComp from '../../components/CardComp';
-
-import {getUser, getUserId} from '../../service/user.ts';
-import {fetchUsersWithReports, getReportsByUser} from '../../service/report.ts';
+import {fetchUsersWithReports, getReportsByUser,getUserId} from '../../service';
 import {timeAgo} from '../../helpers/timeAgo.ts';
 import {Report} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
@@ -43,7 +35,7 @@ const ReportScreen: React.FC = () => {
     React.useCallback(() => {
       const fetchReports = async () => {
         try {
-          const reportData = await getReportsByUser(userId, user?.role);
+          const reportData = await getReportsByUser(userId, user!.role);
           setReports(reportData.data);
         } catch (error) {
           console.error('Error fetching reports:', error);
@@ -64,11 +56,18 @@ const ReportScreen: React.FC = () => {
       const allReportUser = await fetchUsersWithReports(user?.role!);
       console.log(allReportUser.length);
       const isDownloaded = await exportDataToExcel(allReportUser);
-      if (isDownloaded) {
-        ToastAndroid.show('Data berhasil di download', ToastAndroid.SHORT);
+
+      if(!isDownloaded.status){
+          throw new Error('Gagal Simpan file')
+      }
+      if (isDownloaded.status) {
+        ToastAndroid.show( `File saved to ${isDownloaded.path}`, ToastAndroid.SHORT);
         setIsLoading(false);
       }
+
     } catch (e) {
+      setIsLoading(false)
+      ToastAndroid.show(e!.message, ToastAndroid.SHORT);
       console.log(e);
     }
   }, []);
@@ -76,7 +75,7 @@ const ReportScreen: React.FC = () => {
   if (!user?.alamat_lengkap) {
     Alert.alert(
       'Invalid data',
-      'data tidak lengkap, silahkah dilengkapi terlbih dahulu',
+      'data tidak lengkap, silahkah dilengkapi terlebih dahulu',
     );
   }
 
@@ -103,6 +102,7 @@ const ReportScreen: React.FC = () => {
         }}>
         Result Report
       </Text>
+        <ScrollView>
       {reports?.length > 0 ? (
         reports.map((report: Report, index: number) => (
           <CardComp
@@ -119,6 +119,7 @@ const ReportScreen: React.FC = () => {
       ) : (
         <Text>No reports found</Text>
       )}
+        </ScrollView>
       {user?.role === 'siswa' ? (
         <TouchableOpacity
           onPress={() => {

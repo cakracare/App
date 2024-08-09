@@ -22,6 +22,7 @@ import {
 import {Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
+import {sendEmail} from "../../helpers/sendMail.ts";
 
 export default function HasilReport() {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -62,23 +63,22 @@ export default function HasilReport() {
   }, [total_point]);
 
   const handleUdpateReport = async () => {
-    // console.log('sdfsdf')
     try {
       setLoading(true);
       report.feedback = feedback || report.feedback;
       report.status = 'success';
       report.kategori = kategori;
-      const iupdateReport = await updateLaporanBullying(idReport, report);
-      // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
-      setLoading(false);
+      const iupdateReport = await updateLaporanBullying(idReport, report!);
+
       if (iupdateReport.success) {
+        await sendEmail(userReport.email,'Info laporan', 'laporan kamu sudah di proses, silahkan check!!')
+        setLoading(false);
         navigation.navigate('Report');
       }
     } catch (e) {
       console.log(e);
       setLoading(false);
     }
-    // console.log('Udpate Report');
   };
 
   return (

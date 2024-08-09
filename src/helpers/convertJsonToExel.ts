@@ -4,6 +4,7 @@ import {PermissionsAndroid} from 'react-native';
 import {getCurentTime, getFormattedTime} from './getCurentTime.ts';
 import {Platform} from 'react-native';
 
+
 export const exportDataToExcel = async (data: [] | undefined) => {
   const hasPermission = await checkPermissions();
   const version = Platform.Version;
@@ -14,7 +15,7 @@ export const exportDataToExcel = async (data: [] | undefined) => {
       const permissionGranted = await requestExternalWritePermission();
       if (!permissionGranted) {
         console.log('Permission denied, cannot proceed with export');
-        return false;
+        return {status:false,path:null};
       }
     }
   }
@@ -22,26 +23,21 @@ export const exportDataToExcel = async (data: [] | undefined) => {
   let wb = XLSX.utils.book_new();
   let ws = XLSX.utils.json_to_sheet(data!);
   XLSX.utils.book_append_sheet(wb, ws, 'response');
-  const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
+  const wbout = XLSX.write(wb, { type: 'binary', bookType: 'xlsx' });
 
-  let status: boolean = false;
-  // Write generated excel to Storage
   try {
-    await RNFS.writeFile(
-      RNFS.DownloadDirectoryPath +
-        `/ReportBullyResponse_${getFormattedTime(getCurentTime())}.xlsx`,
-      wbout,
-      'ascii',
-    );
-    status = true;
+    // Menyimpan file ke Download atau Document Directory
+    const path = `${RNFS.DownloadDirectoryPath}/ReportBullyResponse_${getFormattedTime(getCurentTime())}.xlsx`;
+
+    await RNFS.writeFile(path, wbout, 'ascii');
+    console.log('File saved successfully at', path);
+    return {status: true, path: path};
   } catch (e) {
-    console.log('Error', e);
-    status = false;
+    console.log('Error writing file', e);
+    Alert.alert('Error', 'Failed to save the file.');
+    return {status:false,path:null};
   }
-
-  return status;
 };
-
 const permissions = [
   PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
   PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,

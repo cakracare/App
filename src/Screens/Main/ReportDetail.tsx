@@ -1,4 +1,4 @@
-import {Input, InputProps, Layout, Text} from '@ui-kitten/components';
+import {Input, InputProps, Layout, Modal, Spinner, Text} from '@ui-kitten/components';
 import React, {useCallback, useState} from 'react';
 import {ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import ReportComp from '../../components/ReportComp';
@@ -8,12 +8,12 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {getQuestionsByType} from '../../service/questions.ts';
-import {getUserId} from '../../service/user.ts';
+import {getQuestionsByType,getUserId,createLaporanBullying} from '../../service';
 import {BullyingResponse} from '../../Types';
 import {getCurentTime} from '../../helpers/getCurentTime.ts';
-import {createLaporanBullying} from '../../service/report.ts';
 import PetunjukComp from '../../components/petunjukComp';
+import {sendEmail} from "../../helpers/sendMail.ts";
+import {useUser} from "../../helpers/userContext.tsx";
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = React.useState(initialValue);
@@ -29,6 +29,8 @@ export default function ReportDetail() {
   const [kategori, setKategori] = useState('');
   const titleInputState = useInputState();
   const deskirpsiInputState = useInputState();
+  const {user,setUser} = useUser()
+  const [loading, setLoading] = useState(false);
   console.log(responses);
   React.useEffect(() => {
     // Update the responses state with the data from route params
@@ -42,6 +44,7 @@ export default function ReportDetail() {
 
   const createBullyingResponse = async () => {
     //  tambhakn try catch
+    setLoading(true)
     const bullyResponse = {
       userId: userid,
       title: titleInputState.value,
@@ -62,9 +65,13 @@ export default function ReportDetail() {
     bullyResponse.kategori = kategori;
     const newReport = await createLaporanBullying(bullyResponse);
     if (!newReport.success) {
+      setLoading(false)
       ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     }
+    await sendEmail('sahrul.tayadih@gmail.com,sahrul.canva.bebas@gmail.com,wongtulus360@gmail.com ,kasyikoyek@gmail.com','Laporan siswa', `ada laporan baru dari ${user?.nama_lengkap}`)
+    await sendEmail(user!.email,'info laporan', 'terimakasih sudah membuat laporan, laporan anda sedang kami proses')
     ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
+    setLoading(false)
     navigation.navigate('Report');
   };
 
@@ -92,6 +99,14 @@ export default function ReportDetail() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <Modal
+            visible={loading}
+            animationType="fade"
+            backdropStyle={{
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            }}>
+          <Spinner size="giant" status="primary" />
+        </Modal>
         <View
           style={{
             flexDirection: 'row',
@@ -190,11 +205,10 @@ export default function ReportDetail() {
           status="primary"
           width={300}
           disabled={
-            (responses['verbal'] &&
-              responses['physical'] &&
-              responses['seksual'] &&
-              responses['cyber']) === undefined ||
-            (titleInputState.value && deskirpsiInputState.value) === ''
+            (responses['verbal'] === undefined ||
+              responses['physical'] === undefined ||
+              responses['seksual'] === undefined ||
+              responses['cyber']=== undefined)
           }
           onPress={createBullyingResponse}
         />
