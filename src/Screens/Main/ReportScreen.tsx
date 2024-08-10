@@ -131,7 +131,7 @@ const ReportScreen: React.FC = () => {
 
 
           {/* Button Select Class */}
-          <ButtonSelectClass onClassSelect={handleClassSelection} />
+          {user.role === 'guru'? <ButtonSelectClass onClassSelect={handleClassSelection} /> : ''}
 
           {/* Text Header */}
           <Text style={{ fontSize: 20, fontWeight: 'bold', marginStart: 5, marginVertical: 10 }}>

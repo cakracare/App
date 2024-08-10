@@ -8,7 +8,8 @@ export const UserSchema = z.object({
     usia: z.string()
         .refine(value => /^\d+$/.test(value) && Number(value) > 0, { message: "Usia harus berupa angka positif" }).optional(),
     role: z.enum(['siswa', 'guru']).default('siswa'),
-    kelas: z.string().min(1, { message: "Kelas tidak boleh kosong" }).optional(),
+    kelas: z.string().refine(value => /^\d{1,2}$/.test(value) && Number(value) > 0, { message: "kelas tidak valid" })
+        .optional(),
     asal_sekolah: z.string().min(1, { message: "Asal sekolah tidak boleh kosong" }).optional(),
     no_ortu: z.string().min(1, { message: "Nomor orang tua tidak boleh kosong" }).optional(),
     alamat_lengkap: z.string().min(1, { message: "Alamat lengkap tidak boleh kosong" }).optional(),

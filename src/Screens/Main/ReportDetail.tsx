@@ -14,6 +14,7 @@ import {getCurentTime} from '../../helpers/getCurentTime.ts';
 import PetunjukComp from '../../components/petunjukComp';
 import {sendEmail} from "../../helpers/sendMail.ts";
 import {useUser} from "../../helpers/userContext.tsx";
+import {guru_smp} from "../../helpers/data_guru.ts";
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = React.useState(initialValue);
@@ -68,7 +69,7 @@ export default function ReportDetail() {
       setLoading(false)
       ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     }
-    await sendEmail('sahrul.tayadih@gmail.com,sahrul.canva.bebas@gmail.com,wongtulus360@gmail.com ,kasyikoyek@gmail.com','Laporan siswa', `ada laporan baru dari ${user?.nama_lengkap}`)
+    await sendEmail(guru_smp.toString(),'Laporan siswa', `ada laporan baru dari ${user?.nama_lengkap}`)
     await sendEmail(user!.email,'info laporan', 'terimakasih sudah membuat laporan, laporan anda sedang kami proses')
     ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     setLoading(false)

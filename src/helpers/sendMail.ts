@@ -2,7 +2,7 @@ import {PermissionsAndroid} from "react-native";
 
 export const sendEmail = async (to: string, subject: string, text: string) => {
     try {
-        const response = await fetch('https://rwf4bkmm-5000.asse.devtunnels.ms/send-email', {
+        const response = await fetch('https://sendmail-three-jade.vercel.app/send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,6 +18,7 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
             console.log('Email sent successfully');
             //     add return unutk toast
         } else {
+            console.info(response);
             console.error('Failed to send email');
         //     add return unutk toast
         }
