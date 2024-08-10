@@ -18,6 +18,7 @@ import React from 'react';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from '../../helpers/userContext.tsx';
 import {getUserId, updateUser} from '../../service';
+import GenderSelect from "../../components/GenderSelect.tsx";
 
 export default function EditProfil() {
   const [loading, setLoading] = React.useState(false);
@@ -31,7 +32,6 @@ export default function EditProfil() {
   const handleUpdateAccount = async () => {
     setLoading(true);
     setUser(formData);
-    console.log(user, 'asdsad');
     const result = await updateUser(getUserId()!, formData);
     if (result.success) {
       ToastAndroid.show(result.message, ToastAndroid.SHORT);
@@ -39,7 +39,6 @@ export default function EditProfil() {
     }
   };
 
-  const labelKelas = user?.role === 'guru' ? 'wali kelas' : 'kelas';
   const no_hp = user?.role === 'guru' ? 'no pribadi' : 'no ortu';
 
   return (
@@ -88,18 +87,16 @@ export default function EditProfil() {
             'nama_lengkap',
             'email',
             'usia',
-            labelKelas,
+            "kelas",
             'asal_sekolah',
-            'gender',
             no_hp,
             'alamat_lengkap',
           ].map(field => (
             <FormInput
-              key={field === ('wali kelas' || 'kelas') ? 'kelas' : field}
-              label={field
-                .replace(/_/g, ' ')
-                .replace(/([A-Z])/g, ' $1')
-                .trim()}
+              key={field}
+              label={field === 'kelas' &&  user.role === 'guru'?'wali kelas':field.replace(/_/g, ' ')
+                  .replace(/([A-Z])/g, ' $1')
+                  .trim()}
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}
@@ -107,7 +104,9 @@ export default function EditProfil() {
               error={errors[field] || null}
             />
           ))}
+          <GenderSelect onGenderChange={gender => handleInputChange('gender', gender)} />
         </Layout>
+
         <ButtonCompo
           width={300}
           status="primary"

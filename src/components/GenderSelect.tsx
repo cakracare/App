@@ -39,8 +39,8 @@ const GenderSelect: React.FC<GenderSelectProps> = ({ onGenderChange }) => {
             )}
             selectedIndex={selectedIndex}
             onSelect={handleSelect}
-            // value={selectedIndex.row === 1 ? 'Laki-laki' : 'Perempuan'}
             value={gender}
+            style={{ width: '100%',marginBottom: 10 }}
         >
             <SelectItem title="Pilih gender" />
             <SelectItem title="Laki-laki" />
