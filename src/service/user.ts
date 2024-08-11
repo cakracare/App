@@ -110,3 +110,32 @@ export const deleteUser = async (userId: string, password:string) => {
         return { success: false, message: error.message };
     }
 };
+
+
+export const getGuruByKelas = async () => {
+    try {
+        // Ambil data semua pengguna dengan role 'guru'
+        const guruSnapshot = await firestore()
+            .collection('users')
+            .where('role', '==', 'guru')
+            .get();
+
+        const guruSMP: Array<any> = [];
+        const guruSMA: Array<any> = [];
+
+        guruSnapshot.forEach(doc => {
+            const guru = doc.data();
+
+            if (['7', '8', '9'].includes(guru.kelas)) {
+                guruSMP.push(guru.email);
+            } else if (['10', '11', '12'].includes(guru.kelas)) {
+                guruSMA.push(guru.email);
+            }
+        });
+
+        return { guruSMP, guruSMA };
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw new Error('Gagal mendapatkan data guru.');
+    }
+};

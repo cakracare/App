@@ -1,5 +1,5 @@
 export const guru_smp = [
-    'aufaluzumaki@gmail.com',"sahrul.tayadih@gmail.com",
+    '210403010034@mhs.unikama.ac.id',"sahrul.tayadih@gmail.com",
     "sahrul.canva.bebas@gmail.com",
    "wongtulus360@gmail.com",
     'koyekkasyi@gmail.com'

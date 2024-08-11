@@ -17,13 +17,16 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
         if (response.ok) {
             console.log('Email sent successfully');
             //     add return unutk toast
+            return {status: true, message: 'Email sent successfully'};
         } else {
             console.info(response);
             console.error('Failed to send email');
         //     add return unutk toast
+            return {status: false, message: 'Email sent failed'};
         }
     } catch (error) {
         console.error('Error sending email:', error);
+        return {status: false, message: 'Email sent failed'};
         //     add return unutk toast
     }
 };

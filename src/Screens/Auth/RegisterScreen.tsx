@@ -92,10 +92,11 @@ export default function RegisterScreen() {
             ].map(field => (
                 <FormInput
                     key={field}
-                    label={field
+                    label={field === 'no_ortu' ? 'Nomer Wali Murid' : field
                         .replace(/_/g, ' ')
                         .replace(/([A-Z])/g, ' $1')
-                        .trim()}
+                        .trim()
+                        .replace(/\b\w/g, char => char.toUpperCase())}
                     placeholder=""
                     value={formData[field]}
                     onChangeText={value => handleInputChange(field, value)}

@@ -26,6 +26,8 @@ import {exportDataToExcel} from '../../helpers/convertJsonToExel.ts';
 
 
 
+
+
 interface ButtonSelectClassProps {
     onClassSelect: (className: string[]) => void;
 }
@@ -64,9 +66,9 @@ const ReportScreen: React.FC = () => {
   const {user, setUser} = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedClass, setSelectedClass] = useState<string[] | null>(null);
+  const [isDisable,setDisable]=useState(false)
 
   const handleClassSelection = (selected: string[]) => {
-      // console.log(selected)
         setSelectedClass(selected);
   };
 
@@ -85,12 +87,27 @@ const ReportScreen: React.FC = () => {
 
       fetchReports();
 
+
+
+        if ((user?.alamat_lengkap === null) || (user?.alamat_lengkap === undefined) || (user?.alamat_lengkap === " ")) {
+            setDisable(true)
+            Alert.alert(
+                'Invalid data',
+                'data tidak lengkap, silahkah dilengkapi terlebih dahulu',
+            );
+        }else{
+            setDisable(false)
+        }
+
+        console.info(isDisable)
+
       return () => {
         // Cleanup if necessary
       };
-    }, [selectedClass]),
+
+    }, [selectedClass, user]),
   );
-    console.info(selectedClass)
+    console.info(user)
 
   const data = useCallback(async () => {
     try {
@@ -113,14 +130,10 @@ const ReportScreen: React.FC = () => {
       ToastAndroid.show(e!.message, ToastAndroid.SHORT);
       console.log(e);
     }
+
   }, []);
 
-  if (!user?.alamat_lengkap) {
-    Alert.alert(
-      'Invalid data',
-      'data tidak lengkap, silahkah dilengkapi terlebih dahulu',
-    );
-  }
+
 
   return (
       <Layout style={{ flex: 1, padding: 10 }}>
@@ -159,6 +172,7 @@ const ReportScreen: React.FC = () => {
           {/* Floating Action Button */}
           {user?.role === 'siswa' ? (
               <TouchableOpacity
+                  disabled={isDisable}
                   onPress={() => {
                       navigation.navigate('ReportNavigator', { screen: 'ReportDetail' });
                   }}

@@ -19,6 +19,7 @@ import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from '../../helpers/userContext.tsx';
 import {getUserId, updateUser} from '../../service';
 import GenderSelect from "../../components/GenderSelect.tsx";
+import {formattedField} from "../../helpers/formattedField.ts";
 
 export default function EditProfil() {
   const [loading, setLoading] = React.useState(false);
@@ -89,14 +90,12 @@ export default function EditProfil() {
             'usia',
             "kelas",
             'asal_sekolah',
-            no_hp,
+            'no_ortu',
             'alamat_lengkap',
           ].map(field => (
             <FormInput
               key={field}
-              label={field === 'kelas' &&  user.role === 'guru'?'wali kelas':field.replace(/_/g, ' ')
-                  .replace(/([A-Z])/g, ' $1')
-                  .trim()}
+              label={formattedField(field,user) }
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}

@@ -5,12 +5,17 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
 import {useUser} from '../../helpers/userContext.tsx';
 import {Platform} from 'react-native';
-import {checkConnections, sendEmail} from "../../helpers/sendMail.ts";
+import {getGuruByKelas} from "../../service";
 
 const HomeScreen: React.FC = () => {
   const version = Platform.Version;
   const {user, setUser} = useUser();
   console.log('version', version);
+ const handleGetguru = async ()=>{
+   const guru = await getGuruByKelas();
+   console.log('guru smp', guru['guruSMP']);
+   console.log('guru sma', guru['guruSMA']);
+ }
 
 
 
@@ -63,6 +68,7 @@ const HomeScreen: React.FC = () => {
             </Text>
           </View>
         </Card>
+        {/*<Button  onPress={handleGetguru} >sdfdf</Button>*/}
       </ScrollView>
     </Layout>
   );

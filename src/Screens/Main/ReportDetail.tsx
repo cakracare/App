@@ -8,13 +8,13 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {getQuestionsByType,getUserId,createLaporanBullying} from '../../service';
+import {getQuestionsByType, getUserId, createLaporanBullying, getGuruByKelas} from '../../service';
 import {BullyingResponse} from '../../Types';
 import {getCurentTime} from '../../helpers/getCurentTime.ts';
 import PetunjukComp from '../../components/petunjukComp';
 import {sendEmail} from "../../helpers/sendMail.ts";
 import {useUser} from "../../helpers/userContext.tsx";
-import {guru_smp} from "../../helpers/data_guru.ts";
+import {guru_sma, guru_smp} from "../../helpers/data_guru.ts";
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = React.useState(initialValue);
@@ -69,7 +69,25 @@ export default function ReportDetail() {
       setLoading(false)
       ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     }
-    await sendEmail(guru_smp.toString(),'Laporan siswa', `ada laporan baru dari ${user?.nama_lengkap}`)
+
+
+    const guruSMP = ['7', '8', '9'];
+    const guruSMA = ['10', '11', '12'];
+    let guruEmail: string[] | undefined;
+    // const guru = await getGuruByKelas()
+
+    if (guruSMP.includes(user!.kelas!)) {
+      // guruEmail = guru.guruSMP;
+      guruEmail = guru_smp;
+    } else if (guruSMA.includes(user!.kelas!)) {
+      // guruEmail = guru.guruSMA;
+      guruEmail = guru_sma;
+    } else {
+      throw new Error('Kelas tidak valid');
+    }
+
+
+    await sendEmail(guruEmail.toString(),'Laporan siswa', `ada laporan baru dari ${user?.nama_lengkap}`)
     await sendEmail(user!.email,'info laporan', 'terimakasih sudah membuat laporan, laporan anda sedang kami proses')
     ToastAndroid.show(newReport.message!, ToastAndroid.SHORT);
     setLoading(false)
@@ -81,14 +99,6 @@ export default function ReportDetail() {
       return await getQuestionsByType(type);
     },
     [route],
-  );
-
-  console.log(
-    (responses['verbal'] ||
-      responses['physical'] ||
-      responses['seksual'] ||
-      responses['cyber']) === undefined ||
-      (titleInputState.value && deskirpsiInputState.value) === '',
   );
 
   return (

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView, ToastAndroid} from 'react-native';
 import {
   Input,
   Button,
@@ -71,8 +71,13 @@ export default function HasilReport() {
       const iupdateReport = await updateLaporanBullying(idReport, report!);
 
       if (iupdateReport.success) {
-        await sendEmail(userReport.email,'Info laporan', 'laporan kamu sudah di proses, silahkan check!!')
+       const isSend =  await sendEmail(userReport.email,'Info laporan', 'laporan kamu sudah di proses, silahkan check!!')
+        if (!isSend.status){
+          ToastAndroid.show(isSend.message, ToastAndroid.SHORT);
+          setLoading(false);
+        }
         setLoading(false);
+        ToastAndroid.show('Feedback berhasil dikirim', ToastAndroid.SHORT);
         navigation.navigate('Report');
       }
     } catch (e) {
