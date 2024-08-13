@@ -28,33 +28,43 @@ import {exportDataToExcel} from '../../helpers/convertJsonToExel.ts';
 
 
 
-interface ButtonSelectClassProps {
-    onClassSelect: (className: string[]) => void;
-}
+// interface ButtonSelectClassProps {
+//     onClassSelect: (className: string[]) => void;
+// }
+//
+// export const ButtonSelectClass: React.FC<ButtonSelectClassProps> = ({ onClassSelect }) => (
+//     <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10 }}>
+//         <Button
+//             style={{ flex: 1, marginRight: 5 }}
+//             onPress={() => onClassSelect(['7','8','9'])}
+//         >
+//             SMP
+//         </Button>
+//         <Button
+//             style={{ flex: 1 }}
+//             onPress={() => onClassSelect(['10','11','12'])}
+//         >
+//             SMA
+//         </Button>
+//         <Button
+//             style={{ flex: 1, marginLeft: 5 }}
+//             onPress={() => onClassSelect([])}
+//         >
+//             RESET
+//         </Button>
+//     </Layout>
+// );
 
-export const ButtonSelectClass: React.FC<ButtonSelectClassProps> = ({ onClassSelect }) => (
-    <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal: 10 }}>
-        <Button
-            style={{ flex: 1, marginRight: 5 }}
-            onPress={() => onClassSelect(['7','8','9'])}
-        >
-            SMP
-        </Button>
-        <Button
-            style={{ flex: 1 }}
-            onPress={() => onClassSelect(['10','11','12'])}
-        >
-            SMA
-        </Button>
-        <Button
-            style={{ flex: 1, marginLeft: 5 }}
-            onPress={() => onClassSelect([])}
-        >
-            RESET
-        </Button>
-    </Layout>
-);
-
+const getSelectedClass = (userClass: string, userRole: string): string[] => {
+    if (userRole === 'guru') {
+        if (['7', '8', '9'].includes(userClass)) {
+            return ['7','8','9'];
+        } else if (['10', '11', '12'].includes(userClass)) {
+            return ['10','11','12'];
+        }
+    }
+    return []; // Atau default yang sesuai dengan kebutuhan
+};
 
 
 
@@ -65,12 +75,12 @@ const ReportScreen: React.FC = () => {
   const userId = getUserId() || '';
   const {user, setUser} = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<string[] | null>(null);
+  // const [selectedClass, setSelectedClass] = useState<string[] | null>(null);
   const [isDisable,setDisable]=useState(false)
 
-  const handleClassSelection = (selected: string[]) => {
-        setSelectedClass(selected);
-  };
+  // const handleClassSelection = (selected: string[]) => {
+  //       setSelectedClass(selected);
+  // };
 
   const [reports, setReports] = useState<any>({});
 
@@ -78,7 +88,7 @@ const ReportScreen: React.FC = () => {
     React.useCallback(() => {
       const fetchReports = async () => {
         try {
-          const reportData = await getReportsByUser(userId, user!.role, selectedClass);
+          const reportData = await getReportsByUser(userId, user!.role, getSelectedClass(user.kelas!,user.role!));
           setReports(reportData.data);
         } catch (error) {
           console.error('Error fetching reports:', error);
@@ -105,7 +115,7 @@ const ReportScreen: React.FC = () => {
         // Cleanup if necessary
       };
 
-    }, [selectedClass, user]),
+    }, [user]),
   );
     console.info(user)
 
@@ -113,7 +123,7 @@ const ReportScreen: React.FC = () => {
     try {
 
       setIsLoading(true);
-      const allReportUser = await fetchUsersWithReports(user?.role!,selectedClass);
+      const allReportUser = await fetchUsersWithReports(user?.role!,getSelectedClass(user.kelas!,user.role!));
       console.log(allReportUser.length);
       const isDownloaded = await exportDataToExcel(allReportUser);
 
@@ -144,7 +154,7 @@ const ReportScreen: React.FC = () => {
 
 
           {/* Button Select Class */}
-          {user.role === 'guru'? <ButtonSelectClass onClassSelect={handleClassSelection} /> : ''}
+          {/*{user.role === 'guru'? <ButtonSelectClass onClassSelect={handleClassSelection} /> : ''}*/}
 
           {/* Text Header */}
           <Text style={{ fontSize: 20, fontWeight: 'bold', marginStart: 5, marginVertical: 10 }}>

@@ -50,7 +50,7 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
     />
       <InfoItem
           iconName="address-book"
-          label="Nomor wali murid"
+          label={item?.role === 'guru' ? 'Nomor pribadi' : 'Nomor wali murid'}
           value={item?.no_ortu}
       />
   </View>

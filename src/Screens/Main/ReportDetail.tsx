@@ -15,6 +15,7 @@ import PetunjukComp from '../../components/petunjukComp';
 import {sendEmail} from "../../helpers/sendMail.ts";
 import {useUser} from "../../helpers/userContext.tsx";
 import {guru_sma, guru_smp} from "../../helpers/data_guru.ts";
+import {set} from "zod";
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = React.useState(initialValue);
@@ -32,7 +33,7 @@ export default function ReportDetail() {
   const deskirpsiInputState = useInputState();
   const {user,setUser} = useUser()
   const [loading, setLoading] = useState(false);
-  console.log(responses);
+
   React.useEffect(() => {
     // Update the responses state with the data from route params
     if (response) {
@@ -74,14 +75,12 @@ export default function ReportDetail() {
     const guruSMP = ['7', '8', '9'];
     const guruSMA = ['10', '11', '12'];
     let guruEmail: string[] | undefined;
-    // const guru = await getGuruByKelas()
+    const guru = await getGuruByKelas()
 
     if (guruSMP.includes(user!.kelas!)) {
-      // guruEmail = guru.guruSMP;
-      guruEmail = guru_smp;
+      guruEmail = guru.guruSMP;
     } else if (guruSMA.includes(user!.kelas!)) {
-      // guruEmail = guru.guruSMA;
-      guruEmail = guru_sma;
+      guruEmail = guru.guruSMA;
     } else {
       throw new Error('Kelas tidak valid');
     }

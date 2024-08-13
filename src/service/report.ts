@@ -101,6 +101,8 @@ export async function getReportsByUser(userId: string, role: UserRole, kelasArra
                     // Jika tidak ada user dalam kelas yang ditentukan, kembalikan laporan kosong
                     return { success: true, data: [] };
                 }
+            }else{
+                return { success: true, data: [] }
             }
         } else {
             throw new Error('Peran tidak dikenal');

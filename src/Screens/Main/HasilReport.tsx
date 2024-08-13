@@ -23,6 +23,7 @@ import {Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
 import {sendEmail} from "../../helpers/sendMail.ts";
+import {set} from "zod";
 
 export default function HasilReport() {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -43,11 +44,11 @@ export default function HasilReport() {
 
   useEffect(() => {
     const data = async () => {
+      console.log('1')
       const laporan = await getLaporanBullying(idReport);
       const dataUser = await getUser(laporan.data?.userId);
       return {laporan, dataUser};
     };
-
     data().then(result => {
       setReport(result.laporan.data);
       setUserReport(result.dataUser.data);
@@ -62,28 +63,33 @@ export default function HasilReport() {
     }
   }, [total_point]);
 
-  const handleUdpateReport = async () => {
-    try {
-      setLoading(true);
-      report.feedback = feedback || report.feedback;
-      report.status = 'success';
-      report.kategori = kategori;
-      const iupdateReport = await updateLaporanBullying(idReport, report!);
 
-      if (iupdateReport.success) {
-       const isSend =  await sendEmail(userReport.email,'Info laporan', 'laporan kamu sudah di proses, silahkan check!!')
-        if (!isSend.status){
-          ToastAndroid.show(isSend.message, ToastAndroid.SHORT);
+
+  const handleUdpateReport = async () => {
+    if(feedback){
+      try {
+        setLoading(true);
+        report.feedback = feedback || report.feedback;
+        report.status = 'success';
+        report.kategori = kategori;
+        const iupdateReport = await updateLaporanBullying(idReport, report!);
+
+        if (iupdateReport.success) {
+          const isSend =  await sendEmail(userReport.email,'Info laporan', 'laporan kamu sudah di proses, silahkan check!!')
+          if (!isSend.status){
+            ToastAndroid.show(isSend.message, ToastAndroid.SHORT);
+            setLoading(false);
+          }
           setLoading(false);
+          ToastAndroid.show('Feedback berhasil dikirim', ToastAndroid.SHORT);
+          navigation.navigate('Report');
         }
+      } catch (e) {
+        console.log(e);
         setLoading(false);
-        ToastAndroid.show('Feedback berhasil dikirim', ToastAndroid.SHORT);
-        navigation.navigate('Report');
       }
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
     }
+    ToastAndroid.show('Feedback belum diisi', ToastAndroid.SHORT);
   };
 
   return (
