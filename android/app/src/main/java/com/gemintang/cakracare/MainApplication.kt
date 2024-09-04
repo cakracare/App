@@ -1,4 +1,4 @@
-package com.cakracare
+package com.gemintang.cakracare
 
 import android.app.Application
 import com.facebook.react.PackageList
