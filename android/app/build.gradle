@@ -82,8 +82,8 @@ android {
         applicationId "com.cakracare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "0.1.16"
+        versionCode 17
+        versionName "0.1.17"
     }
     lintOptions {
             abortOnError false
