@@ -1,33 +1,111 @@
 {
   "project_info": {
-    "project_number": "677122732442",
-    "project_id": "cakracare-f16cc",
-    "storage_bucket": "cakracare-f16cc.appspot.com"
+    "project_number": "448143761674",
+    "firebase_url": "https://cakra-care-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "cakra-care",
+    "storage_bucket": "cakra-care.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:677122732442:android:f70097353d9910dee84a23",
+        "mobilesdk_app_id": "1:448143761674:android:992b6565f4841472ed5af3",
         "android_client_info": {
-          "package_name": "com.gemintang.cakracare"
+          "package_name": "com.cakracare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "677122732442-p7d2ptg249gmlstl3vv5kmh9kkgt60qp.apps.googleusercontent.com",
+          "client_id": "448143761674-db5rpjghdtgk6h1mm3ckleq047gajujd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cakracare",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "448143761674-g8echhrapvdef39tnnrm3hbqi8i5e9q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cakracare",
+            "certificate_hash": "642e9dd04e070736d70fdc2946553ac3a79ef6c1"
+          }
+        },
+        {
+          "client_id": "448143761674-umg33591l12ihe96jm94v3ji14n69vet.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cakracare",
+            "certificate_hash": "ce2bd929d289cfbac0dd96a33525bc1517267097"
+          }
+        },
+        {
+          "client_id": "448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_c_4zRkq8oDDw4en7sez4-0qjMapgdrs"
+          "current_key": "AIzaSyAsBzHaI-4yKO2Mzm3JfflTpoDtF-Xger0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "677122732442-p7d2ptg249gmlstl3vv5kmh9kkgt60qp.apps.googleusercontent.com",
+              "client_id": "448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448143761674:android:96b6148d5b229fcaed5af3",
+        "android_client_info": {
+          "package_name": "com.gemintang.cakracare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448143761674-cjil7gkkoj47fvqueovgs8qej65torbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gemintang.cakracare",
+            "certificate_hash": "642e9dd04e070736d70fdc2946553ac3a79ef6c1"
+          }
+        },
+        {
+          "client_id": "448143761674-utn166irv7vpg1s5spvnvdqmrp081fr3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gemintang.cakracare",
+            "certificate_hash": "773968dd530cd4b3e80868940fd330cdc2c21b92"
+          }
+        },
+        {
+          "client_id": "448143761674-v1fhttnj84k6arg8j2jmeho0hrdg4uih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gemintang.cakracare",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsBzHaI-4yKO2Mzm3JfflTpoDtF-Xger0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

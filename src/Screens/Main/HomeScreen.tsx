@@ -5,7 +5,9 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
 import {useUser} from '../../helpers/userContext.tsx';
 import {Platform} from 'react-native';
-import {getGuruByKelas} from "../../service";
+import {addQuestion, getGuruByKelas} from "../../service";
+import {Questions} from "../../Types/Questions.ts";
+import data_soal from "../../helpers/data_soal.json";
 
 const HomeScreen: React.FC = () => {
   const version = Platform.Version;
@@ -15,6 +17,20 @@ const HomeScreen: React.FC = () => {
    const guru = await getGuruByKelas();
    console.log('guru smp', guru['guruSMP']);
    console.log('guru sma', guru['guruSMA']);
+ }
+
+ const handleUplodSoal = async ()=>{
+
+     try {
+       const questions = data_soal as unknown as Questions[];
+       for (const question of questions) {
+         await addQuestion(question);
+           console.log(question)
+       }
+       console.info('All questions added!');
+     } catch (error) {
+       console.error('Error adding all questions: ', error);
+     }
  }
 
 
@@ -68,7 +84,7 @@ const HomeScreen: React.FC = () => {
             </Text>
           </View>
         </Card>
-        {/*<Button  onPress={handleGetguru} >sdfdf</Button>*/}
+        {/*<Button  onPress={handleUplodSoal} >sdfdf</Button>*/}
       </ScrollView>
     </Layout>
   );

@@ -1,0 +1,212 @@
+[
+        {
+            "id": 1,
+            "question": "Apakah Anda pernah mengalami kekerasan dengan menggunakan anggota tubuh (kaki, tangan dan anggota lain)?",
+            "type": "physical"
+        },
+        {
+            "id": 2,
+            "question": "Apakah Anda pernah mengalami kekerasan dengan menggunakan benda?",
+            "type": "physical"
+        },
+        {
+            "id": 3,
+            "question": "Apakah Anda pernah dimintai uang atau makanan atau benda lain oleh siswa lain secara paksa?",
+            "type": "physical"
+        },
+        {
+            "id": 4,
+            "question": "Apakah Anda pernah dengan sengaja disenggol oleh siswa lain hingga terjatuh?",
+            "type": "physical"
+        },
+        {
+            "id": 5,
+            "question": "Apakah Anda pernah ditumpahkan makanan atau minuman oleh siswa lain?",
+            "type": "physical"
+        },
+        {
+            "id": 6,
+            "question": "Apakah Anda mendukung siswa lain yang suka memukul?",
+            "type": "physical"
+        },
+        {
+            "id": 7,
+            "question": "Apakah Anda pernah diperintah siswa lain untuk mem-bully siswa lainnya?",
+            "type": "physical"
+        },
+        {
+            "id": 8,
+            "question": "Apakah barang yang Anda miliki pernah disembunyikan oleh siswa lain?",
+            "type": "physical"
+        },
+        {
+            "id": 9,
+            "question": "Apakah kendaraan Anda pernah dirusak oleh siswa lain?",
+            "type": "physical"
+        },
+        {
+            "id": 10,
+            "question": "Apakah Anda pernah dipaksa untuk merekam kejadian pembullyan?",
+            "type": "physical"
+        },
+        {
+            "id": 11,
+            "question": "Apakah siswa lain pernah mengolok-olok Anda dengan menyebut nama orang tua?",
+            "type": "verbal"
+        },
+        {
+            "id": 12,
+            "question": "Apakah Anda pernah dicela menggunakan nama nama hewan oleh siswa lain?",
+            "type": "verbal"
+        },
+        {
+            "id": 13,
+            "question": "Apakah Anda pernah mendapatkan siulan atau apaan usil (catcalling) dari siswa lain?",
+            "type": "verbal"
+        },
+        {
+            "id": 14,
+            "question": "Apakah Anda pernah diejek secara fisik (body shaming) oleh siswa lain?",
+            "type": "verbal"
+        },
+        {
+            "id": 15,
+            "question": "Apakah Anda pernah dijauhi oleh siswa lain karena penyebaran berita yang tidak benar tentang Anda (fitnah/hoaks)?",
+            "type": "verbal"
+        },
+        {
+            "id": 16,
+            "question": "Apakah Anda pernah diberikan julukan yang buruk?",
+            "type": "verbal"
+        },
+        {
+            "id": 17,
+            "question": "Apakah Anda pernah mendapatkan ancaman dari siswa lain karena berselisih paham?",
+            "type": "verbal"
+        },
+        {
+            "id": 18,
+            "question": "Apakah Anda pernah mengalami diskriminasi atau pelecehan tampilan fisik dan kondisi tubuh (body shaming) bernuansa seksual?",
+            "type": "seksual"
+        },
+        {
+            "id": 19,
+            "question": "Apakah Anda pernah bertemu dengan orang lain yang membujuk, menjanjikan, atau menawarkan sesuatu kepada Anda dengan tujuan transaksi atau kegiatan seksual?",
+            "type": "seksual"
+        },
+        {
+            "id": 20,
+            "question": "Apakah Anda pernah mengalami diintai atau dikuntit (stalking) siswa lain untuk melihat kegiatan pribadi Anda?",
+            "type": "seksual"
+        },
+        {
+            "id": 21,
+            "question": "Apakah Anda pernah diintip siswa lain untuk melihat bagian tubuh tertentu Anda?",
+            "type": "seksual"
+        },
+        {
+            "id": 22,
+            "question": "Apakah Anda pernah melihat siswa lain mengeluarkan maupun memainkan alat kelaminnya di depan Anda?",
+            "type": "seksual"
+        },
+        {
+            "id": 23,
+            "question": "Apakah Anda pernah disentuh, diraba, dipegang, dipeluk, dicium atau digosokkan bagian tubuh anda oleh siswa lain?",
+            "type": "seksual"
+        },
+        {
+            "id": 24,
+            "question": "Apakah Anda pernah mengalami percobaan pemerkosaan?",
+            "type": "seksual"
+        },
+        {
+            "id": 25,
+            "question": "Apakah Anda pernah dirayu, digoda atau siulan yang bernuansa seksual?",
+            "type": "seksual"
+        },
+        {
+            "id": 26,
+            "question": "Apakah pernah foto pribadi Anda disebarluaskan tanpa persetujuan Anda?",
+            "type": "seksual"
+        },
+        {
+            "id": 27,
+            "question": "Apakah Anda pernah dikirimi pesan/gambar/foto/video bernuansa seksual?",
+            "type": "seksual"
+        },
+        {
+            "id": 28,
+            "question": "Apakah Anda pernah siswa lain dengan tatapan yang tidak disukai atau sinis?",
+            "type": "psychological"
+        },
+        {
+            "id": 29,
+            "question": "Apakah Anda pernah mendapati siswa lain membuang muka ketika Anda sapa?",
+            "type": "psychological"
+        },
+        {
+            "id": 30,
+            "question": "Apakah Anda pernah mendapati siswa lain bersikap tidak peduli apabila Anda butuh bantuan?",
+            "type": "psychological"
+        },
+        {
+            "id": 31,
+            "question": "Apakah Anda pernah dikucilkan oleh siswa lain?",
+            "type": "psychological"
+        },
+        {
+            "id": 32,
+            "question": "Apakah Anda pernah ditinggal pergi oleh siswa lain ketika anda ingin bergabung dalam suatu tempat maupun kelompok?",
+            "type": "psychological"
+        },
+        {
+            "id": 33,
+            "question": "Apakah Anda pernah difitnah atau diolok-olok melalui sosial media?",
+            "type": "cyber"
+        },
+        {
+            "id": 34,
+            "question": "Apakah Anda pernah mendapatkan ancaman atau teror melalui sosial media?",
+            "type": "cyber"
+        },
+        {
+            "id": 35,
+            "question": "Apakah Anda pernah mendapati akun sosial media palsu yang berpura-pura menjadi kerabat dan meminta uang atau barang kepada Anda?",
+            "type": "cyber"
+        },
+        {
+            "id": 36,
+            "question": "Apakah Anda pernah mendapati foto pribadi Anda digunakan orang yang tidak bertanggung jawab untuk melakukan tindakan kriminal?",
+            "type": "cyber"
+        },
+        {
+            "id": 37,
+            "question": "Apakah akun sosial media Anda pernah dibobol orang lain untuk kegiatan yang merugikan (meminta uang, pulsa, barang)?",
+            "type": "cyber"
+        },
+        {
+            "id": 38,
+            "question": "Apakah Anda pernah mengalami foto pribadi Anda disebar dan digunakan sebagai bahan ejekan (stiker wa, upload status)?",
+            "type": "cyber"
+        },
+        {
+            "id": 39,
+            "question": "Apakah Anda pernah mendapatkan komentar dengan kata-kata yang buruk pada postingan di media sosial Anda?",
+            "type": "cyber"
+        },
+        {
+            "id": 40,
+            "question": "Apakah Anda pernah dikucilkan oleh siswa lain dalam lingkup pertemanan Anda melalui media layanan chatting?",
+            "type": "cyber"
+        },
+        {
+            "id": 41,
+            "question": "Apakah Anda pernah mengalami tidak direspon oleh siapapun ketika bertanya di obrolan grup?",
+            "type": "cyber"
+        },
+        {
+            "id": 42,
+            "question": "Apakah Anda pernah merasa dipermalukan oleh siswa lain melalui media sosial?",
+            "type": "cyber"
+        }
+    ]

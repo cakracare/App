@@ -8,7 +8,7 @@ import {handleFirebaseError} from "../helpers/handlingErrorFirebaseAuth.ts";
 
 // Configuration : google
 GoogleSignin.configure({
-    webClientId: '448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com',
+    webClientId: "448143761674-rt1fffn31i4ggojp6j20fgus1g9rt3i4.apps.googleusercontent.com",
 })
 
 /**
@@ -125,6 +125,7 @@ const MAX_RETRIES = 5;
 export const signInWithGoogle = async (attempt = 1): Promise<{ success: boolean, user?: User, message: string }> => {
     try {
         // Ambil token dari device
+        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
         const { idToken } = await GoogleSignin.signIn();
         // Ambil data dari Google credential menggunakan token yang sudah didapatkan
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
@@ -160,7 +161,7 @@ export const signInWithGoogle = async (attempt = 1): Promise<{ success: boolean,
             message: 'Login successful with Google!'
         };
     } catch (error: any) {
-        console.error(error);
+        console.error(error, '<< auth with google');
         if (error.code === 'auth/network-request-failed' && attempt <= MAX_RETRIES) {
             const delay = Math.pow(2, attempt) * 100; // Backoff eksponensial
             console.log(`Retrying in ${delay}ms...`);
@@ -169,7 +170,7 @@ export const signInWithGoogle = async (attempt = 1): Promise<{ success: boolean,
         } else {
             await auth().signOut();
             const message = handleFirebaseError(error);
-            console.error(message, '<< auth with google');
+
             return {
                 success: false,
                 message: message || error.message
