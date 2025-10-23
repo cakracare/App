@@ -16,7 +16,7 @@ import {handleZodError, validateUser} from '../../helpers/validateUser.ts';
 import {Logout, SignUpWithEmailAndPassword} from '../../service';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
-import {Picker} from '@react-native-picker/picker';
+import GenderSelect from '../../components/GenderSelect.tsx';
 
 const initialState = {
   nama_lengkap: '',
@@ -34,10 +34,11 @@ export default function RegisterScreen() {
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
     useForm(initialState);
   const navigation = useNavigation<NavigationProp<any>>();
-  const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
-    new IndexPath(0),
-  );
+  // const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
+  //     new IndexPath(0),
+  // );
   const [isChecked, setIsChecked] = useState(false);
+  // console.log(selectedIndex.row)
 
   const validateForm = () => {
     Object.keys(formData).forEach(field => clearFieldError(field));
@@ -52,15 +53,18 @@ export default function RegisterScreen() {
     return true;
   };
 
+  console.log(formData);
+
   const handleRegister = async () => {
+    // formData['gender']=selectedIndex.row;
     if (validateForm()) {
       const user = validateUser(formData);
       if (user.success) {
         // @ts-ignore
         const newUser = await SignUpWithEmailAndPassword(
-          user?.data,
-          user?.data.password,
-          user?.data.confirm_password,
+          user?.data!,
+          user?.data!.password!,
+          user?.data!.confirm_password!,
         );
         if (newUser?.success) {
           await Logout();
@@ -89,10 +93,15 @@ export default function RegisterScreen() {
           ].map(field => (
             <FormInput
               key={field}
-              label={field
-                .replace(/_/g, ' ')
-                .replace(/([A-Z])/g, ' $1')
-                .trim()}
+              label={
+                field === 'no_ortu'
+                  ? 'Nomer Wali Murid'
+                  : field
+                      .replace(/_/g, ' ')
+                      .replace(/([A-Z])/g, ' $1')
+                      .trim()
+                      .replace(/\b\w/g, char => char.toUpperCase())
+              }
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}
@@ -100,43 +109,9 @@ export default function RegisterScreen() {
               error={errors[field] || null}
             />
           ))}
-          <Select
-            label={() => (
-              <Text
-                style={{
-                  marginStart: 10,
-                  marginTop: 10,
-                  color: 'grey',
-                  paddingVertical: 5,
-                }}>
-                gender
-              </Text>
-            )}
-            selectedIndex={selectedIndex}
-            onSelect={index => {
-              setSelectedIndex(index);
-              handleInputChange(
-                'gender',
-                index.row === 1
-                  ? 'laki-laki'
-                  : index.row === 2
-                  ? 'perempuan'
-                  : 'other',
-              );
-            }}
-            value={
-              selectedIndex.row === 0
-                ? 'Select Gender'
-                : selectedIndex.row === 1
-                ? 'Laki-laki'
-                : selectedIndex.row === 2
-                ? 'perempuan'
-                : 'Lainya'
-            }>
-            <SelectItem title="Laki-laki" />
-            <SelectItem title="Perempuan" />
-            <SelectItem title="Lainya" />
-          </Select>
+          <GenderSelect
+            onGenderChange={gender => handleInputChange('gender', gender)}
+          />
           <FormInput
             label="Password"
             placeholder=""

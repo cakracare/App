@@ -1,15 +1,23 @@
-import {Layout, Text, Card} from '@ui-kitten/components';
+import {Layout, Text, Card, Button} from '@ui-kitten/components';
 import {Image, Linking, ScrollView, View} from 'react-native';
 import styles from '../../style/HomeStyle.tsx';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React from 'react';
 import {useUser} from '../../helpers/userContext.tsx';
 import {Platform} from 'react-native';
+import {getGuruByKelas} from "../../service";
 
 const HomeScreen: React.FC = () => {
   const version = Platform.Version;
   const {user, setUser} = useUser();
   console.log('version', version);
+ const handleGetguru = async ()=>{
+   const guru = await getGuruByKelas();
+   console.log('guru smp', guru['guruSMP']);
+   console.log('guru sma', guru['guruSMA']);
+ }
+
+
 
   //   masukkan nama user kedalam kata sambutan
   return (
@@ -60,6 +68,7 @@ const HomeScreen: React.FC = () => {
             </Text>
           </View>
         </Card>
+        {/*<Button  onPress={handleGetguru} >sdfdf</Button>*/}
       </ScrollView>
     </Layout>
   );

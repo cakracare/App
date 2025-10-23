@@ -213,3 +213,22 @@ export async function Logout() {
         };
     }
 }
+
+export const sendPasswordResetEmail = async (email: string): Promise<{ success: boolean, message: string }> => {
+    try {
+        // Cek apakah email terdaftar
+        const userSnapshot = await firestore().collection('users').where('email', '==', email).get();
+
+        if (!userSnapshot.empty) {
+            // Jika email terdaftar, kirim email reset password
+            await auth().sendPasswordResetEmail(email);
+            return { success: true, message: 'Email reset password telah dikirim!' };
+        } else {
+            // Jika email tidak terdaftar
+            return { success: false, message: 'Email tidak terdaftar.' };
+        }
+    } catch (error: any) {
+        console.error('Error sending password reset email:', error);
+        return { success: false, message: 'Gagal mengirim email reset password.' };
+    }
+};

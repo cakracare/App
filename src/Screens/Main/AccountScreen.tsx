@@ -39,7 +39,7 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
     <InfoItem iconName="user" label="Nama" value={item?.nama_lengkap} />
     <InfoItem iconName="envelope" label="Email" value={item?.email} />
     <InfoItem iconName="key" label="Password" value={item?.password} />
-    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender} />
+    <InfoItem iconName="transgender-alt" label="Gender" value={item?.gender === 'male'?'laki - laki':'perempuan'} />
     <InfoItem iconName="user-graduate" label="Kelas" value={item?.kelas} />
     <InfoItem iconName="school" label="School" value={item?.asal_sekolah} />
     <InfoItem iconName="user-cog" label="Status" value={item?.role} />
@@ -48,6 +48,11 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
       label="Alamat rumah"
       value={item?.alamat_lengkap}
     />
+      <InfoItem
+          iconName="address-book"
+          label={item?.role === 'guru' ? 'Nomor pribadi' : 'Nomor wali murid'}
+          value={item?.no_ortu}
+      />
   </View>
 );
 const AccountScreen: React.FC = () => {

@@ -77,9 +77,10 @@ export async function getLaporanBullying(reportId: string) {
  * Get all reports by a specific user or all reports based on role
  * @param userId - The user ID
  * @param role - The user's role
+ * @param kelasArray
  * @returns A list of reports or an error message
  */
-export async function getReportsByUser(userId: string, role: UserRole): Promise<{ success: boolean, data?: Report[], error?: string }> {
+export async function getReportsByUser(userId: string, role: UserRole, kelasArray?: string[]): Promise<{ success: boolean, data?: Report[], error?: string }> {
     try {
         let query;
 
@@ -87,6 +88,22 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
             query = firestore().collection('reports').where('userId', '==', userId);
         } else if (role === UserRole.TEACHER) {
             query = firestore().collection('reports');
+            if (kelasArray && kelasArray.length > 0) {
+                const usersSnapshot = await firestore()
+                    .collection('users')
+                    .where('kelas', 'in', kelasArray)
+                    .get();
+                const userIds = usersSnapshot.docs.map(doc => doc.id);
+
+                if (userIds.length > 0) {
+                    query = query.where('userId', 'in', userIds);
+                } else {
+                    // Jika tidak ada user dalam kelas yang ditentukan, kembalikan laporan kosong
+                    return { success: true, data: [] };
+                }
+            }else{
+                return { success: true, data: [] }
+            }
         } else {
             throw new Error('Peran tidak dikenal');
         }
@@ -109,7 +126,6 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
                 status: data.status,
                 kategori: data.kategori,
                 skor_total: data.skor_total,
-
             });
         });
 
@@ -119,6 +135,7 @@ export async function getReportsByUser(userId: string, role: UserRole): Promise<
         return { success: false, error: error.message };
     }
 }
+
 
 /**
  * Update an existing bullying report
@@ -195,7 +212,7 @@ type CombinedReport = {
     "Feedback": string;
 };
 
-export async function fetchUsersWithReports(currentUserRole: string): Promise<CombinedReport[]> {
+export async function fetchUsersWithReports(currentUserRole: string, allowedClasses?: string[]): Promise<CombinedReport[]> {
     if (currentUserRole !== 'guru') {
         throw new Error('Only teachers can perform this action');
     }
@@ -208,6 +225,11 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
             ...doc.data(),
         })) as User[];
 
+        // If allowedClasses is not provided, include all users
+        const filteredUsers = allowedClasses
+            ? users.filter(user => allowedClasses.includes(user.kelas))
+            : users;
+
         // Fetch all reports
         const reportSnapshot = await firestore().collection('reports').get();
         const reports: Report[] = reportSnapshot.docs.map(doc => ({
@@ -215,17 +237,15 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
             ...doc.data(),
             timestamp: doc.data().timestamp.toDate(),
         })) as Report[];
-        // console.log(reports.length, 'sadfsafsdadsasfd')
 
         // Combine users and their reports into the desired structure
         const combinedReports: CombinedReport[] = [];
 
         reports.forEach(report => {
-
             // Find the corresponding user for each report
-            const user = users.find(user => user.id === report.userId);
+            const user = filteredUsers.find(user => user.id === report.userId);
 
-            // Ensure the user is found
+            // Ensure the user is found and belongs to an allowed class
             if (user) {
                 combinedReports.push({
                     "Nama pelapor": user.nama_lengkap,
@@ -233,8 +253,8 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
                     Title: report.title,
                     "Tanggal laporan": report.timestamp?.toString().slice(0, 16) || '',
                     Alamat: user.alamat_lengkap,
-                    Cyber: 0,
-                    Deskripsi: "",
+                    Cyber: report.cyberPointResponse,
+                    Deskripsi: report.deskripsi,
                     Seksual: report.sexualPointResponse,
                     Fisik: report.physicalPointResponse,
                     Verbal: report.verbalPointResponse,
@@ -245,11 +265,14 @@ export async function fetchUsersWithReports(currentUserRole: string): Promise<Co
                 });
             }
         });
-        console.info(combinedReports.length, 'total jumlah laporan yang berhasil diambbil')
+
+        console.info(combinedReports.length, 'total jumlah laporan yang berhasil diambil');
         return combinedReports;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw new Error('Failed to fetch users and reports');
     }
 }
+
+
 
