@@ -1,4 +1,5 @@
-import {User} from "./User.ts";
+import {User} from './User.ts';
+import {BullyingResponse} from './index.ts';
 
 export type ParamListBase = {
   Home: undefined;
@@ -8,17 +9,15 @@ export type ParamListBase = {
   HasilReport: undefined;
 };
 
-
 export type ParamListReport = {
-  Report: { questions: any[] };
-  ReportDetail: undefined;
+  Report: {questions: any[]};
+  ReportDetail: {bullyResponse?: BullyingResponse};
   Soal: undefined;
   HasilReport: undefined;
-  EditProfil: {user: User}
-}
-
+  EditProfil: {user: User};
+};
 
 export type ParamListAccount = {
   Account: undefined;
-  EditProfil: {user: User}
-}
+  EditProfil: {user: User};
+};

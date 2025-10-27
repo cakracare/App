@@ -9,6 +9,16 @@ import {
   SelectItem,
   IndexPath,
 } from '@ui-kitten/components';
+import {
+  Button,
+  Text,
+  CheckBox,
+  Input,
+  Layout,
+  Select,
+  SelectItem,
+  IndexPath,
+} from '@ui-kitten/components';
 import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
@@ -38,6 +48,7 @@ export default function RegisterScreen() {
     new IndexPath(0),
   );
   const [isChecked, setIsChecked] = useState(false);
+  // console.log(selectedIndex.row)
 
   const validateForm = () => {
     Object.keys(formData).forEach(field => clearFieldError(field));
@@ -52,15 +63,18 @@ export default function RegisterScreen() {
     return true;
   };
 
+  console.log(formData);
+
   const handleRegister = async () => {
+    // formData['gender']=selectedIndex.row;
     if (validateForm()) {
       const user = validateUser(formData);
       if (user.success) {
         // @ts-ignore
         const newUser = await SignUpWithEmailAndPassword(
-          user?.data,
-          user?.data.password,
-          user?.data.confirm_password,
+          user?.data!,
+          user?.data!.password!,
+          user?.data!.confirm_password!,
         );
         if (newUser?.success) {
           await Logout();
@@ -84,16 +98,20 @@ export default function RegisterScreen() {
             'usia',
             'kelas',
             'asal_sekolah',
-            'gender',
             'no_ortu',
             'alamat_lengkap',
           ].map(field => (
             <FormInput
               key={field}
-              label={field
-                .replace(/_/g, ' ')
-                .replace(/([A-Z])/g, ' $1')
-                .trim()}
+              label={
+                field === 'no_ortu'
+                  ? 'Nomer Wali Murid'
+                  : field
+                      .replace(/_/g, ' ')
+                      .replace(/([A-Z])/g, ' $1')
+                      .trim()
+                      .replace(/\b\w/g, char => char.toUpperCase())
+              }
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Button, Layout, Text} from '@ui-kitten/components';
+import React, {useState} from 'react';
+import {Layout, Text} from '@ui-kitten/components';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {ScrollView, useColorScheme, View} from 'react-native';
 import styles from '../../style/AccountStyle.tsx';
@@ -21,12 +21,18 @@ const InfoItem = ({
   const securePasswordEntry = (value: string) => {
     return value && value.replace(/./g, '*');
   };
+  const securePasswordEntry = (value: string) => {
+    return value && value.replace(/./g, '*');
+  };
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === 'dark' ? 'white' : 'black';
   return (
     <View style={styles.container3}>
       <Icon2 name={iconName} size={20} color={iconColor} style={styles.icon} />
       <Text style={styles.Text2}>{label}</Text>
+      <Text style={styles.Text3}>
+        {label == 'Password' ? securePasswordEntry(value) : value}
+      </Text>
       <Text style={styles.Text3}>
         {label == 'Password' ? securePasswordEntry(value) : value}
       </Text>
@@ -48,6 +54,11 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
       label="Alamat rumah"
       value={item?.alamat_lengkap}
     />
+      <InfoItem
+          iconName="address-book"
+          label={item?.role === 'guru' ? 'Nomor pribadi' : 'Nomor wali murid'}
+          value={item?.no_ortu}
+      />
   </View>
 );
 const AccountScreen: React.FC = () => {
@@ -86,6 +97,10 @@ const AccountScreen: React.FC = () => {
               text="edit"
               width={150}
               onPress={() =>
+                navigation.navigate('AccountNavigator', {
+                  screen: 'EditProfil',
+                  params: {user: user},
+                })
                 navigation.navigate('AccountNavigator', {
                   screen: 'EditProfil',
                   params: {user: user},

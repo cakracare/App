@@ -1,37 +1,61 @@
-import {Layout} from '@ui-kitten/components';
-import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Layout, Modal, Spinner} from '@ui-kitten/components';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {
   NavigationProp,
+  RouteProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import React from 'react';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from '../../helpers/userContext.tsx';
-import {getUserId, updateUser} from '../../service/user.ts';
+import {getUserId, updateUser} from '../../service';
+import GenderSelect from '../../components/GenderSelect.tsx';
+import {formattedField} from '../../helpers/formattedField.ts';
+import {ParamListAccount} from '../../Types/ParamListBase.ts';
+
+type EditProfilRouteProp = RouteProp<ParamListAccount, 'EditProfil'>;
 
 export default function EditProfil() {
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation<NavigationProp<any>>();
-  const route = useRoute();
+  const route = useRoute<EditProfilRouteProp>();
   const {user, setUser} = useUser();
   const userCurrent = route.params?.user;
-  console.log(userCurrent, 'dfgfdg');
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
     useForm(userCurrent);
 
   const handleUpdateAccount = async () => {
+    setLoading(true);
     setUser(formData);
     const result = await updateUser(getUserId()!, formData);
-    console.log(result);
     if (result.success) {
-      Alert.alert(result.message);
+      ToastAndroid.show(result.message, ToastAndroid.SHORT);
       navigation.navigate('Account');
     }
   };
+
+  const no_hp = user?.role === 'guru' ? 'no pribadi' : 'no ortu';
+
   return (
     <Layout>
+      <Modal
+        visible={loading}
+        animationType="fade"
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}>
+        <Spinner size="giant" status="primary" />
+      </Modal>
       <ScrollView contentContainerStyle={styles.container}>
         <View
           style={{
@@ -70,16 +94,12 @@ export default function EditProfil() {
             'usia',
             'kelas',
             'asal_sekolah',
-            'gender',
             'no_ortu',
             'alamat_lengkap',
           ].map(field => (
             <FormInput
               key={field}
-              label={field
-                .replace(/_/g, ' ')
-                .replace(/([A-Z])/g, ' $1')
-                .trim()}
+              label={formattedField(field, user)}
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}
@@ -87,7 +107,11 @@ export default function EditProfil() {
               error={errors[field] || null}
             />
           ))}
+          <GenderSelect
+            onGenderChange={gender => handleInputChange('gender', gender)}
+          />
         </Layout>
+
         <ButtonCompo
           width={300}
           status="primary"

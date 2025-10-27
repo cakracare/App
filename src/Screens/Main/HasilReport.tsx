@@ -13,20 +13,30 @@ import {
   NavigationProp,
   useNavigation,
   useRoute,
+  RouteProp,
 } from '@react-navigation/native';
-import {getLaporanBullying} from '../../service/report.ts';
-import {Report} from '../../Types';
+import {
+  getLaporanBullying,
+  updateLaporanBullying,
+} from '../../service/report.ts';
+import {Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
-import HasilCompo from '../../components/CardHasil.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
+import {getUser} from '../../service/user.ts';
+import {UserRole} from '../../Types/User.ts';
+
+type HasilReportRouteParams = {
+  idreport: string;
+};
 
 export default function HasilReport() {
   const navigation = useNavigation<NavigationProp<any>>();
   const [feedback, setFeedback] = useState('');
-  const [report, setReport] = useState<Report>({});
-  const [userReport, setUserReport] = useState<User>({});
+  const [report, setReport] = useState<Report>({} as Report);
+  const [userReport, setUserReport] = useState<User>({} as User);
   const [time, setTime] = useState('');
-  const route = useRoute();
+  const route =
+    useRoute<RouteProp<{params: HasilReportRouteParams}, 'params'>>();
   const idReport = route.params?.idreport;
   const {user, setUser} = useUser();
   const [loading, setLoading] = useState(false);
@@ -39,34 +49,53 @@ export default function HasilReport() {
 
   useEffect(() => {
     const data = async () => {
+      console.log('1');
       const laporan = await getLaporanBullying(idReport);
       const dataUser = await getUser(laporan.data?.userId);
       return {laporan, dataUser};
     };
 
     data().then(result => {
-      setReport(result.laporan.data);
-      setUserReport(result.dataUser.data);
+      // guard against undefined DocumentData before updating state
+      if (result.laporan?.data) {
+        setReport(result.laporan.data as Report);
+      } else {
+        setReport({} as Report);
+      }
+
+      if (result.dataUser?.data) {
+        setUserReport(result.dataUser.data as User);
+      } else {
+        setUserReport({} as User);
+      }
     });
 
     if (total_point < 18) {
       setKategori('ringan');
-    } else if (total_point > 18 || total_point < 32) {
+    } else if (total_point >= 18 && total_point < 32) {
       setKategori('sedang');
-    } else if (total_point > 18) {
+    } else {
       setKategori('berat');
     }
   }, [total_point]);
 
   const handleUdpateReport = async () => {
-    // console.log('sdfsdf')
     try {
       setLoading(true);
       report.feedback = feedback || report.feedback;
       report.status = 'success';
       report.kategori = kategori;
-      const iupdateReport = await updateLaporanBullying(idReport, report);
-      // console.log(iupdateReport,'sdfsdfdsfdsfdffd');
+      const updatedReport = {
+        ...report,
+        timestamp:
+          report.timestamp instanceof Date
+            ? report.timestamp.getTime()
+            : report.timestamp,
+      };
+      const iupdateReport = await updateLaporanBullying(
+        idReport,
+        updatedReport,
+      );
       setLoading(false);
       if (iupdateReport.success) {
         navigation.navigate('Report');
@@ -75,7 +104,6 @@ export default function HasilReport() {
       console.log(e);
       setLoading(false);
     }
-    // console.log('Udpate Report');
   };
 
   return (
@@ -88,6 +116,7 @@ export default function HasilReport() {
         }}>
         <Spinner size="giant" status="primary" />
       </Modal>
+
       {user?.role === 'guru' ? (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Card style={styles.card}>
@@ -104,10 +133,8 @@ export default function HasilReport() {
               label="Tgl Pelaporan  :"
               text={report.timestamp?.toString().slice(0, 16)}
             />
-          </Card>
-          <Card style={styles.card}>
-            <Text category="h5" style={styles.header}>
-              Hasil Report
+            <Text category="label" style={styles.text}>
+              ===================================
             </Text>
             <CardHasil label="Verbal     :" text={report.verbalPointResponse} />
             <CardHasil label="Cyber      :" text={report.cyberPointResponse} />
@@ -116,8 +143,11 @@ export default function HasilReport() {
             <Text category="label" style={styles.text}>
               ===================================
             </Text>
-            <CardHasil label="Total Point Response :" text={total_point} />
-            <CardHasil label="Kategori :" text={kategori} />
+            <CardHasil
+              label="Total Point Response :"
+              text={report.skor_total || total_point}
+            />
+            <CardHasil label="Kategori :" text={report.kategori || kategori} />
             <CardHasil label="Status :" text={report.status} />
 
             <Input
@@ -126,7 +156,7 @@ export default function HasilReport() {
                   Masukkan Feedback
                 </Text>
               )}
-              disabled={user?.role === 'siswa'}
+              disabled={user?.role !== 'guru'}
               multiline={true}
               value={report.feedback}
               textStyle={{
@@ -142,21 +172,47 @@ export default function HasilReport() {
           </Card>
         </ScrollView>
       ) : (
-        <Input
-          label={() => (
-            <Text style={{fontWeight: 'bold', marginVertical: 20}}>
-              Feedback
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Card style={styles.card}>
+            <Text category="h6" style={styles.header}>
+              Detail Laporan
             </Text>
-          )}
-          disabled={user?.role === 'siswa'}
-          multiline={true}
-          value={report.feedback}
-          textStyle={{
-            minHeight: 100,
-            padding: 5,
-            textAlignVertical: 'top',
-          }}
-        />
+            <CardHasil label="Judul :" text={report.title} />
+            <CardHasil label="Deskripsi :" text={report.deskripsi} />
+            <Text category="label" style={styles.text}>
+              ===================================
+            </Text>
+            <CardHasil label="Verbal     :" text={report.verbalPointResponse} />
+            <CardHasil label="Cyber      :" text={report.cyberPointResponse} />
+            <CardHasil label="Physical :" text={report.physicalPointResponse} />
+            <CardHasil label="Sexual    :" text={report.sexualPointResponse} />
+            <Text category="label" style={styles.text}>
+              ===================================
+            </Text>
+            <CardHasil
+              label="Total Point :"
+              text={report.skor_total || total_point}
+            />
+            <CardHasil label="Kategori :" text={report.kategori || kategori} />
+            <CardHasil label="Status :" text={report.status} />
+
+            <Input
+              label={() => (
+                <Text style={{fontWeight: 'bold', marginVertical: 20}}>
+                  Feedback
+                </Text>
+              )}
+              disabled={true}
+              multiline={true}
+              value={report.feedback}
+              textStyle={{
+                minHeight: 100,
+                padding: 5,
+                textAlignVertical: 'top',
+              }}
+            />
+          </Card>
+        </ScrollView>
       )}
     </Layout>
   );

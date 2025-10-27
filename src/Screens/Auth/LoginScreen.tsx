@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {
-  Button,
-  IconProps,
-  Input,
-  Layout,
-  Text,
-  Icon,
-  Modal,
-  Spinner,
+    Button,
+    IconProps,
+    Input,
+    Layout,
+    Text,
+    Icon,
+    Modal,
+    Spinner, Card,
 } from '@ui-kitten/components';
 import {Alert, Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {signInWithEmailAndPass, signInWithGoogle} from '../../service';
+import {sendPasswordResetEmail, signInWithEmailAndPass, signInWithGoogle} from '../../service';
 import {useUser} from '../../helpers/userContext.tsx';
 import styles from '../../style/LoginStyle.tsx';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
@@ -23,6 +23,8 @@ export default function LoginScreen(): React.ReactElement {
   const [pass, setPass] = useState('');
   const {user, setUser} = useUser();
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+    const [emailReset, setEmailReset] = useState('');
 
   const renderPasswordIcon = (props: IconProps) => (
     <Icon
@@ -57,19 +59,34 @@ export default function LoginScreen(): React.ReactElement {
   const handleLoginWithGoogle = async () => {
     setLoading(true);
     signInWithGoogle().then(result => {
-      if (result.success) {
-        console.info(result, '<< login screen');
-        setUser(result.user);
-        navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
-        ToastAndroid.show(result.message, ToastAndroid.SHORT);
+       console.info(result, '<< login screen');
+       setUser(result.user);
+       setLoading(false);
+       navigation.navigate('MainNavigator', {Screen: 'HomeScreen'});
+       ToastAndroid.show(result.message, ToastAndroid.SHORT);
+    }).catch((err)=>{
         setLoading(false);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        ToastAndroid.show(result.message, ToastAndroid.SHORT);
-      }
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
     });
   };
+
+  const handleResetPassword = async ()=>{
+      setVisible(true)
+  }
+
+  const sendMessageReset = async ()=>{
+      const result = await sendPasswordResetEmail(emailReset)
+      if (result.success) {
+          setVisible(false)
+          Alert.alert(result.message, 'silahkan check email anda !!')
+      }
+
+      if (!result.success) {
+          setVisible(false)
+          Alert.alert(result.message)
+      }
+
+  }
 
   return (
     <Layout style={styles.container}>
@@ -79,7 +96,23 @@ export default function LoginScreen(): React.ReactElement {
         backdropStyle={styles.backdrop}>
         <Spinner size="giant" status="primary" />
       </Modal>
-
+        <Modal
+            visible={visible}
+            backdropStyle={styles.backdrop}
+            onBackdropPress={() => setVisible(false)}
+        >
+            <Card disabled={true}>
+                <Input
+                    placeholder="Enter your email"
+                    style={styles.input}
+                    value={emailReset}
+                    onChangeText={nextValue => setEmailReset(nextValue)}
+                />
+                <Button onPress={sendMessageReset} style={{width:'100%', marginTop: 10}}>
+                    Send reset password
+                </Button>
+            </Card>
+        </Modal>
       <View
         style={{
           flexDirection: 'row',
@@ -153,12 +186,14 @@ export default function LoginScreen(): React.ReactElement {
             }}>
             or
           </Text>
-          <Text
-            style={{
-              paddingVertical: 10,
-            }}>
-            Reset Password
-          </Text>
+            <TouchableOpacity onPress={handleResetPassword}>
+                <Text
+                    style={{
+                        paddingVertical: 10,
+                    }}>
+                    Reset Password
+                </Text>
+            </TouchableOpacity>
         </Layout>
         <Button
           onPress={handleLoginWithGoogle}

@@ -114,6 +114,10 @@ const errorCode = [
     {
         "code": "auth/network-request-failed",
         "message": "Permintaan jaringan gagal."
+    },
+    {
+        "code": "auth/no-current-user",
+        "message": "Tidak ada user yang login saat ini"
     }
 ]
 
