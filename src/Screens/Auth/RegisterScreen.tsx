@@ -9,16 +9,6 @@ import {
   SelectItem,
   IndexPath,
 } from '@ui-kitten/components';
-import {
-  Button,
-  Text,
-  CheckBox,
-  Input,
-  Layout,
-  Select,
-  SelectItem,
-  IndexPath,
-} from '@ui-kitten/components';
 import {Alert, Image, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
 import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
@@ -134,21 +124,22 @@ export default function RegisterScreen() {
             selectedIndex={selectedIndex}
             onSelect={index => {
               setSelectedIndex(index);
+              const idx = index as IndexPath;
               handleInputChange(
                 'gender',
-                index.row === 1
+                idx.row === 1
                   ? 'laki-laki'
-                  : index.row === 2
+                  : idx.row === 2
                   ? 'perempuan'
                   : 'other',
               );
             }}
             value={
-              selectedIndex.row === 0
+              (selectedIndex as IndexPath).row === 0
                 ? 'Select Gender'
-                : selectedIndex.row === 1
+                : (selectedIndex as IndexPath).row === 1
                 ? 'Laki-laki'
-                : selectedIndex.row === 2
+                : (selectedIndex as IndexPath).row === 2
                 ? 'perempuan'
                 : 'Lainya'
             }>

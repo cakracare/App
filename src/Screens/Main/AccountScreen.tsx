@@ -51,11 +51,11 @@ const renderItem2 = ({item, index}: {item: any; index: number}) => (
       label="Alamat rumah"
       value={item?.alamat_lengkap}
     />
-      <InfoItem
-          iconName="address-book"
-          label={item?.role === 'guru' ? 'Nomor pribadi' : 'Nomor wali murid'}
-          value={item?.no_ortu}
-      />
+    <InfoItem
+      iconName="address-book"
+      label={item?.role === 'guru' ? 'Nomor pribadi' : 'Nomor wali murid'}
+      value={item?.no_ortu}
+    />
   </View>
 );
 const AccountScreen: React.FC = () => {

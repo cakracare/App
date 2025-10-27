@@ -150,6 +150,29 @@ const ReportScreen: React.FC = () => {
       console.log(e);
     }
   }, [user]);
+  const USE_DUMMY_DATA = false;
+
+  const dummyReports = [
+    {
+      id: '1',
+      userId: 'dummy_user_1',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      title: 'Kena tendang di kelas',
+      deskripsi: 'Saya ditendang oleh teman sekelas',
+      physicalPointResponse: 8,
+      verbalPointResponse: 6,
+      sexualPointResponse: 2,
+      cyberPointResponse: 3,
+      skor_total: 19,
+      kategori: 'sedang',
+      status: 'success',
+      feedback: 'Sudah ditindaklanjuti oleh BK',
+    },
+  ];
+
+  const displayReports = USE_DUMMY_DATA
+    ? [...dummyReports, ...(reports || [])]
+    : reports;
 
   return (
     <Layout style={{flex: 1, padding: 10}}>
@@ -177,10 +200,10 @@ const ReportScreen: React.FC = () => {
 
       {/* Report List */}
       <ScrollView>
-        {reports?.length > 0 ? (
-          reports.map((report: Report, index: number) => (
+        {displayReports?.length > 0 ? (
+          displayReports.map((report: Report, index: number) => (
             <CardComp
-              key={index}
+              key={report.id || index}
               onPress={() =>
                 navigation.navigate('HasilReport', {idreport: report.id})
               }
