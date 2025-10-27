@@ -11,6 +11,7 @@ import FormInput from '../../components/FormInput';
 import useForm from '../../helpers/useFormHooks';
 import {
   NavigationProp,
+  RouteProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -18,13 +19,14 @@ import React from 'react';
 import ButtonCompo from '../../components/ButtonCompo.tsx';
 import {useUser} from '../../helpers/userContext.tsx';
 import {getUserId, updateUser} from '../../service';
-import GenderSelect from "../../components/GenderSelect.tsx";
-import {formattedField} from "../../helpers/formattedField.ts";
+import GenderSelect from '../../components/GenderSelect.tsx';
+import {formattedField} from '../../helpers/formattedField.ts';
+import {ParamListAccount} from '../../Types/ParamListBase';
 
 export default function EditProfil() {
   const [loading, setLoading] = React.useState(false);
-  const navigation = useNavigation<NavigationProp<any>>();
-  const route = useRoute();
+  const navigation = useNavigation<NavigationProp<ParamListAccount>>();
+  const route = useRoute<RouteProp<ParamListAccount, 'EditProfil'>>();
   const {user, setUser} = useUser();
   const userCurrent = route.params?.user;
   const {formData, handleInputChange, errors, setFieldError, clearFieldError} =
@@ -88,14 +90,14 @@ export default function EditProfil() {
             'nama_lengkap',
             'email',
             'usia',
-            "kelas",
+            'kelas',
             'asal_sekolah',
             'no_ortu',
             'alamat_lengkap',
           ].map(field => (
             <FormInput
               key={field}
-              label={formattedField(field,user) }
+              label={formattedField(field, user)}
               placeholder=""
               value={formData[field]}
               onChangeText={value => handleInputChange(field, value)}
@@ -103,7 +105,9 @@ export default function EditProfil() {
               error={errors[field] || null}
             />
           ))}
-          <GenderSelect onGenderChange={gender => handleInputChange('gender', gender)} />
+          <GenderSelect
+            onGenderChange={gender => handleInputChange('gender', gender)}
+          />
         </Layout>
 
         <ButtonCompo
