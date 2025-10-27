@@ -1,14 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
   Button,
+  Card,
   Icon,
   Layout,
   Modal,
@@ -21,14 +14,16 @@ import {
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import {timeAgo} from '../../helpers/timeAgo';
-import {exportDataToExcel} from '../../helpers/convertJsonToExel';
-import {getUserId} from '../../service';
-import {getReportsByUser} from '../../service/report';
-import {Report, User} from '../../Types';
+import {Alert, ScrollView, ToastAndroid, TouchableOpacity} from 'react-native';
+import {
+  fetchUsersWithReports,
+  getReportsByUser,
+  getUserId,
+} from '../../service';
+import {timeAgo} from '../../helpers/timeAgo.ts';
+import {Report} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
-import {fetchUsersWithReports} from '../../service/report.ts';
-import {UserRole} from '../../Types/User.ts';
+import {exportDataToExcel} from '../../helpers/convertJsonToExel.ts';
 
 // interface ButtonSelectClassProps {
 //     onClassSelect: (className: string[]) => void;

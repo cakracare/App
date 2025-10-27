@@ -11,15 +11,15 @@ import {
 } from '@ui-kitten/components';
 import {
   NavigationProp,
+  RouteProp,
   useNavigation,
   useRoute,
-  RouteProp,
 } from '@react-navigation/native';
 import {
   getLaporanBullying,
   updateLaporanBullying,
 } from '../../service/report.ts';
-import {Report, User} from '../../Types';
+import {ParamListReport, Report, User} from '../../Types';
 import {useUser} from '../../helpers/userContext.tsx';
 import CardHasil from '../../components/CardHasil.tsx';
 import {getUser} from '../../service/user.ts';
@@ -30,7 +30,7 @@ type HasilReportRouteParams = {
 };
 
 export default function HasilReport() {
-  const navigation = useNavigation<NavigationProp<any>>();
+  const navigation = useNavigation<NavigationProp<ParamListReport>>();
   const [feedback, setFeedback] = useState('');
   const [report, setReport] = useState<Report>({} as Report);
   const [userReport, setUserReport] = useState<User>({} as User);
@@ -42,10 +42,10 @@ export default function HasilReport() {
   const [loading, setLoading] = useState(false);
   const [kategori, setKategori] = useState('');
   const total_point =
-    report.cyberPointResponse +
-    report.physicalPointResponse +
-    report.sexualPointResponse +
-    report.verbalPointResponse;
+    (report?.cyberPointResponse || 0) +
+    (report?.physicalPointResponse || 0) +
+    (report?.sexualPointResponse || 0) +
+    (report?.verbalPointResponse || 0);
 
   useEffect(() => {
     const data = async () => {
@@ -98,7 +98,7 @@ export default function HasilReport() {
       );
       setLoading(false);
       if (iupdateReport.success) {
-        navigation.navigate('Report');
+        navigation.navigate('Report', {questions: []});
       }
     } catch (e) {
       console.log(e);
@@ -131,24 +131,30 @@ export default function HasilReport() {
             />
             <CardHasil
               label="Tgl Pelaporan  :"
-              text={report.timestamp?.toString().slice(0, 16)}
+              text={report?.timestamp?.toString().slice(0, 16)}
             />
             <Text category="label" style={styles.text}>
               ===================================
             </Text>
-            <CardHasil label="Verbal     :" text={report.verbalPointResponse} />
-            <CardHasil label="Cyber      :" text={report.cyberPointResponse} />
-            <CardHasil label="Physical :" text={report.physicalPointResponse} />
-            <CardHasil label="Sexual    :" text={report.sexualPointResponse} />
+            <CardHasil
+              label="Verbal     :"
+              text={report?.verbalPointResponse}
+            />
+            <CardHasil label="Cyber      :" text={report?.cyberPointResponse} />
+            <CardHasil
+              label="Physical :"
+              text={report?.physicalPointResponse}
+            />
+            <CardHasil label="Sexual    :" text={report?.sexualPointResponse} />
             <Text category="label" style={styles.text}>
               ===================================
             </Text>
             <CardHasil
               label="Total Point Response :"
-              text={report.skor_total || total_point}
+              text={report?.skor_total || total_point}
             />
-            <CardHasil label="Kategori :" text={report.kategori || kategori} />
-            <CardHasil label="Status :" text={report.status} />
+            <CardHasil label="Kategori :" text={report?.kategori || kategori} />
+            <CardHasil label="Status :" text={report?.status} />
 
             <Input
               label={() => (
@@ -158,7 +164,7 @@ export default function HasilReport() {
               )}
               disabled={user?.role !== 'guru'}
               multiline={true}
-              value={report.feedback}
+              value={report?.feedback}
               textStyle={{
                 minHeight: 100,
                 padding: 5,

@@ -21,9 +21,6 @@ const InfoItem = ({
   const securePasswordEntry = (value: string) => {
     return value && value.replace(/./g, '*');
   };
-  const securePasswordEntry = (value: string) => {
-    return value && value.replace(/./g, '*');
-  };
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === 'dark' ? 'white' : 'black';
   return (
@@ -97,10 +94,6 @@ const AccountScreen: React.FC = () => {
               text="edit"
               width={150}
               onPress={() =>
-                navigation.navigate('AccountNavigator', {
-                  screen: 'EditProfil',
-                  params: {user: user},
-                })
                 navigation.navigate('AccountNavigator', {
                   screen: 'EditProfil',
                   params: {user: user},

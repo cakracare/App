@@ -1,14 +1,19 @@
 export const guru_smp = [
-    '210403010034@mhs.unikama.ac.id',"sahrul.tayadih@gmail.com",
-    "sahrul.canva.bebas@gmail.com",
-   "wongtulus360@gmail.com",
-    'koyekkasyi@gmail.com'
-]
-
+  '210403010034@mhs.unikama.ac.id',
+  'sahrul.tayadih@gmail.com',
+  'sahrul.canva.bebas@gmail.com',
+  'wongtulus360@gmail.com',
+  'koyekkasyi@gmail.com',
+  'kasyikoyek@gmail.com',
+  'azizzr081@gmail.com',
+];
 
 export const guru_sma = [
-    'aufaluzumaki@gmail.com',"sahrul.tayadih@gmail.com",
-    "sahrul.canva.bebas@gmail.com",
-    "wongtulus360@gmail.com",
-    'koyekkasyi@gmail.com'
-]
+  'aufaluzumaki@gmail.com',
+  'sahrul.tayadih@gmail.com',
+  'sahrul.canva.bebas@gmail.com',
+  'wongtulus360@gmail.com',
+  'koyekkasyi@gmail.com',
+  'kasyikoyek@gmail.com',
+  'azizzr081@gmail.com',
+];

@@ -1,18 +1,16 @@
 import firestore from '@react-native-firebase/firestore';
-import {User} from "../Types";
-import {validateUser} from "../helpers/validateUser.ts";
-import auth from "@react-native-firebase/auth";
-import {Logout} from "./auth.tsx";
-
+import {User} from '../Types';
+import {validateUser} from '../helpers/validateUser.ts';
+import auth from '@react-native-firebase/auth';
+import {Logout} from './auth.tsx';
 
 /*
 Get current user id
  */
-export const getUserId = ()=>{
-    const user = auth().currentUser;
-    return user?.uid
-}
-
+export const getUserId = () => {
+  const user = auth().currentUser;
+  return user?.uid;
+};
 
 /**
  * create new user
@@ -21,29 +19,28 @@ export const getUserId = ()=>{
  * @returns Success or failure status
  */
 export const createUser = async (userPayload: User, id: string) => {
-    try {
-        // check validasi user
-        const {success, data} = validateUser(userPayload)
+  try {
+    // check validasi user
+    const {success, data} = validateUser(userPayload);
 
-        // jika gagal throw error
-        if (!success){
-            throw new Error('Data yang anda masukkan tidak valid');
-        }
-
-        if (data?.email.includes('@guru')){
-            data.role = 'guru'
-        }
-
-        // buat collection baru ke firestore
-        await firestore().collection('users').doc(id).set(data!);
-        console.info('User added!');
-        return { success: true, message: 'User added successfully' };
-    } catch (error: any) {
-        console.error( error,'<< adding user');
-        return { success: false, message: error.message };
+    // jika gagal throw error
+    if (!success) {
+      throw new Error('Data yang anda masukkan tidak valid');
     }
-};
 
+    if (data?.email.includes('@guru')) {
+      data.role = 'guru';
+    }
+
+    // buat collection baru ke firestore
+    await firestore().collection('users').doc(id).set(data!);
+    console.info('User added!');
+    return {success: true, message: 'User added successfully'};
+  } catch (error: any) {
+    console.error(error, '<< adding user');
+    return {success: false, message: error.message};
+  }
+};
 
 /**
  * Get User by Id
@@ -51,18 +48,21 @@ export const createUser = async (userPayload: User, id: string) => {
  * @returns Success or failure status
  */
 export const getUser = async (userId: string | undefined) => {
-    try {
-        // ambil data user dari firestore
-        const userDocument = await firestore().collection('users').doc(userId).get();
-        if (!userDocument.exists) {
-            throw new Error('User does not exist!');
-        }
-        console.info('user berhasil di cari')
-        return { success: true, data: userDocument.data() as User};
-    } catch (error: any) {
-        console.error(error, '<< get data user');
-        return { success: false, message: error.message };
+  try {
+    // ambil data user dari firestore
+    const userDocument = await firestore()
+      .collection('users')
+      .doc(userId)
+      .get();
+    if (!userDocument.exists) {
+      throw new Error('User does not exist!');
     }
+    console.info('user berhasil di cari');
+    return {success: true, data: userDocument.data() as User};
+  } catch (error: any) {
+    console.error(error, '<< get data user');
+    return {success: false, message: error.message};
+  }
 };
 
 /**
@@ -71,16 +71,19 @@ export const getUser = async (userId: string | undefined) => {
  * @param updatePayloadUser - The updated bullying response data
  * @returns Success or failure status
  */
-export const updateUser = async (userId: string, updatePayloadUser: Partial<User>) => {
-    try {
-        // update data user
-        await firestore().collection('users').doc(userId).update(updatePayloadUser);
-        console.info('data user berhasil di updated', updatePayloadUser);
-        return { success: true, message: 'User updated successfully' };
-    } catch (error: any) {
-        console.error(error, '<< Update data user');
-        return { success: false, message: error.message };
-    }
+export const updateUser = async (
+  userId: string,
+  updatePayloadUser: Partial<User>,
+) => {
+  try {
+    // update data user
+    await firestore().collection('users').doc(userId).update(updatePayloadUser);
+    console.info('data user berhasil di updated', updatePayloadUser);
+    return {success: true, message: 'User updated successfully'};
+  } catch (error: any) {
+    console.error(error, '<< Update data user');
+    return {success: false, message: error.message};
+  }
 };
 
 /**
@@ -89,53 +92,64 @@ export const updateUser = async (userId: string, updatePayloadUser: Partial<User
  * @param password - password
  * @returns Success or failure status
  */
-export const deleteUser = async (userId: string, password:string) => {
-    try {
-        // hapus juga data user di  auth
-        const user = auth().currentUser;
-        const credential = auth.EmailAuthProvider.credential(
-            user!.email!,
-           password
-        );
-        // lakukan reauthentikasi
-        await user!.reauthenticateWithCredential(credential);
-        await user!.delete();
-        // delete data user
-        await firestore().collection('users').doc(userId).delete();
-        await Logout()
-        console.info('user berhasil dihapus');
-        return { success: true, message: 'User deleted successfully' };
-    } catch (error: any) {
-        console.error(error, '<< delete data user');
-        return { success: false, message: error.message };
-    }
+export const deleteUser = async (userId: string, password: string) => {
+  try {
+    // hapus juga data user di  auth
+    const user = auth().currentUser;
+    const credential = auth.EmailAuthProvider.credential(
+      user!.email!,
+      password,
+    );
+    // lakukan reauthentikasi
+    await user!.reauthenticateWithCredential(credential);
+    await user!.delete();
+    // delete data user
+    await firestore().collection('users').doc(userId).delete();
+    await Logout();
+    console.info('user berhasil dihapus');
+    return {success: true, message: 'User deleted successfully'};
+  } catch (error: any) {
+    console.error(error, '<< delete data user');
+    return {success: false, message: error.message};
+  }
 };
 
-
 export const getGuruByKelas = async () => {
-    try {
-        // Ambil data semua pengguna dengan role 'guru'
-        const guruSnapshot = await firestore()
-            .collection('users')
-            .where('role', '==', 'guru')
-            .get();
+  try {
+    console.log('Fetching guru data from Firestore...');
 
-        const guruSMP: Array<any> = [];
-        const guruSMA: Array<any> = [];
+    // Ambil data semua pengguna dengan role 'guru'
+    const guruSnapshot = await firestore()
+      .collection('users')
+      .where('role', '==', 'guru')
+      .get();
 
-        guruSnapshot.forEach(doc => {
-            const guru = doc.data();
+    console.log('Total guru found:', guruSnapshot.size);
 
-            if (['7', '8', '9'].includes(guru.kelas)) {
-                guruSMP.push(guru.email);
-            } else if (['10', '11', '12'].includes(guru.kelas)) {
-                guruSMA.push(guru.email);
-            }
-        });
+    const guruSMP: Array<any> = [];
+    const guruSMA: Array<any> = [];
 
-        return { guruSMP, guruSMA };
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        throw new Error('Gagal mendapatkan data guru.');
-    }
+    guruSnapshot.forEach(doc => {
+      const guru = doc.data();
+      console.log('Processing guru:', guru.email, 'kelas:', guru.kelas);
+
+      if (['7', '8', '9'].includes(guru.kelas)) {
+        guruSMP.push(guru.email);
+        console.log('Added to guruSMP:', guru.email);
+      } else if (['10', '11', '12'].includes(guru.kelas)) {
+        guruSMA.push(guru.email);
+        console.log('Added to guruSMA:', guru.email);
+      } else {
+        console.warn('Guru with invalid kelas:', guru.kelas, guru.email);
+      }
+    });
+
+    console.log('Final guruSMP:', guruSMP);
+    console.log('Final guruSMA:', guruSMA);
+
+    return {guruSMP, guruSMA};
+  } catch (error) {
+    console.error('Error fetching guru data:', error);
+    throw new Error('Gagal mendapatkan data guru.');
+  }
 };
